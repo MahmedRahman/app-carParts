@@ -1,0 +1,6 @@
+package com.atpnet.carpart
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
