@@ -1,3 +1,4 @@
+import 'package:carpart/app/data/model/order_model.dart';
 import 'package:carpart/app/data/order_data.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/routes/app_pages.dart';
@@ -10,35 +11,49 @@ class OrderView extends GetView<OrderController> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-      child: Column(
-        children: List.generate(
-          OrderList.length,
-          (index) {
-            return Card(
-              child: ListTile(
-                onTap: (){
-                  Get.toNamed(Routes.OrderDetailesView);
-                },
-                isThreeLine: true,
-                title: Text(OrderList.elementAt(index).OrderNumber),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(OrderList.elementAt(index).CarBrand),
-                    Text(OrderList.elementAt(index).orderStatus.toString()),
-                  ],
-                ),
-                trailing: Text(OrderList.elementAt(index).OrderDate),
-                leading: Icon(
-                  Icons.car_repair,
-                  color: KAccentColor,
-                ),
-              ),
-            );
-          },
+      child: FutureBuilder(
+          future: controller.getOrder(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<OrderModel> orderModelList;
+              orderModelList = snapshot.data;
+              return Column(
+                  children: List.generate(orderModelList.length, (index) {
+                return orderItem(
+                  orderModel: orderModelList.elementAt(index),
+                );
+              }).toList());
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
+    ));
+  }
+
+  Card orderItem({@required OrderModel orderModel}) {
+    return Card(
+      child: ListTile(
+        onTap: () {
+          Get.toNamed(Routes.OrderDetailesView);
+        },
+        isThreeLine: true,
+        title: Text(orderModel.vanNumber),
+        subtitle: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(orderModel.vanNumber),
+            Text(orderModel.vanNumber),
+          ],
+        ),
+        trailing: Text(orderModel.vanNumber),
+        leading: Icon(
+          Icons.car_repair,
+          color: KAccentColor,
         ),
       ),
-    ));
+    );
   }
 }

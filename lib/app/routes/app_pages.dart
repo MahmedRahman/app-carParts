@@ -1,3 +1,4 @@
+import 'package:carpart/app/modules/order/views/order_create_view.dart';
 import 'package:get/get.dart';
 
 import 'package:carpart/app/modules/authiocation/bindings/authiocation_binding.dart';
@@ -115,6 +116,11 @@ class AppPages {
     GetPage(
       name: Routes.OrderDetailesView,
       page: () => OrderDetailesView(),
+      binding: OrderBinding(),
+    ),
+    GetPage(
+      name: Routes.OrderCreateView,
+      page: () => OrderCreateView(),
       binding: OrderBinding(),
     ),
     GetPage(

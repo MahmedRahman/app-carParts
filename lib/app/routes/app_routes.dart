@@ -25,4 +25,7 @@ abstract class Routes {
 
   static const SignupDealerView = '/SignupDealerView';
   static const ENTRY_POINT = '/entry-point';
+  static const OrderCreateView = '/OrderCreateView';
+
+  
 }

@@ -13,7 +13,7 @@ import 'package:carpart/app/routes/app_pages.dart';
 
 import 'package:carpart/app/data/component/CustemButton.dart';
 import 'package:carpart/app/data/component/CustemCheckbox.dart';
-import 'package:carpart/app/data/component/CustemDropdown.dart';
+import 'package:carpart/app/data/component/CustemDropdown__.dart';
 import 'package:carpart/app/data/component/CustemIconButton.dart';
 import 'package:carpart/app/data/component/CustemTextForm.dart';
 import 'package:flutter/material.dart';
@@ -318,16 +318,7 @@ class HomeView extends GetView<HomeController> {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({
-    Key key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    
-  }
-}
 
 class AnonymousUser extends StatelessWidget {
   @override

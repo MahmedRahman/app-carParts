@@ -18,6 +18,8 @@ List<String> CarModel = [
   '520i',
 ];
 
-List<String> CityName = ['مكة', 'الرياض', 'جدة', 'المدينة'];
+var CityName = [
+
+];
 
 enum userRole { anonymous, Buyer, dealer, Delivery }

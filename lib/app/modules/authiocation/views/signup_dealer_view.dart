@@ -20,7 +20,6 @@ class SignupDealerView extends GetView {
               title: 'حياك معنا',
             ),
             CustemTextForm(textHint: 'اسم النشاط التجاري'),
-            CustemTextForm(textHint: 'اسم المالك'),
             CustemTextForm(
               textHint: 'صورة من السجل التجاري',
               textIconData: Icons.camera_alt_rounded,

@@ -1,3 +1,4 @@
+import 'package:carpart/app/data/component/CustemDropdown.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/helper/AppUtils.dart';
@@ -6,7 +7,7 @@ import 'package:carpart/app/modules/authiocation/controllers/authiocation_contro
 import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:carpart/app/data/component/CustemButton.dart';
-import 'package:carpart/app/data/component/CustemDropdown.dart';
+import 'package:carpart/app/data/component/CustemDropdown__.dart';
 import 'package:carpart/app/data/component/CustemIconButton.dart';
 import 'package:carpart/app/data/component/CustemTextForm.dart';
 import 'package:flutter/material.dart';
@@ -40,12 +41,17 @@ class SignupcomplateView extends GetView<AuthiocationController> {
                   return AppValidation.checkEmail(value);
                 },
               ),
-              CustemDropdown(dataList: CityName),
+              CustomDropdownButton(
+                listDropdown:
+                    CityName.map((e) => e['title'].toString()).toList(),
+                listDropdownValue:
+                    CityName.map((e) => int.parse(e['id'].toString())).toList(), selectText: '',
+              ),
               CustemButton(
                 title: 'إرسال',
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                   controller.createUser();
+                    controller.createUser();
                   }
                 },
               )

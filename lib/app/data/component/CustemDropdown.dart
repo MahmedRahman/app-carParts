@@ -1,62 +1,97 @@
-import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class CustemDropdown extends StatelessWidget {
-  const CustemDropdown({
-    @required this.dataList,
+class CustomDropdownButton extends StatelessWidget {
+  CustomDropdownButton(
+     {
+    @required this.listDropdown,
+     @required  this.listDropdownValue,
+    this.labelDropdownButton,
+    this.onChanged,
+    this.labelhint,
+    this.showlabel = false, @required this.selectText,
   });
 
-  final List<String> dataList;
-
+  final List<String> listDropdown;
+  final List<int> listDropdownValue;
+  final String labelDropdownButton;
+  final String labelhint;
+  final Function onChanged;
+  final bool showlabel;
+  var selectText;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 5,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.rectangle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(.3),
-              blurRadius: 10,
-              spreadRadius: 2,
-            )
-          ],
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: DropdownButtonFormField(
-          isDense: false,
-          decoration: InputDecoration.collapsed(hintText: ''),
-          dropdownColor: Colors.white,
-          value: 0,
-          elevation: 2,
-          isExpanded: true,
-          icon: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Icon(Icons.arrow_downward,color: KAccentColor,),
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: SizedBox(
+            height: labelDropdownButton.isEmpty ? 0 : null,
+            child: Align(
+                alignment: Alignment.centerRight,
+                child: showlabel
+                    ? Text(
+                        labelDropdownButton,
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      )
+                    : SizedBox.shrink()),
           ),
-          iconDisabledColor: KAccentColor,
-          items: List.generate(dataList.length, (index) {
-            return DropdownMenuItem(
-              value: index,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  dataList.elementAt(index),
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            print(value);
-          },
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2,
+                color: Color(0XFF707070),
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+              ),
+              child: Obx(() {
+                return Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: DropdownButton(
+                    hint: Text(labelhint ?? labelDropdownButton),
+                    value: selectText.value == '-1' ? null : selectText.value,
+                    isDense: false,
+                    elevation: 2,
+                    icon: Icon(Icons.arrow_drop_down),
+                    iconSize: 36,
+                    isExpanded: true,
+                    items: new List.generate(
+                      listDropdown.length,
+                      (index) {
+                        return new DropdownMenuItem(
+                          value: listDropdownValue.elementAt(index).toString(),
+                          child: Text(
+                            listDropdown.elementAt(index).toString(),
+                          ),
+                        );
+                      },
+                    ),
+                    onChanged: (value) {
+            print(value);
+                      selectText.value = value;
+              
+                      onChanged(value);
+                    },
+                  ),
+                );
+              }),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

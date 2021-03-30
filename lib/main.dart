@@ -2,6 +2,8 @@ import 'package:carpart/app/data/auth.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/AppTranslation.dart';
+import 'package:carpart/app/modules/order/bindings/order_binding.dart';
+import 'package:carpart/app/modules/order/controllers/order_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ void main() async {
       title: AppName,
       theme: themeData,
       initialRoute: AppPages.INITIAL,
+      initialBinding: OrderBinding(),
       getPages: AppPages.routes,
       locale: Locale('ar', 'EG'),
       fallbackLocale: Locale('ar', 'EG'),
