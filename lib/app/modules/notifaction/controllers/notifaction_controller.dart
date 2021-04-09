@@ -1,18 +1,14 @@
+import 'package:carpart/app/modules/notifaction/model/notifaction_model.dart';
+import 'package:carpart/app/modules/notifaction/providers/provider_provider.dart';
 import 'package:get/get.dart';
 
 class NotifactionController extends GetxController {
   //TODO: Implement NotifactionController
-  
-  final count = 0.obs;
 
-  @override
-  void onInit() {}
+  getNotifaction() async {
+    Response response = await ProviderProvider().getNotifaction();
+    final notifactionModel = notifactionModelFromJson(response.bodyString);
 
-  @override
-  void onReady() {}
-
-  @override
-  void onClose() {}
-
-  void increment() => count.value++;
+    return notifactionModel;
+  }
 }

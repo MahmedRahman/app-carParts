@@ -7,4 +7,23 @@ class EntryPointProvider extends RepostoryProvide {
       return response;
     });
   }
+
+  Future getMark() async {
+    return await repGet('Mark/Get').then((response) {
+      return response;
+    });
+  }
+
+
+  Future getModel() async {
+    return await repGet('Model/Get').then((response) {
+      return response;
+    });
+  }
+
+  Future getVersion() async {
+    return await repGet('Version/Get').then((response) {
+      return response;
+    });
+  }
 }

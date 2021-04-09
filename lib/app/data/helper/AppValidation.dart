@@ -4,7 +4,7 @@ class AppValidation {
 
   static String checkEmail(String value) {
     if (GetUtils.isEmail(value) == false) {
-      return 'Not vaild Email'.tr;
+      return 'الرجاء ادخال الايميل'.tr;
     } else {
       return null;
     }
@@ -12,7 +12,7 @@ class AppValidation {
 
   static String checkEmpty(String value) {
     if (value.isEmpty) {
-      return 'Empty String'.tr;
+      return 'هذا الحقل مطلوب'.tr;
     }
     return null;
   }

@@ -8,7 +8,11 @@ class AuthiocationProvider extends RepostoryProvide {
     @required String phoneNumber,
     @required String password,
     @required String email,
+    @required int cityid,
+    @required String DeviceId,
+    String LogoBytes,
   }) async {
+
     Response response = await repPost('Account/Register', {
       "Name": name,
       "PhoneNumber": phoneNumber,
@@ -16,18 +20,17 @@ class AuthiocationProvider extends RepostoryProvide {
       "Password": password,
       "ConfirmPassword": password,
       "Email": email,
-      "Logo": "sample string 12",
-      "LogoFile": null,
-      "CityId": 1,
+      "LogoBytes": LogoBytes,
+      "CityId": cityid,
       "Lat": 9.1,
       "Lng": 10.1,
-      "DeviceId": "sample string 11"
+      "DeviceId": DeviceId
     });
 
     return response;
   }
 
-  siginWithPhoneNumber({
+  Future siginWithPhoneNumber({
     @required String phone,
     @required String password,
   }) async {
@@ -59,5 +62,19 @@ class AuthiocationProvider extends RepostoryProvide {
     } else {
       return response.bodyString.toString();
     }
+  }
+
+  Future<Response> upgrateMerchant(
+      {@required String businessName,
+      @required String registrationImageBytes}) async {
+        
+    var data = {
+      "BusinessName": businessName,
+      "RegistrationImageBytes": registrationImageBytes
+    };
+
+    Response response = await repPost('Account/Upgrade?role=1', data);
+    return response;
+    //Account/Upgrade?role=1
   }
 }

@@ -38,6 +38,7 @@ class SigninView extends GetView<AuthiocationController> {
                                 title: Text('رقم الجوال'),
                                 subtitle: TextFormField(
                                   controller: controller.phoneNumber,
+                                  keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     isDense: true,
                                   ),
@@ -66,6 +67,7 @@ class SigninView extends GetView<AuthiocationController> {
                         child: ListTile(
                           title: Text('كلمة المرور'),
                           subtitle: TextFormField(
+                            obscureText: true,
                             controller: controller.password,
                             decoration: InputDecoration(
                               isDense: true,
@@ -104,23 +106,13 @@ class SigninView extends GetView<AuthiocationController> {
                 ),
                 CustemButton(
                   title: 'تسجيل دخول',
+                  buttonController: controller.btnController,
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       controller.siginWithPhoneNumber();
+                    } else {
+                      controller.btnController.reset();
                     }
-
-                    /*
-                    AppUtils().showSnackBar(
-                        AppName, 'لقد قمت بالتسجيل انت الان تتمتع بصلاحيات المشترى',
-                        snackbarStatus: (value) {
-                      Get.find<UserAuth>().setRole(userRole.Buyer);
-
-                      if (value == SnackbarStatus.CLOSED) {
-                        Get.toNamed(Routes.HOME);
-                      }
-                    });
-                    //print(Get.find<UserAuth>().getRole().toString());
-                 */
                   },
                 ),
                 Text(

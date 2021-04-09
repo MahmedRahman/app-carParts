@@ -1,4 +1,5 @@
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
+import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -63,6 +64,7 @@ class UserAuth extends GetxService {
     Get.find<UserAuth>().setRole(userRole.anonymous);
   Get.toNamed(Routes.SplashView);
    Future.delayed(Duration(seconds: 1), () {
+       Get.find<HomeController>().selectindex.value = 0;
       Get.toNamed(Routes.HOME);
     });
   }

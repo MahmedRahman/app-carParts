@@ -14,7 +14,6 @@ import 'package:get_storage/get_storage.dart';
 void main() async {
   await GetStorage.init();
   await initServices();
-
   runApp(
     GetMaterialApp(
       title: AppName,

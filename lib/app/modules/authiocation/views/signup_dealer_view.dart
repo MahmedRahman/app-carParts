@@ -1,6 +1,8 @@
 import 'package:carpart/app/data/auth.dart';
+import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppUtils.dart';
+import 'package:carpart/app/modules/authiocation/controllers/authiocation_controller.dart';
 import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
@@ -9,38 +11,38 @@ import 'package:carpart/app/data/component/CustemTextForm.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignupDealerView extends GetView {
+class SignupDealerView extends GetView<AuthiocationController> {
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          children: [
-            AuthiocationHeader(
-              title: 'حياك معنا',
-            ),
-            CustemTextForm(textHint: 'اسم النشاط التجاري'),
-            CustemTextForm(
-              textHint: 'صورة من السجل التجاري',
-              textIconData: Icons.camera_alt_rounded,
-            ),
-            CustemButton(
-              title: 'تسجيل',
-              onPressed: () {
-                AppUtils().showSnackBar(
-                  AppName,
-                  'لقد قمت بالتسجيل انت الان تتمتع بصلاحيات التاجر',
-                  snackbarStatus: (value) {
-                    Get.find<UserAuth>().setRole(userRole.dealer);
-
-                    if (value == SnackbarStatus.CLOSED) {
-                      Get.toNamed(Routes.HOME);
-                    }
-                  },
-                );
-              },
-            )
-          ],
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              AuthiocationHeader(
+                title: 'حياك معنا',
+              ),
+              CustemTextForm(
+                textHint: 'اسم النشاط التجاري',
+                inputcontroller: controller.businessName,
+              ),
+              CustemImagePicker(
+                onclick: (value) {
+                  controller.registrationImageBytes = value;
+                },
+              ),
+              CustemButton(
+                title: 'تسجيل',
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    controller.upgrateMerchant();
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

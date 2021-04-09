@@ -11,18 +11,12 @@ import 'package:carpart/app/modules/order/views/order_view.dart';
 import 'package:carpart/app/modules/profile/views/profile_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 
-import 'package:carpart/app/data/component/CustemButton.dart';
-import 'package:carpart/app/data/component/CustemCheckbox.dart';
-import 'package:carpart/app/data/component/CustemDropdown__.dart';
-import 'package:carpart/app/data/component/CustemIconButton.dart';
-import 'package:carpart/app/data/component/CustemTextForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  var selectindex = 0.obs;
   userRole currentUser = Get.find<UserAuth>().getRole();
   @override
   Widget build(BuildContext context) {
@@ -40,38 +34,61 @@ class HomeView extends GetView<HomeController> {
       ),
       drawer: Drawer(
           elevation: 0.0,
-          
           child: Container(
             color: KScandaryColor,
             child: ListView(
               children: [
-                Container(
-                  height: Get.height * .3,
-                  decoration: BoxDecoration(
-                    color: KScandaryColor,
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'images/drwar/wallpaper.png',
+                Get.find<UserAuth>().getRole() != userRole.anonymous
+                    ? Container(
+                        height: Get.height * .3,
+                        decoration: BoxDecoration(
+                          color: KScandaryColor,
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'images/drwar/wallpaper.png',
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Center(
+                            child: Get.find<UserAuth>().getRole() !=
+                                    userRole.anonymous
+                                ? ListTile(
+                                    leading: Container(
+                                      child:
+                                          Image.asset('images/drwar/user.png'),
+                                    ),
+                                    title: Text(
+                                      Get.find<UserAuth>().getUserName(),
+                                      style: headline3.copyWith(
+                                          color: Colors.white),
+                                    ),
+                                    subtitle: Text(
+                                      Get.find<UserAuth>().getRole().toString(),
+                                      style: headline3.copyWith(
+                                          color: Colors.white),
+                                    ),
+                                  )
+                                : SizedBox.shrink()),
+                      )
+                    : Container(
+                        height: Get.height * .3,
+                        decoration: BoxDecoration(
+                          color: KScandaryColor,
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'images/drwar/wallpaper.png',
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'images/logolight.png',
+                            width: 128,
+                          ),
+                        ),
                       ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Center(
-                    child:Get.find<UserAuth>().getRole() != userRole.anonymous ? ListTile(
-                      leading: Container(
-                        child: Image.asset('images/drwar/user.png'),
-                      ),
-                      title: Text(
-                        Get.find<UserAuth>().getUserName(),
-                        style: headline3.copyWith(color: Colors.white),
-                      ),
-                      subtitle: Text(
-                          Get.find<UserAuth>().getUserEmail(),
-                        style: headline3.copyWith(color: Colors.white),
-                      ),
-                    ):SizedBox.shrink()
-                  ),
-                ),
                 Container(
                   height: Get.height * .6,
                   color: Color(0XFF445969),
@@ -88,6 +105,7 @@ class HomeView extends GetView<HomeController> {
                           child: Image.asset('images/drwar/home.png'),
                         ),
                         onTap: () {
+                            Get.find<HomeController>().selectindex.value = 0;
                           Get.back();
                         },
                       ),
@@ -105,7 +123,8 @@ class HomeView extends GetView<HomeController> {
                         },
                       ),
                       SizedBox(
-                          child: Get.find<UserAuth>().getRole() == userRole.Buyer
+                          child: Get.find<UserAuth>().getRole() ==
+                                  userRole.Buyer
                               ? ListTile(
                                   title: Text(
                                     'طلب انضمام كمندوب',
@@ -122,7 +141,8 @@ class HomeView extends GetView<HomeController> {
                                 )
                               : SizedBox.shrink()),
                       SizedBox(
-                          child: Get.find<UserAuth>().getRole() == userRole.Buyer
+                          child: Get.find<UserAuth>().getRole() ==
+                                  userRole.Buyer
                               ? ListTile(
                                   title: Text(
                                     'طلب انضمام كتاجر',
@@ -165,8 +185,8 @@ class HomeView extends GetView<HomeController> {
                                     style:
                                         headline4.copyWith(color: Colors.white),
                                   ),
-                                  leading:
-                                      SvgPicture.asset('images/drwar/login.svg'),
+                                  leading: SvgPicture.asset(
+                                      'images/drwar/login.svg'),
                                   onTap: () {
                                     Get.back();
                                     Get.toNamed(Routes.SigninView);
@@ -207,15 +227,17 @@ class HomeView extends GetView<HomeController> {
                                 ? ListTile(
                                     title: Text(
                                       'تسجيل خروج',
-                                      style:
-                                          headline4.copyWith(color: Colors.white),
+                                      style: headline4.copyWith(
+                                          color: Colors.white),
                                     ),
-                                    leading: Image.asset('images/drwar/exit.png'),
+                                    leading:
+                                        Image.asset('images/drwar/exit.png'),
                                     onTap: () {
                                       // Update the state of the app.
+                                      // 
                                       Get.back();
-                                      Get.find<UserAuth>()
-                                          .signout();
+                                    
+                                      Get.find<UserAuth>().signout();
                                     },
                                   )
                                 : SizedBox.shrink()),
@@ -232,7 +254,7 @@ class HomeView extends GetView<HomeController> {
           ),
       bottomNavigationBar: Obx(() {
         return BottomNavigationBar(
-          currentIndex: selectindex.value,
+          currentIndex: controller.selectindex.value,
           selectedItemColor: KAccentColor,
           unselectedItemColor: KScandaryColor,
           selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -240,14 +262,14 @@ class HomeView extends GetView<HomeController> {
           elevation: 2,
           onTap: (value) {
             if (Get.find<UserAuth>().getRole() == userRole.anonymous) {
-              selectindex.value = 0;
+              controller.selectindex.value = 0;
               AppUtils().showDialog(
                   AppName, 'برجاء تسجيل دخول حتى تتمكن من استخدام التطبيق', () {
                 Get.back();
                 Get.toNamed(Routes.SigninView);
               });
             } else {
-              selectindex.value = value;
+              controller.selectindex.value = value;
             }
           },
           items: [
@@ -258,7 +280,9 @@ class HomeView extends GetView<HomeController> {
                 ),
                 child: SvgPicture.asset(
                   'images/menu/Home.svg',
-                  color: selectindex.value == 0 ? KAccentColor : KScandaryColor,
+                  color: controller.selectindex.value == 0
+                      ? KAccentColor
+                      : KScandaryColor,
                 ),
               ),
               label: 'الرئيسية',
@@ -270,8 +294,9 @@ class HomeView extends GetView<HomeController> {
                   ),
                   child: SvgPicture.asset(
                     'images/menu/Cart.svg',
-                    color:
-                        selectindex.value == 1 ? KAccentColor : KScandaryColor,
+                    color: controller.selectindex.value == 1
+                        ? KAccentColor
+                        : KScandaryColor,
                   ),
                 ),
                 label: 'الطلبات'),
@@ -282,7 +307,9 @@ class HomeView extends GetView<HomeController> {
                 ),
                 child: SvgPicture.asset(
                   'images/menu/notifications.svg',
-                  color: selectindex.value == 2 ? KAccentColor : KScandaryColor,
+                  color: controller.selectindex.value == 2
+                      ? KAccentColor
+                      : KScandaryColor,
                 ),
               ),
               label: 'التنبيهات',
@@ -294,7 +321,9 @@ class HomeView extends GetView<HomeController> {
                 ),
                 child: SvgPicture.asset(
                   'images/menu/Profile.svg',
-                  color: selectindex.value == 3 ? KAccentColor : KScandaryColor,
+                  color: controller.selectindex.value == 3
+                      ? KAccentColor
+                      : KScandaryColor,
                 ),
               ),
               label: 'صفحتي',
@@ -304,7 +333,7 @@ class HomeView extends GetView<HomeController> {
       }),
       body: Obx(() {
         return IndexedStack(
-          index: selectindex.value,
+          index: controller.selectindex.value,
           children: [
             OrderCreateView(),
             OrderView(),
@@ -317,8 +346,6 @@ class HomeView extends GetView<HomeController> {
     );
   }
 }
-
-
 
 class AnonymousUser extends StatelessWidget {
   @override

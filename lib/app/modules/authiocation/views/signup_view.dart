@@ -52,9 +52,12 @@ class SignupView extends GetView<AuthiocationController> {
               CustemCheckbox(),
               CustemButton(
                 title: 'التالي',
+                buttonController: controller.btnController,
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     Get.toNamed(Routes.SignupcomplateView);
+                  } else {
+                    controller.btnController.reset();
                   }
                 },
               )

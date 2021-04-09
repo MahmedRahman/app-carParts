@@ -1,50 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CustomDropdownButton extends StatelessWidget {
-  CustomDropdownButton(
-     {
-    @required this.listDropdown,
-     @required  this.listDropdownValue,
-    this.labelDropdownButton,
+class CustomDropdownButton extends StatefulWidget {
+  CustomDropdownButton({
+    @required this.dropdownDate,
     this.onChanged,
     this.labelhint,
-    this.showlabel = false, @required this.selectText,
+    this.showlabel = false,
   });
 
-  final List<String> listDropdown;
-  final List<int> listDropdownValue;
-  final String labelDropdownButton;
+  final List<dynamic> dropdownDate;
   final String labelhint;
-  final Function onChanged;
+  final Function(dynamic) onChanged;
   final bool showlabel;
-  var selectText;
+
+  @override
+  _CustomDropdownButtonState createState() => _CustomDropdownButtonState();
+}
+
+class _CustomDropdownButtonState extends State<CustomDropdownButton> {
+  String selectValue;
+
   @override
   Widget build(BuildContext context) {
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: SizedBox(
-            height: labelDropdownButton.isEmpty ? 0 : null,
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: showlabel
-                    ? Text(
-                        labelDropdownButton,
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
-                      )
-                    : SizedBox.shrink()),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0),
-          child: Container(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
             decoration: BoxDecoration(
+              color: Colors.white,
               border: Border.all(
                 width: 2,
                 color: Color(0XFF707070),
@@ -57,41 +43,34 @@ class CustomDropdownButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
               ),
-              child: Obx(() {
-                return Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: DropdownButton(
-                    hint: Text(labelhint ?? labelDropdownButton),
-                    value: selectText.value == '-1' ? null : selectText.value,
-                    isDense: false,
-                    elevation: 2,
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 36,
-                    isExpanded: true,
-                    items: new List.generate(
-                      listDropdown.length,
-                      (index) {
-                        return new DropdownMenuItem(
-                          value: listDropdownValue.elementAt(index).toString(),
-                          child: Text(
-                            listDropdown.elementAt(index).toString(),
-                          ),
-                        );
-                      },
-                    ),
-                    onChanged: (value) {
-            print(value);
-                      selectText.value = value;
-              
-                      onChanged(value);
-                    },
-                  ),
-                );
-              }),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: DropdownButton(
+                  hint: Text('اختيار من القائمة'),
+                  value: selectValue,
+                  isExpanded: true,
+                  elevation: 2,
+                  icon: Icon(Icons.arrow_drop_down),
+                  iconSize: 36,
+                  items: new List.generate(widget.dropdownDate.length, (index) {
+                    return new DropdownMenuItem(
+                      value: widget.dropdownDate.elementAt(index)['id'],
+                      child:
+                          Text(widget.dropdownDate.elementAt(index)['title']),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    print(value);
+                    selectValue = value;
+                    widget.onChanged(value);
+                    setState(() {});
+                  },
+                ),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

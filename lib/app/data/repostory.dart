@@ -8,6 +8,7 @@ import 'package:get/get_connect/connect.dart';
 String baes_url = 'https://carpart.atpnet.net/api/';
 
 class RepostoryProvide extends GetConnect {
+ 
   final header = {
     'Authorization': 'Bearer ',
   };
@@ -28,8 +29,8 @@ class RepostoryProvide extends GetConnect {
   Future<Response> repPost(url, body) async {
     print(baes_url  + url);
     setUserTokan();
-    Response response = await post(baes_url  + url, body, headers: header);
-    //print(response.bodyString);
+    Response response = await post(baes_url  + url, json.encode(body), headers: header);
+    print(response.bodyString);
     try {
       switch (response.statusCode) {
         case 200:
@@ -72,4 +73,5 @@ class RepostoryProvide extends GetConnect {
       return Future.error(e);
     }
   }
+
 }

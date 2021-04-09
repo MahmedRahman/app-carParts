@@ -1,4 +1,3 @@
-import 'package:carpart/app/modules/order/views/order_create_view.dart';
 import 'package:get/get.dart';
 
 import 'package:carpart/app/modules/authiocation/bindings/authiocation_binding.dart';
@@ -10,6 +9,8 @@ import 'package:carpart/app/modules/authiocation/views/signup_delivery_view.dart
 import 'package:carpart/app/modules/authiocation/views/signup_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signupcomplate_view.dart';
 import 'package:carpart/app/modules/authiocation/views/splash_view.dart';
+import 'package:carpart/app/modules/bank/bindings/bank_binding.dart';
+import 'package:carpart/app/modules/bank/views/bank_view.dart';
 import 'package:carpart/app/modules/entry_point/bindings/entry_point_binding.dart';
 import 'package:carpart/app/modules/entry_point/views/entry_point_view.dart';
 import 'package:carpart/app/modules/home/bindings/home_binding.dart';
@@ -17,6 +18,7 @@ import 'package:carpart/app/modules/home/views/home_view.dart';
 import 'package:carpart/app/modules/notifaction/bindings/notifaction_binding.dart';
 import 'package:carpart/app/modules/notifaction/views/notifaction_view.dart';
 import 'package:carpart/app/modules/order/bindings/order_binding.dart';
+import 'package:carpart/app/modules/order/views/order_create_view.dart';
 import 'package:carpart/app/modules/order/views/order_detailes_view.dart';
 import 'package:carpart/app/modules/order/views/order_view.dart';
 import 'package:carpart/app/modules/page/bindings/page_binding.dart';
@@ -127,6 +129,11 @@ class AppPages {
       name: Routes.ENTRY_POINT,
       page: () => EntryPointView(),
       binding: EntryPointBinding(),
+    ),
+    GetPage(
+      name: Routes.BANK,
+      page: () => BankView(),
+      binding: BankBinding(),
     ),
   ];
 }

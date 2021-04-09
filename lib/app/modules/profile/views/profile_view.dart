@@ -54,14 +54,16 @@ class ProfileView extends GetView<ProfileController> {
                         title: Text('اجمالى المبالغ المدفوعة'),
                         trailing: Text('2500  SR'),
                       ):SizedBox.fromSize(),
-                       (Get.find<UserAuth>().getRole() == userRole.anonymous) ? ListTile(
+                       (Get.find<UserAuth>().getRole() != userRole.anonymous) ? ListTile(
                         onTap: () {},
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('طلبات التحويل'),
                         trailing: Text('32'),
                       ):SizedBox.fromSize(),
-                      (Get.find<UserAuth>().getRole() == userRole.anonymous) ?ListTile(
-                        onTap: () {},
+                      (Get.find<UserAuth>().getRole() != userRole.anonymous) ?ListTile(
+                        onTap: () {
+                          Get.toNamed(Routes.BANK);
+                        },
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('حسابي البنكي'),
                       ):SizedBox.fromSize(),
