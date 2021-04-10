@@ -7,10 +7,12 @@ import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signup_dealer_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signup_delivery_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signup_view.dart';
-import 'package:carpart/app/modules/authiocation/views/signupcomplate_view.dart';
+import 'package:carpart/app/modules/authiocation/views/signup_complate_view.dart';
 import 'package:carpart/app/modules/authiocation/views/splash_view.dart';
-import 'package:carpart/app/modules/bank/bindings/bank_binding.dart';
-import 'package:carpart/app/modules/bank/views/bank_view.dart';
+import 'package:carpart/app/modules/bank/add/bindings/bank_add_binding.dart';
+import 'package:carpart/app/modules/bank/add/views/bank_add_view.dart';
+import 'package:carpart/app/modules/bank/list/bindings/bank_list_binding.dart';
+import 'package:carpart/app/modules/bank/list/views/bank_list_view.dart';
 import 'package:carpart/app/modules/entry_point/bindings/entry_point_binding.dart';
 import 'package:carpart/app/modules/entry_point/views/entry_point_view.dart';
 import 'package:carpart/app/modules/home/bindings/home_binding.dart';
@@ -26,8 +28,14 @@ import 'package:carpart/app/modules/page/views/about_view.dart';
 import 'package:carpart/app/modules/page/views/contactus_view.dart';
 import 'package:carpart/app/modules/page/views/page_view.dart';
 import 'package:carpart/app/modules/page/views/trems_view.dart';
+import 'package:carpart/app/modules/payment/add/bindings/payment_add_binding.dart';
+import 'package:carpart/app/modules/payment/add/views/payment_add_view.dart';
+import 'package:carpart/app/modules/payment/list/bindings/payment_list_binding.dart';
+import 'package:carpart/app/modules/payment/list/views/payment_list_view.dart';
 import 'package:carpart/app/modules/profile/bindings/profile_binding.dart';
 import 'package:carpart/app/modules/profile/views/profile_view.dart';
+import 'package:carpart/app/modules/stoperror/bindings/stoperror_binding.dart';
+import 'package:carpart/app/modules/stoperror/views/stoperror_view.dart';
 
 part 'app_routes.dart';
 
@@ -131,9 +139,29 @@ class AppPages {
       binding: EntryPointBinding(),
     ),
     GetPage(
-      name: Routes.BANK,
-      page: () => BankView(),
-      binding: BankBinding(),
+      name: Routes.BANK_LIST,
+      page: () => BankListView(),
+      binding: BankListBinding(),
+    ),
+    GetPage(
+      name: Routes.BANK_ADD,
+      page: () => BankAddView(),
+      binding: BankAddBinding(),
+    ),
+    GetPage(
+      name: Routes.PAYMENT_LIST,
+      page: () => PaymentListView(),
+      binding: PaymentListBinding(),
+    ),
+    GetPage(
+      name: Routes.PAYMENT_ADD,
+      page: () => PaymentAddView(),
+      binding: PaymentAddBinding(),
+    ),
+    GetPage(
+      name: Routes.STOPERROR,
+      page: () => StoperrorView(),
+      binding: StoperrorBinding(),
     ),
   ];
 }

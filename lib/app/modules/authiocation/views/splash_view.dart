@@ -22,7 +22,7 @@ class SplashView extends GetView {
           children: [
             InkWell(
               onTap: () {
-                Get.toNamed(Routes.HOME);
+                Get.offNamed(Routes.HOME);
               },
               child: Container(
                 height: Get.height,

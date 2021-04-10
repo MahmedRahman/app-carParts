@@ -3,12 +3,14 @@ import 'package:carpart/app/data/component/CustemButton.dart';
 import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/component/CustomIndicator.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
+import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/modules/order/bindings/order_binding.dart';
 import 'package:carpart/app/modules/order/controllers/order_controller.dart';
-import 'package:carpart/app/modules/order/model/oder_detaile_model.dart';
-import 'package:carpart/app/modules/order/model/offer_model.dart';
+import 'package:carpart/app/data/model/oder_detaile_model.dart';
+import 'package:carpart/app/data/model/offer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class OrderDetailesView extends GetView<OrderController> {
   final _formKey = GlobalKey<FormState>();
@@ -20,19 +22,22 @@ class OrderDetailesView extends GetView<OrderController> {
         title: Text('بيانات الطلب'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: FutureBuilder(
-            future: controller.getOrderDetailes(Get.arguments[0]),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return orderDetailes(snapshot.data);
-              } else if (snapshot.hasError) {
-                return Center(child: CustomIndicator(
-                  indicatorStatus: IndicatorStatus.error,
-                ));
-              }
-              return Center(child: CustomIndicator());
-            }),
+      body: ListView(
+        children: [
+          FutureBuilder(
+              future: controller.getOrderDetailes(Get.arguments[0]),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return orderDetailes(snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Center(
+                      child: CustomIndicator(
+                    indicatorStatus: IndicatorStatus.error,
+                  ));
+                }
+                return Center(child: CustomIndicator());
+              }),
+        ],
       ),
     );
   }
@@ -41,10 +46,10 @@ class OrderDetailesView extends GetView<OrderController> {
     return Column(
       children: [
         orderCard(orderDetaileModel),
-        Get.find<UserAuth>().getRole() == userRole.Buyer
+        KRole == userRole.Client
             ? offerClient(orderDetaileModel)
             : SizedBox.shrink(),
-        Get.find<UserAuth>().getRole() == userRole.dealer
+       KRole == userRole.Merchant
             ? offerMerchant(orderDetaileModel)
             : SizedBox.shrink(),
       ],
@@ -69,30 +74,40 @@ class OrderDetailesView extends GetView<OrderController> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             )
-          :  Center(
+          : Center(
               child: Column(
                 children: List.generate(orderDetaileModel.merchantOffers.length,
                     (index) {
-                  return ListTile(
-                      leading: Text(orderDetaileModel.merchantOffers
-                          .elementAt(index)
-                          .userName),
-                      title: Text(orderDetaileModel.merchantOffers
-                          .elementAt(index)
-                          .name),
-                      subtitle: Text(orderDetaileModel.merchantOffers
-                          .elementAt(index)
-                          .price
-                          .toString()),
-                      trailing:  ElevatedButton(
-                        child: Text('قبول'),
-                        onPressed: () {
-                          controller.acceptOffer(
-                              offerId: orderDetaileModel.merchantOffers
-                                  .elementAt(index)
-                                  .id);
-                        },
-                      ));
+                  MerchantOffer merchantOffer =
+                      orderDetaileModel.merchantOffers.elementAt(index);
+
+                  return Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          'أسم التاجر',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        trailing: Text(merchantOffer.userName),
+                      ),
+                      ListTile(
+                        leading: Text(merchantOffer.name),
+                        title: Text(merchantOffer.price.toString()),
+                        trailing: IconButton(
+                          icon: Icon(
+                            Icons.done_all_rounded,
+                            color: KAccentColor,
+                          ),
+                          onPressed: () {
+                            controller.acceptOffer(
+                                offerId: orderDetaileModel.merchantOffers
+                                    .elementAt(index)
+                                    .id);
+                          },
+                        ),
+                      ),
+                    ],
+                  );
                 }),
               ),
             ),
@@ -225,45 +240,33 @@ class OrderDetailesView extends GetView<OrderController> {
           SizedBox(
             height: 10,
           ),
-          Text(
-            'رقم الطلب : ' + orderDetaileModel.id.toString(),
-            style: TextStyle(fontSize: 20),
+          ListTile(
+            title: Text('رقم الطلب'),
+            trailing: Text(orderDetaileModel.id.toString()),
           ),
-          Text(
-            'تاريخ الطلب : ' + orderDetaileModel.date.toString(),
-            style: TextStyle(fontSize: 20),
+          ListTile(
+            title: Text('حالة الطلب'),
+            trailing: Text( OrderStatus.values[orderDetaileModel.status].toString().tr),
           ),
-          Text(
-            orderDetaileModel.markName,
-            style: TextStyle(fontSize: 20),
+          ListTile(
+            title: Text('تاريخ الطلب'),
+            trailing: Text(DateFormat.MMMMd().format(orderDetaileModel.date)),
           ),
-          Text(
-            orderDetaileModel.modelName,
-            style: TextStyle(fontSize: 20),
+          ListTile(
+            title: Text('ألماركة'),
+            trailing: Text(orderDetaileModel.markName),
           ),
-          Text(
-            'موديل : ' + orderDetaileModel.versionId.toString(),
-            style: TextStyle(fontSize: 20),
+          ListTile(
+            title: Text('الموديل'),
+            trailing: Text(orderDetaileModel.modelName),
           ),
-          Text(
-            'رقم الهيكل :  ' + orderDetaileModel.vanNumber,
-            style: TextStyle(fontSize: 20),
+          ListTile(
+            title: Text('رقم الهيكل'),
+            trailing: Text(orderDetaileModel.vanNumber),
           ),
-          Text(
-            'وصف الطلب',
-            style: TextStyle(fontSize: 20),
-          ),
-          Text(
-            orderDetaileModel.description,
-            style: TextStyle(fontSize: 20),
-          ),
-              Text(
-            'حالة الطلب',
-            style: TextStyle(fontSize: 20),
-          ),
-            Text(
-            orderDetaileModel.status.toString(),
-            style: TextStyle(fontSize: 20),
+          ListTile(
+            title: Text('وصف الطلب'),
+            subtitle: Text(orderDetaileModel.description),
           ),
         ],
       ),

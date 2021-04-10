@@ -6,11 +6,12 @@ import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppUtils.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/order_model.dart';
+import 'package:carpart/app/data/webServices.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 import 'package:carpart/app/modules/order/bindings/order_binding.dart';
-import 'package:carpart/app/modules/order/model/oder_detaile_model.dart';
-import 'package:carpart/app/modules/order/model/offer_model.dart';
-import 'package:carpart/app/modules/order/providers/order_provider_provider.dart';
+import 'package:carpart/app/data/model/oder_detaile_model.dart';
+import 'package:carpart/app/data/model/offer_model.dart';
+
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,7 @@ class OrderController extends GetxController {
       new RoundedLoadingButtonController();
 
   createorder() async {
-    Response response = await OrderProvider().createorder(
+    Response response = await WebServices().createorder(
         markid: markid.value,
         modelId: modelId.value,
         versionId: versionYear.text,
@@ -66,7 +67,7 @@ class OrderController extends GetxController {
   }
 
   Future getOrder() async {
-    Response response = await OrderProvider().getOrder();
+    Response response = await WebServices().getOrder();
     print(response.bodyString);
     if (response == null) {
       return Future.error('error');
@@ -77,7 +78,7 @@ class OrderController extends GetxController {
   }
 
   Future getOrderDetailes(int OrderId) async {
-    return await OrderProvider().getOrderDetailes(OrderId).then((response) {
+    return await WebServices().getOrderDetailes(OrderId).then((response) {
       final oderDetaileModel = oderDetaileModelFromJson(response.bodyString);
       return oderDetaileModel;
     }, onError: (err) {
@@ -86,7 +87,7 @@ class OrderController extends GetxController {
   }
 
   addOffer({@required int orderId}) async {
-    Response response = await OrderProvider().addOffer(
+    Response response = await WebServices().addOffer(
       orderId: orderId,
       name: offerName.text,
       price: double.parse(offerPrice.text.toString()),
@@ -115,13 +116,13 @@ class OrderController extends GetxController {
   }
 
   Future getMerchantOffers({@required int orderId}) async {
-    Response response = await OrderProvider().getMerchantOffers(orderId);
+    Response response = await WebServices().getMerchantOffers(orderId);
     final offerModel = offerModelFromJson(response.bodyString);
     return offerModel;
   }
 
   acceptOffer({@required int offerId}) async {
-    Response response = await OrderProvider().acceptOffer(offerId);
+    Response response = await WebServices().acceptOffer(offerId);
     print(response.bodyString);
     return response;
   }

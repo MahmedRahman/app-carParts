@@ -7,7 +7,9 @@ import 'package:carpart/app/data/helper/AppUtils.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/client_model.dart';
 import 'package:carpart/app/data/model/userModel.dart';
-import 'package:carpart/app/modules/authiocation/provider/authiocation_provider.dart';
+import 'package:carpart/app/data/webServices.dart';
+import 'package:carpart/app/modules/entry_point/controllers/entry_point_controller.dart';
+
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -26,26 +28,26 @@ class AuthiocationController extends GetxController {
   String registrationImageBytes;
 
   String logoBytes;
-  var cityid=0.obs;
+  var cityid = 0.obs;
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    phoneNumber.text = "0123560607";
+    phoneNumber.text = "01223560607";
     password.text = "123456";
   }
 
   void createUser() async {
     String deviceId = await _getId();
 
-    Response response = await AuthiocationProvider().createUser(
+    Response response = await WebServices().createUser(
         name: name.text,
         email: email.text,
         password: password.text,
         phoneNumber: phoneNumber.text,
         cityid: cityid.value,
-        DeviceId: deviceId,
-        LogoBytes: logoBytes);
+        deviceId: deviceId,
+        logoBytes: logoBytes);
 
     if (response.statusCode == 200) {
       if (response.body['IsSuccess']) {
@@ -71,30 +73,20 @@ class AuthiocationController extends GetxController {
 
   void siginWithPhoneNumber() async {
     // String deviceId = await _getId();
-    await AuthiocationProvider()
+    await WebServices()
         .siginWithPhoneNumber(
       phone: phoneNumber.text,
       password: password.text,
     )
-        .then((value) {
+        .then((value) async {
       final userModel = userModelFromJson(value);
       Get.find<UserAuth>().setUserToken(userModel.accessToken);
-      Get.find<UserAuth>().setUserName(userModel.userName);
-      Get.find<UserAuth>().setUserEmail(email.text);
-
+      await EntryPointController().getProfile();
       showSnackBar(
           title: AppName,
           message: "تم تسجيل الدخول بنجاح",
           snackbarStatus: () {
-            if (userModel.role == 'Client') {
-              Get.find<UserAuth>().setRole(userRole.Buyer);
-              Get.toNamed(Routes.HOME);
-            } else if (userModel.role == 'Merchant') {
-              Get.find<UserAuth>().setRole(userRole.dealer);
-              Get.toNamed(Routes.HOME);
-            } else {
-              Get.find<UserAuth>().setRole(userRole.anonymous);
-            }
+            Get.toNamed(Routes.HOME);
 
             btnController.reset();
           });
@@ -121,8 +113,12 @@ class AuthiocationController extends GetxController {
     }
   }
 
+  void bntrest() {
+    btnController.reset();
+  }
+
   void upgrateMerchant() async {
-    Response response = await AuthiocationProvider().upgrateMerchant(
+    Response response = await WebServices().upgrateMerchant(
       businessName: businessName.text,
       registrationImageBytes: registrationImageBytes,
     );
@@ -133,7 +129,7 @@ class AuthiocationController extends GetxController {
             title: AppName,
             message: 'تم تقدم طلب ترقية',
             snackbarStatus: () {
-              Get.toNamed(Routes.HOME);
+              Get.offNamed(Routes.HOME);
             });
       } else {
         showSnackBar(
@@ -147,5 +143,25 @@ class AuthiocationController extends GetxController {
           message: 'خطاء فى عملية الترقية',
           snackbarStatus: () {});
     }
+  }
+
+  TextEditingController nationalNumber = new TextEditingController();
+  String nationalIdBytes;
+  String carBackBytes;
+  String carFrontBytes;
+  String carPaperBytes;
+  String drivingLicenseBytes;
+
+  void upgrateDelivery() async {
+    Response response = await WebServices().upgrateDelivery(
+      nationalNumber: nationalNumber.text,
+      nationalIdBytes: nationalIdBytes,
+      carBackBytes: carBackBytes,
+      carFrontBytes: carFrontBytes,
+      carPaperBytes: carPaperBytes,
+      drivingLicenseBytes: drivingLicenseBytes,
+    );
+
+    print(response.bodyString);
   }
 }

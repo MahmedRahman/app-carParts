@@ -7,7 +7,11 @@ class AppTranslation extends Translations {
         'ar_EG': {
          'skip' : 'تخطى',
          'lang' :'English',
-         'Done' : 'موافق'
+         'Done' : 'موافق',
+         'OrderStatus.Request' : 'الطلب فى حالة الانتظار' , 
+         'userRole.Client' : 'مشترى',
+         'userRole.Merchant' : 'تاجر' ,
+         'userRole.DeliveryAgent' : 'مندوب توصيل'
         }
       };
 }

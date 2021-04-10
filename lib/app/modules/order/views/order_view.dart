@@ -7,6 +7,7 @@ import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carpart/app/modules/order/controllers/order_controller.dart';
+import 'package:intl/intl.dart';
 
 class OrderView extends GetView<OrderController> {
   @override
@@ -28,7 +29,6 @@ class OrderView extends GetView<OrderController> {
               ).toList(),
             );
           } else if (snapshot.hasError) {
-            
             return Center(
               child: CustomIndicator(
                 indicatorStatus: IndicatorStatus.error,
@@ -51,7 +51,8 @@ class OrderView extends GetView<OrderController> {
           children: [
             ListTile(
               onTap: () {
-                Get.toNamed(Routes.OrderDetailesView,arguments: [orderModel.id]);
+                Get.toNamed(Routes.OrderDetailesView,
+                    arguments: [orderModel.id]);
               },
               isThreeLine: true,
               title: Text(orderModel.markName),
@@ -59,11 +60,13 @@ class OrderView extends GetView<OrderController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(orderModel.modelName + " " + orderModel.versionId.toString()),
+                  Text(orderModel.modelName +
+                      " " +
+                      orderModel.versionId.toString()),
                   Text(orderModel.vanNumber),
                 ],
               ),
-              trailing: Text(orderModel.date.toString()),
+              trailing: Text(DateFormat.MMMMd().format(orderModel.date)),
               leading: SizedBox(
                 height: 50,
                 width: 50,

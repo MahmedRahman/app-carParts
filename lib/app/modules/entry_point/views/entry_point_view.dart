@@ -9,6 +9,7 @@ class EntryPointView extends GetView<EntryPointController> {
   @override
   Widget build(BuildContext context) {
     EntryPointController entryPointController = Get.put(EntryPointController());
+    entryPointController.Start();
     return SplashView();
   }
 }

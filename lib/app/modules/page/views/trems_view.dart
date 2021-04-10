@@ -1,5 +1,7 @@
+import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; 
+import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 
 class TremsView extends GetView {
   @override
@@ -9,13 +11,11 @@ class TremsView extends GetView {
         title: Text('TremsView'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Text(
-          'TremsView is working', 
-          style: TextStyle(fontSize:20),
-        ),
-      ),
+      body: FutureBuilder(
+          future: pageTream,
+          builder: (context, snapshot) {
+            return Html(data: snapshot.data);
+          }),
     );
   }
 }
-  

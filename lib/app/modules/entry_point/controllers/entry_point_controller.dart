@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:carpart/app/data/auth.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
-import 'package:carpart/app/modules/authiocation/provider/authiocation_provider.dart';
-import 'package:carpart/app/modules/entry_point/providers/entry_point_provider.dart';
+import 'package:carpart/app/data/model/setting_model.dart';
+import 'package:carpart/app/data/webServices.dart';
+
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
@@ -11,24 +12,27 @@ class EntryPointController extends GetxController {
   //TODO: Implement EntryPointController
 
   @override
-  void onInit() async {
-    // TODO: implement onInit
-    if (Get.find<UserAuth>().getRole()?.toString() == null ||
-        Get.find<UserAuth>().getUserEmail()?.toString() == null ||
-        Get.find<UserAuth>().getUserName()?.toString() == null) {
-      Get.find<UserAuth>().setRole(userRole.anonymous);
-    }
+  void onInit() async {}
 
-    await getcity();
-    await getcarMark();
-    await getcarModel();
-   // await getcarVersions();
-    Get.toNamed(Routes.HOME);
+  void Start() async {
+    await fillLookUpTable().then((value) {
+      Get.offNamed(Routes.HOME);
+    });
+
     super.onInit();
   }
 
+  Future fillLookUpTable() async {
+    await getProfile();
+    await getcity();
+    await getcarMark();
+    await getcarModel();
+    await getBank();
+    await getSetting();
+  }
+
   Future getcity() async {
-    Response response = await EntryPointProvider().getcity();
+    Response response = await WebServices().getcity();
     print(response.bodyString);
 
     List<dynamic> ListCity = jsonDecode(response.bodyString);
@@ -42,7 +46,7 @@ class EntryPointController extends GetxController {
   }
 
   Future getcarMark() async {
-    Response response = await EntryPointProvider().getMark();
+    Response response = await WebServices().getMark();
     print(response.bodyString);
 
     List<dynamic> ListData = jsonDecode(response.bodyString);
@@ -56,7 +60,7 @@ class EntryPointController extends GetxController {
   }
 
   Future getcarModel() async {
-    Response response = await EntryPointProvider().getModel();
+    Response response = await WebServices().getModel();
     print(response.bodyString);
 
     List<dynamic> ListData = jsonDecode(response.bodyString);
@@ -69,5 +73,42 @@ class EntryPointController extends GetxController {
     });
   }
 
+  Future getBank() async {
+    Response response = await WebServices().getBank();
+    print(response.bodyString);
 
+    List<dynamic> ListData = jsonDecode(response.bodyString);
+
+    ListData.forEach((element) {
+      bankName.add({
+        "id": "" + element['Id'].toString() + "",
+        "title": "" + element['Name'].toString() + "",
+      });
+    });
+  }
+
+  Future getSetting() async {
+    Response response = await WebServices().getSetting();
+    final settingModel = settingModelFromJson(response.bodyString);
+
+    pageAbout = Future.value(settingModel.about);
+    pageCallus = Future.value(settingModel.callUs);
+    pageTream = Future.value(settingModel.terms);
+    helpPhoneNumber = settingModel.helpPhoneNumber;
+    print(response.bodyString);
+  }
+
+  Future getProfile() async {
+    Response response = await WebServices().getProfile();
+
+    if (response.statusCode == 401) {
+      KRole = userRole.anonymous;
+    } else {
+      KName = response.body['Name'];
+      KEmail = response.body['Email'];
+      KCity = response.body['CityName'];
+      KRole = userRole.values[response.body['Role']];
+    }
+
+  }
 }

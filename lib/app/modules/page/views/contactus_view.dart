@@ -1,4 +1,6 @@
+import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart'; 
 
 class ContactusView extends GetView {
@@ -9,11 +11,11 @@ class ContactusView extends GetView {
         title: Text('أتصل بنا'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Text(
-          'أتصل بنا', 
-          style: TextStyle(fontSize:20),
-        ),
+      body: FutureBuilder(
+        future: pageCallus,
+        builder: (context, snapshot) {
+          return Html(data: snapshot.data) ;
+        }
       ),
     );
   }

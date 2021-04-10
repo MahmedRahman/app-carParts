@@ -1,7 +1,27 @@
 var carMark = [];
 var carModel = [];
 var cityName = [];
+var bankName = [];
 
-enum userRole { anonymous, Buyer, dealer, Delivery }
+Future pageAbout;
+Future pageCallus;
+Future pageTream;
+String helpPhoneNumber;
 
-enum OrderStatus {Request ,MerchantOffer,MerchantOfferComplete,DeliveryAgentOffer,DeliveryAgentOfferComplete}
+enum userRole { Client, Merchant, DeliveryAgent, anonymous }
+
+String KName = '';
+String KEmail = '';
+String KCity = '';
+
+userRole KRole = userRole.anonymous;
+
+enum OrderStatus {
+  Request,
+  MerchantOffer,
+  MerchantOfferComplete,
+  DeliveryAgentOffer,
+  DeliveryAgentOfferComplete
+}
+
+enum RequestStatus { Request, Accept, Refuse }

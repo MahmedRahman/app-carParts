@@ -1,4 +1,4 @@
-import 'package:carpart/app/data/repostory.dart';
+import 'package:carpart/app/data/ApiManger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

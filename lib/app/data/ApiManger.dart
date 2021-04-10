@@ -7,8 +7,7 @@ import 'package:get/get_connect/connect.dart';
 
 String baes_url = 'https://carpart.atpnet.net/api/';
 
-class RepostoryProvide extends GetConnect {
- 
+class ApiManger extends GetConnect {
   final header = {
     'Authorization': 'Bearer ',
   };
@@ -27,17 +26,18 @@ class RepostoryProvide extends GetConnect {
   }
 
   Future<Response> repPost(url, body) async {
-    print(baes_url  + url);
+    print(baes_url + url);
     setUserTokan();
-    Response response = await post(baes_url  + url, json.encode(body), headers: header);
-    print(response.bodyString);
+    Response response =
+        await post(baes_url + url, json.encode(body), headers: header);
+    print(baes_url + url + " statusCode " + response.statusCode.toString());
     try {
       switch (response.statusCode) {
         case 200:
           return response;
           break;
         case 401:
-          if (Get.find<UserAuth>().getRole() != userRole.anonymous) {
+          if (KRole != userRole.anonymous) {
             Get.find<UserAuth>().signout();
           }
           return Future.error('error');
@@ -51,27 +51,33 @@ class RepostoryProvide extends GetConnect {
   }
 
   Future<Response> repGet(url) async {
-    print(baes_url +  url);
+    print(baes_url + url);
     setUserTokan();
+
     Response response = await get(baes_url + url, headers: header);
-    //print(response.bodyString);
+    print(baes_url + url + " statusCode " + response.statusCode.toString());
     try {
       switch (response.statusCode) {
         case 200:
           return response;
           break;
         case 401:
-          if (Get.find<UserAuth>().getRole() != userRole.anonymous) {
+        
+          if (KRole != userRole.anonymous) {
             Get.find<UserAuth>().signout();
           }
-          return Future.error('error');
+
+        
+
+          return Future.value(response);
           break;
         default:
+          Get.toNamed(Routes.STOPERROR,arguments: [url ,response.statusCode.toString() ]);
           return Future.error('error');
       }
     } catch (e) {
+      Get.toNamed(Routes.STOPERROR,arguments: [url ,response.statusCode.toString() ]);
       return Future.error(e);
     }
   }
-
 }

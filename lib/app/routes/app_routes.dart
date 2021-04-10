@@ -10,15 +10,12 @@ abstract class Routes {
   static const FrogatepasswordView = '/FrogatepasswordView';
   static const SignupcomplateView = '/SignupcomplateView';
   static const PAGE = '/page';
-
   static const AboutView = '/AboutView';
   static const ContactusView = '/ContactusView';
   static const TremsView = '/TremsView';
-
   static const NOTIFACTION = '/notifaction';
   static const PROFILE = '/profile';
   static const ORDER = '/order';
-
   static const OrderDetailesView = '/OrderDetailesView';
 
   static const SignupDeliveryView = '/SignupDeliveryView';
@@ -26,5 +23,11 @@ abstract class Routes {
   static const SignupDealerView = '/SignupDealerView';
   static const ENTRY_POINT = '/entry-point';
   static const OrderCreateView = '/OrderCreateView';
-  static const BANK = '/bank';
+
+  static const BANK_LIST = '/bank/list';
+
+  static const BANK_ADD = '/bank/add';
+  static const PAYMENT_LIST = '/payment/list';
+  static const PAYMENT_ADD = '/payment/add';
+  static const STOPERROR = '/stoperror';
 }

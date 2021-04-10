@@ -1,6 +1,7 @@
 import 'package:carpart/app/data/auth.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
+import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,9 +15,9 @@ class ProfileView extends GetView<ProfileController> {
         child: Column(
           children: [
           ListTile(
-            title: Text('احمد عبد الرحمن'),
-            subtitle: Text('Ahmed2020@gmail.com'),
-            leading: Icon(Icons.ac_unit),
+            title: Text(KName),
+            subtitle: Text(KEmail),
+            leading: Icon(Icons.account_circle),
           ),
             Padding(
               padding: const EdgeInsets.all(25),
@@ -37,32 +38,36 @@ class ProfileView extends GetView<ProfileController> {
                   child: Column(
                     children: [
                       ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          Get.find<HomeController>().selectindex.value = 1;
+                        },
                         leading: Icon(Icons.wallet_giftcard),
-                        title: Text('اجمالى عدد الطلبات'),
-                        trailing: Text('23'),
+                        title: Text('الطلبات'),
+                        //trailing: Text('23'),
                       ),
-                      (Get.find<UserAuth>().getRole() != userRole.Buyer) ? ListTile(
+                      (KRole != userRole.Client) ? ListTile(
                         onTap: () {},
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('اجمالى المبالغ المترتبة'),
-                        trailing: Text('500 SR'),
+                       // trailing: Text('500 SR'),
                       ):SizedBox.fromSize(),
-                       (Get.find<UserAuth>().getRole() != userRole.Buyer) ?ListTile(
+                       (KRole != userRole.Client) ?ListTile(
                         onTap: () {},
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('اجمالى المبالغ المدفوعة'),
-                        trailing: Text('2500  SR'),
+                       // trailing: Text('2500  SR'),
                       ):SizedBox.fromSize(),
-                       (Get.find<UserAuth>().getRole() != userRole.anonymous) ? ListTile(
-                        onTap: () {},
+                       (KRole != userRole.anonymous) ? ListTile(
+                        onTap: () {
+                          Get.toNamed(Routes.PAYMENT_LIST);
+                        },
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('طلبات التحويل'),
-                        trailing: Text('32'),
+                      //  trailing: Text('32'),
                       ):SizedBox.fromSize(),
-                      (Get.find<UserAuth>().getRole() != userRole.anonymous) ?ListTile(
+                      (KRole != userRole.anonymous) ?ListTile(
                         onTap: () {
-                          Get.toNamed(Routes.BANK);
+                          Get.toNamed(Routes.BANK_LIST);
                         },
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('حسابي البنكي'),
@@ -71,7 +76,7 @@ class ProfileView extends GetView<ProfileController> {
                         onTap: () {},
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('مركز المساعدة'),
-                        trailing: Text('01002002020'),
+                        trailing: Text(helpPhoneNumber),
                       ),
                       ListTile(
                         onTap: () {

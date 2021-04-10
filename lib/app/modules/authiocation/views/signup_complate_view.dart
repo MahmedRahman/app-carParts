@@ -59,7 +59,7 @@ class SignupcomplateView extends GetView<AuthiocationController> {
                   if (_formKey.currentState.validate()) {
                     controller.createUser();
                   } else {
-                    controller.btnController.reset();
+                    controller.bntrest(); 
                   }
                 },
               )

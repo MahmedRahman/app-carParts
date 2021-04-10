@@ -17,7 +17,7 @@ import 'package:get/get.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  userRole currentUser = Get.find<UserAuth>().getRole();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +38,7 @@ class HomeView extends GetView<HomeController> {
             color: KScandaryColor,
             child: ListView(
               children: [
-                Get.find<UserAuth>().getRole() != userRole.anonymous
+                KRole != userRole.anonymous
                     ? Container(
                         height: Get.height * .3,
                         decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class HomeView extends GetView<HomeController> {
                           ),
                         ),
                         child: Center(
-                            child: Get.find<UserAuth>().getRole() !=
+                            child: KRole !=
                                     userRole.anonymous
                                 ? ListTile(
                                     leading: Container(
@@ -59,12 +59,12 @@ class HomeView extends GetView<HomeController> {
                                           Image.asset('images/drwar/user.png'),
                                     ),
                                     title: Text(
-                                      Get.find<UserAuth>().getUserName(),
+                                      KName,
                                       style: headline3.copyWith(
                                           color: Colors.white),
                                     ),
                                     subtitle: Text(
-                                      Get.find<UserAuth>().getRole().toString(),
+                                      KEmail + " " + KRole.toString().tr,
                                       style: headline3.copyWith(
                                           color: Colors.white),
                                     ),
@@ -105,7 +105,7 @@ class HomeView extends GetView<HomeController> {
                           child: Image.asset('images/drwar/home.png'),
                         ),
                         onTap: () {
-                            Get.find<HomeController>().selectindex.value = 0;
+                          Get.find<HomeController>().selectindex.value = 0;
                           Get.back();
                         },
                       ),
@@ -123,8 +123,7 @@ class HomeView extends GetView<HomeController> {
                         },
                       ),
                       SizedBox(
-                          child: Get.find<UserAuth>().getRole() ==
-                                  userRole.Buyer
+                          child: KRole == userRole.Client
                               ? ListTile(
                                   title: Text(
                                     'طلب انضمام كمندوب',
@@ -141,8 +140,7 @@ class HomeView extends GetView<HomeController> {
                                 )
                               : SizedBox.shrink()),
                       SizedBox(
-                          child: Get.find<UserAuth>().getRole() ==
-                                  userRole.Buyer
+                          child: KRole == userRole.Client
                               ? ListTile(
                                   title: Text(
                                     'طلب انضمام كتاجر',
@@ -159,8 +157,7 @@ class HomeView extends GetView<HomeController> {
                                 )
                               : SizedBox.shrink()),
                       SizedBox(
-                          child: Get.find<UserAuth>().getRole() ==
-                                  userRole.anonymous
+                          child: KRole == userRole.anonymous
                               ? ListTile(
                                   title: Text(
                                     'تسجيل جديد',
@@ -177,8 +174,7 @@ class HomeView extends GetView<HomeController> {
                                 )
                               : SizedBox.shrink()),
                       SizedBox(
-                          child: Get.find<UserAuth>().getRole() ==
-                                  userRole.anonymous
+                          child: KRole == userRole.anonymous
                               ? ListTile(
                                   title: Text(
                                     'تسجيل الدخول',
@@ -223,7 +219,7 @@ class HomeView extends GetView<HomeController> {
                         color: Color(0XFF445969),
                         child: Align(
                             alignment: Alignment.bottomRight,
-                            child: currentUser != userRole.anonymous
+                            child: KRole != userRole.anonymous
                                 ? ListTile(
                                     title: Text(
                                       'تسجيل خروج',
@@ -233,10 +229,9 @@ class HomeView extends GetView<HomeController> {
                                     leading:
                                         Image.asset('images/drwar/exit.png'),
                                     onTap: () {
-                                      // Update the state of the app.
-                                      // 
+
                                       Get.back();
-                                    
+
                                       Get.find<UserAuth>().signout();
                                     },
                                   )
@@ -261,7 +256,7 @@ class HomeView extends GetView<HomeController> {
           type: BottomNavigationBarType.fixed,
           elevation: 2,
           onTap: (value) {
-            if (Get.find<UserAuth>().getRole() == userRole.anonymous) {
+            if (KRole == userRole.anonymous) {
               controller.selectindex.value = 0;
               AppUtils().showDialog(
                   AppName, 'برجاء تسجيل دخول حتى تتمكن من استخدام التطبيق', () {
@@ -339,19 +334,9 @@ class HomeView extends GetView<HomeController> {
             OrderView(),
             NotifactionView(),
             ProfileView(),
-            AnonymousUser()
           ],
         );
       }),
-    );
-  }
-}
-
-class AnonymousUser extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('برجاء تسجيل الدخول'),
     );
   }
 }

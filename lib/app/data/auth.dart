@@ -18,53 +18,18 @@ class UserAuth extends GetxService {
     storage.write(KuserToken, value);
   }
 
-  void setUserName(String value) {
-    storage.write(KuserUserName, value);
-  }
-
-  void setUserEmail(String value) {
-    storage.write(KuserEmail, value);
-  }
-
-  void setRole(userRole role) {
-    storage.write(KuserRoal, role.toString());
-  }
-
   String getUserToken() {
     return storage.read(KuserToken);
   }
 
-  String getUserName() {
-    return storage.read(KuserUserName);
-  }
-
-  String getUserEmail() {
-    return storage.read(KuserEmail);
-  }
-
-  userRole getRole() {
-    String Role = storage.read(KuserRoal);
-
-    switch (Role) {
-      case 'userRole.Buyer':
-        return userRole.Buyer;
-        break;
-      case 'userRole.Delivery':
-        return userRole.Delivery;
-        break;
-      case 'userRole.dealer':
-        return userRole.dealer;
-        break;
-      default:
-        return userRole.anonymous;
-    }
-  }
-
   void signout() {
-    Get.find<UserAuth>().setRole(userRole.anonymous);
-  Get.toNamed(Routes.SplashView);
-   Future.delayed(Duration(seconds: 1), () {
-       Get.find<HomeController>().selectindex.value = 0;
+
+    KRole = userRole.anonymous;
+
+    Get.toNamed(Routes.SplashView);
+
+    Future.delayed(Duration(seconds: 1), () {
+      Get.find<HomeController>().selectindex.value = 0;
       Get.toNamed(Routes.HOME);
     });
   }

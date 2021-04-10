@@ -1,5 +1,7 @@
+import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; 
+import 'package:flutter_html/flutter_html.dart';
 
 class AboutView extends GetView {
   @override
@@ -9,13 +11,15 @@ class AboutView extends GetView {
         title: Text('عن المشروع'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Text(
-          'عن المشروع', 
-          style: TextStyle(fontSize:20),
-        ),
-      ),
+      body: FutureBuilder(
+        future: pageAbout,
+        builder: (context, snapshot) {
+          return Html(
+            data:snapshot.data
+          );
+        }
+      )
     );
   }
 }
-  
+

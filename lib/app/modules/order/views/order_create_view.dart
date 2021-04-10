@@ -12,11 +12,12 @@ import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/AppUtils.dart';
 import 'package:carpart/app/data/component/custemImgePicker/ImagePicker.dart';
 import 'package:carpart/app/data/helper/AppValidation.dart';
+import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/modules/order/controllers/order_controller.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -55,8 +56,7 @@ class OrderCreateView extends GetView<OrderController> {
                 ],
               ),
             ),
-            (Get.find<UserAuth>().getRole() == userRole.anonymous ||
-                    Get.find<UserAuth>().getRole() == userRole.Buyer)
+            (KRole == userRole.anonymous || KRole == userRole.Client)
                 ? Form(
                     key: _formKey,
                     child: Column(
@@ -98,7 +98,7 @@ class OrderCreateView extends GetView<OrderController> {
                         SizedBox(
                           height: 10,
                         ),
-                  CustemTextForm(
+                        CustemTextForm(
                           textHint: 'سنة الصنع',
                           inputcontroller: controller.versionYear,
                           textInputType: TextInputType.number,
@@ -134,17 +134,14 @@ class OrderCreateView extends GetView<OrderController> {
                           title: 'ارسال',
                           buttonController: controller.btnController,
                           onPressed: () {
-                            if (Get.find<UserAuth>().getRole() ==
-                                userRole.anonymous) {
-                              AppUtils().showSnackBar(
-                                AppName,
-                                 'برجاء تسجيل دخول',
-                                snackbarStatus: (value) {
-                                  if (value == SnackbarStatus.CLOSED) {
+                            if (KRole == userRole.anonymous) {
+                              showSnackBar(
+                                  title: AppName,
+                                  message: 'برجاء تسجيل دخول',
+                                  snackbarStatus: () {
+                                    controller.restBtn();
                                     Get.toNamed(Routes.SigninView);
-                                  }
-                                },
-                              );
+                                  });
                             } else {
                               if (_formKey.currentState.validate()) {
                                 controller.createorder();
