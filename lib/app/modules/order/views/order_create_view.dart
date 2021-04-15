@@ -17,9 +17,11 @@ import 'package:carpart/app/modules/order/controllers/order_controller.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:geolocator/geolocator.dart';
 
 class OrderCreateView extends GetView<OrderController> {
   @override
@@ -130,6 +132,41 @@ class OrderCreateView extends GetView<OrderController> {
                             controller.imageBytes = value;
                           },
                         ),
+                        InkWell(
+                          onTap: () {
+                            Get.to(MapSample(), fullscreenDialog: true);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 150,
+                              color: Colors.grey,
+                              child: Stack(
+                                children: [
+                                  GoogleMap(
+                                    mapType: MapType.hybrid,
+                                    initialCameraPosition: CameraPosition(
+                                      target: LatLng(Klatitude, Klongitude),
+                                      zoom: 14.4746,
+                                    ),
+                                    markers: Set.from([
+                                      Marker(
+                                        markerId: MarkerId('MarkerId'),
+                                        draggable: true,
+                                        position: LatLng(Klatitude, Klongitude),
+                                      ),
+                                    ]),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      color: Colors.grey.withOpacity(.3),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                         CustemButton(
                           title: 'ارسال',
                           buttonController: controller.btnController,
@@ -169,6 +206,103 @@ class OrderCreateView extends GetView<OrderController> {
                   ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MapSample extends StatefulWidget {
+  @override
+  State<MapSample> createState() => MapSampleState();
+}
+
+class MapSampleState extends State<MapSample> {
+  GoogleMapController _controller;
+  var allMarker = List<Marker>().obs;
+
+  @override
+  Widget build(BuildContext context) {
+    allMarker.add(
+      Marker(  
+        markerId: MarkerId('MarkerId'),
+        draggable: true,
+        position: LatLng(Klatitude, Klongitude),
+      ),
+    );
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text('تحديد العنوان'),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: IconButton(
+              icon: Icon(Icons.done),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+          ),
+        ],
+      ),
+      body: Obx(() {
+        return GoogleMap(
+          mapType: MapType.hybrid,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(Klatitude, Klongitude),
+            zoom: 14.4746,
+          ),
+          onMapCreated: (GoogleMapController controller) {
+            _controller = controller;
+          },
+          onTap: (LatLng _latLng) {
+            Marker marker = Marker(
+              markerId: MarkerId('MarkerId'),
+              draggable: true,
+              position: _latLng,
+            );
+            Klatitude = _latLng.latitude;
+            Klongitude = _latLng.longitude;
+            allMarker.add(marker);
+          },
+          markers: Set.from(allMarker),
+        );
+      }),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.location_pin,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          Geolocator.getCurrentPosition().then(
+            (_latLng) {
+              _controller.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                      target: LatLng(
+                        _latLng.latitude,
+                        _latLng.longitude,
+                      ),
+                      zoom: 14.0,
+                      bearing: 45.0,
+                      tilt: 45.0),
+                ),
+              );
+
+              Marker marker = Marker(
+                markerId: MarkerId('MarkerId'),
+                draggable: true,
+                position: LatLng(
+                  _latLng.latitude,
+                  _latLng.longitude,
+                ),
+              );
+              Klatitude = _latLng.latitude;
+              Klongitude = _latLng.longitude;
+              allMarker.add(marker);
+            },
+          );
+        },
       ),
     );
   }

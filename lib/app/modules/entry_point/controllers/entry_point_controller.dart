@@ -94,6 +94,9 @@ class EntryPointController extends GetxController {
     pageAbout = Future.value(settingModel.about);
     pageCallus = Future.value(settingModel.callUs);
     pageTream = Future.value(settingModel.terms);
+
+    KMPriceMin = settingModel.kmPriceMin;
+    KMPriceMax = settingModel.kmPriceMax;
     helpPhoneNumber = settingModel.helpPhoneNumber;
     print(response.bodyString);
   }
@@ -107,8 +110,11 @@ class EntryPointController extends GetxController {
       KName = response.body['Name'];
       KEmail = response.body['Email'];
       KCity = response.body['CityName'];
+
+      Klatitude = response.body['Lat'];
+      Klongitude = response.body['Lng'];
+
       KRole = userRole.values[response.body['Role']];
     }
-
   }
 }

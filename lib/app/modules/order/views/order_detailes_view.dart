@@ -49,8 +49,11 @@ class OrderDetailesView extends GetView<OrderController> {
         KRole == userRole.Client
             ? offerClient(orderDetaileModel)
             : SizedBox.shrink(),
-       KRole == userRole.Merchant
+        KRole == userRole.Merchant
             ? offerMerchant(orderDetaileModel)
+            : SizedBox.shrink(),
+        KRole == userRole.DeliveryAgent
+            ? offerDeliveryAgent()
             : SizedBox.shrink(),
       ],
     );
@@ -215,6 +218,29 @@ class OrderDetailesView extends GetView<OrderController> {
     );
   }
 
+  Widget offerDeliveryAgent() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      width: Get.width,
+      constraints: BoxConstraints(minHeight: 150),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)]),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text('انت تبعد عن المتجر'),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget orderCard(OderDetaileModel orderDetaileModel) {
     return Container(
       margin: const EdgeInsets.all(15),
@@ -246,7 +272,8 @@ class OrderDetailesView extends GetView<OrderController> {
           ),
           ListTile(
             title: Text('حالة الطلب'),
-            trailing: Text( OrderStatus.values[orderDetaileModel.status].toString().tr),
+            trailing: Text(
+                OrderStatus.values[orderDetaileModel.status].toString().tr),
           ),
           ListTile(
             title: Text('تاريخ الطلب'),

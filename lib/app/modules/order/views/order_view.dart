@@ -1,5 +1,6 @@
 import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/component/CustomIndicator.dart';
+import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/model/order_model.dart';
 
 import 'package:carpart/app/data/helper/AppTheme.dart';
@@ -66,7 +67,12 @@ class OrderView extends GetView<OrderController> {
                   Text(orderModel.vanNumber),
                 ],
               ),
-              trailing: Text(DateFormat.MMMMd().format(orderModel.date)),
+              trailing: Column(
+                children: [
+                  Text(DateFormat.MMMMd().format(orderModel.date)),
+                  Text(OrderStatus.values[orderModel.status].toString().tr )
+                ],
+              ),
               leading: SizedBox(
                 height: 50,
                 width: 50,

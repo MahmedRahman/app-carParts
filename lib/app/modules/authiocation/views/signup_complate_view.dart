@@ -48,7 +48,6 @@ class SignupcomplateView extends GetView<AuthiocationController> {
               CustomDropdownButton(
                 dropdownDate: cityName,
                 onChanged: (value) {
-                
                   controller.cityid.value = int.parse(value);
                 },
               ),

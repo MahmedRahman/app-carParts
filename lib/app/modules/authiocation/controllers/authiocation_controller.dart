@@ -87,7 +87,6 @@ class AuthiocationController extends GetxController {
           message: "تم تسجيل الدخول بنجاح",
           snackbarStatus: () {
             Get.toNamed(Routes.HOME);
-
             btnController.reset();
           });
     }, onError: (err) {
@@ -162,6 +161,10 @@ class AuthiocationController extends GetxController {
       drivingLicenseBytes: drivingLicenseBytes,
     );
 
-    print(response.bodyString);
+    if (response.body['IsSuccess']) {
+      Get.toNamed(Routes.HOME);
+    } else {
+//sh
+    }
   }
 }

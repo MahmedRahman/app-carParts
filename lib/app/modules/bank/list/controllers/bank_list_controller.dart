@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class BankListController extends GetxController {
   //TODO: Implement BankListController
+  //Future bankModel = List<BankModel>.empty().obs;
 
   final count = 0.obs;
   @override

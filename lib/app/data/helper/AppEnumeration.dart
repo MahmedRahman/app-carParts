@@ -8,6 +8,13 @@ Future pageCallus;
 Future pageTream;
 String helpPhoneNumber;
 
+
+double KMPriceMin;
+double KMPriceMax;
+
+double Klatitude = 24.713552;
+double Klongitude = 46.675297;
+
 enum userRole { Client, Merchant, DeliveryAgent, anonymous }
 
 String KName = '';

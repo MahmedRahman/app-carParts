@@ -1,4 +1,5 @@
 import 'package:carpart/app/data/ApiManger.dart';
+import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -61,7 +62,9 @@ class WebServices extends ApiManger {
       @required String registrationImageBytes}) async {
     Response response = await repPost('Account/Upgrade?role=1', {
       "BusinessName": businessName,
-      "RegistrationImageBytes": registrationImageBytes
+      "RegistrationImageBytes": registrationImageBytes,
+      "Lat": Klatitude,
+      "Lng": Klongitude,
     });
     return response;
   }
@@ -100,7 +103,9 @@ class WebServices extends ApiManger {
       "VersionId": versionId,
       "VanNumber": vanNumber,
       "Description": description,
-      "ImageBytes": imageBytes.toString()
+      "ImageBytes": imageBytes.toString(),
+      "Lat": Klatitude,
+      "Lng": Klongitude,
     });
 
     return response;
