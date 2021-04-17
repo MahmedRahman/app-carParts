@@ -15,7 +15,8 @@ class AppTranslation extends Translations {
           'OrderStatus.DeliveryAgentOfferComplete': 'عرض توصيل مكتمل',
           'userRole.Client': 'مشترى',
           'userRole.Merchant': 'تاجر',
-          'userRole.DeliveryAgent': 'مندوب توصيل'
+          'userRole.DeliveryAgent': 'مندوب توصيل',
+          'RequestStatus.Request' : 'جارى الطلب'
         }
       };
 }

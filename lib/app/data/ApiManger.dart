@@ -12,19 +12,6 @@ class ApiManger extends GetConnect {
     'Authorization': 'Bearer ',
   };
 
-  void setUserTokan() {
-    String tokan = Get.find<UserAuth>().getUserToken();
-
-    if (tokan != null) {
-      header.update(
-        'Authorization',
-        (value) {
-          return 'Bearer ' + tokan;
-        },
-      );
-    }
-  }
-
   Future<Response> repPost(url, body) async {
     print(baes_url + url);
     setUserTokan();
@@ -80,4 +67,19 @@ class ApiManger extends GetConnect {
       return Future.error(e);
     }
   }
+
+  void setUserTokan() {
+    String tokan = Get.find<UserAuth>().getUserToken();
+
+    if (tokan != null) {
+      header.update(
+        'Authorization',
+        (value) {
+          return 'Bearer ' + tokan;
+        },
+      );
+    }
+  }
+
+
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "349428691690",
+    "project_id": "carpart-961ed",
+    "storage_bucket": "carpart-961ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349428691690:android:41922746adb5d8366add93",
+        "android_client_info": {
+          "package_name": "com.atpnet.carpart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349428691690-3rr9qk7laumpu3i14rmai675b4ggk1vp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQJdzDDq4ZYm66BL5SGV9BgRFfrh4AjFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349428691690-3rr9qk7laumpu3i14rmai675b4ggk1vp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

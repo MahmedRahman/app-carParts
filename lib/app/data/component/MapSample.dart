@@ -24,7 +24,7 @@ class MapSampleState extends State<MapSample> {
       ),
     );
     return new Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text('تحديد العنوان'),
         centerTitle: true,
         actions: [
@@ -39,6 +39,7 @@ class MapSampleState extends State<MapSample> {
           ),
         ],
       ),
+      */
       body: Obx(() {
         return GoogleMap(
           mapType: MapType.hybrid,

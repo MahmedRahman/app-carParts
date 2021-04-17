@@ -82,21 +82,24 @@ class SigninView extends GetView<AuthiocationController> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        width: Get.width,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              Get.toNamed(
-                                Routes.FrogatepasswordView,
-                              );
-                            },
-                            child: Text(
-                              'نسيت كلمة المرور ؟',
-                              textAlign: TextAlign.left,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: Get.width,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Get.toNamed(
+                                  Routes.FrogatepasswordView,
+                                );
+                              },
+                              child: Text(
+                                'نسيت كلمة المرور ؟',
+                                textAlign: TextAlign.left,
+                              ),
                             ),
                           ),
                         ),
@@ -115,9 +118,15 @@ class SigninView extends GetView<AuthiocationController> {
                     }
                   },
                 ),
+                SizedBox(
+                  height: 5,
+                ),
                 Text(
                   'لو لم يكن لديك حساب',
                   style: headline4,
+                ),
+                SizedBox(
+                  height: 5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -126,9 +135,12 @@ class SigninView extends GetView<AuthiocationController> {
                       'يمكنك التسجيل',
                       style: headline4,
                     ),
+                    SizedBox(
+                      width: 5,
+                    ),
                     InkWell(
                       onTap: () {
-                        Get.toNamed(Routes.SignupView);
+                        Get.offNamed(Routes.SignupView);
                       },
                       child: Text(
                         'من هنا',
@@ -163,13 +175,14 @@ class AuthiocationHeader extends StatelessWidget {
             top: 10,
             left: 10,
             child: IconButton(
-                iconSize: Get.width * .07,
-                icon: Icon(
-                  Icons.close,
-                ),
-                onPressed: () {
-                  Get.back();
-                }),
+              iconSize: Get.width * .07,
+              icon: Icon(
+                Icons.close,
+              ),
+              onPressed: () {
+                Get.back();
+              },
+            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

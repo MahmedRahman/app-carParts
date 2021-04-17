@@ -4,10 +4,10 @@ import 'package:carpart/app/modules/authiocation/bindings/authiocation_binding.d
 import 'package:carpart/app/modules/authiocation/views/authiocation_view.dart';
 import 'package:carpart/app/modules/authiocation/views/frogatepassword_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
+import 'package:carpart/app/modules/authiocation/views/signup_complate_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signup_dealer_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signup_delivery_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signup_view.dart';
-import 'package:carpart/app/modules/authiocation/views/signup_complate_view.dart';
 import 'package:carpart/app/modules/authiocation/views/splash_view.dart';
 import 'package:carpart/app/modules/bank/add/bindings/bank_add_binding.dart';
 import 'package:carpart/app/modules/bank/add/views/bank_add_view.dart';
@@ -19,10 +19,13 @@ import 'package:carpart/app/modules/home/bindings/home_binding.dart';
 import 'package:carpart/app/modules/home/views/home_view.dart';
 import 'package:carpart/app/modules/notifaction/bindings/notifaction_binding.dart';
 import 'package:carpart/app/modules/notifaction/views/notifaction_view.dart';
-import 'package:carpart/app/modules/order/bindings/order_binding.dart';
-import 'package:carpart/app/modules/order/views/order_create_view.dart';
-import 'package:carpart/app/modules/order/views/order_detailes_view.dart';
-import 'package:carpart/app/modules/order/views/order_view.dart';
+import 'package:carpart/app/modules/order/add/bindings/order_add_binding.dart';
+import 'package:carpart/app/modules/order/add/views/order_add_view.dart';
+import 'package:carpart/app/modules/order/detail/bindings/order_detail_binding.dart';
+import 'package:carpart/app/modules/order/detail/views/order_detail_view.dart';
+import 'package:carpart/app/modules/order/list/bindings/order_list_binding.dart';
+import 'package:carpart/app/modules/order/list/views/order_list_view.dart';
+
 import 'package:carpart/app/modules/page/bindings/page_binding.dart';
 import 'package:carpart/app/modules/page/views/about_view.dart';
 import 'package:carpart/app/modules/page/views/contactus_view.dart';
@@ -119,21 +122,6 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
-      name: Routes.ORDER,
-      page: () => OrderView(),
-      binding: OrderBinding(),
-    ),
-    GetPage(
-      name: Routes.OrderDetailesView,
-      page: () => OrderDetailesView(),
-      binding: OrderBinding(),
-    ),
-    GetPage(
-      name: Routes.OrderCreateView,
-      page: () => OrderCreateView(),
-      binding: OrderBinding(),
-    ),
-    GetPage(
       name: Routes.ENTRY_POINT,
       page: () => EntryPointView(),
       binding: EntryPointBinding(),
@@ -162,6 +150,21 @@ class AppPages {
       name: Routes.STOPERROR,
       page: () => StoperrorView(),
       binding: StoperrorBinding(),
+    ),
+    GetPage(
+      name: Routes.ORDER_ADD,
+      page: () => OrderAddView(),
+      binding: OrderAddBinding(),
+    ),
+    GetPage(
+      name: Routes.ORDER_LIST,
+      page: () => OrderListView(),
+      binding: OrderListBinding(),
+    ),
+    GetPage(
+      name: Routes.ORDER_DETAIL,
+      page: () => OrderDetailView(),
+      binding: OrderDetailBinding(),
     ),
   ];
 }

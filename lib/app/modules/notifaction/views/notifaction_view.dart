@@ -6,23 +6,22 @@ import 'package:get/get.dart';
 import 'package:carpart/app/modules/notifaction/controllers/notifaction_controller.dart';
 
 class NotifactionView extends GetView<NotifactionController> {
-  NotifactionController controller = Get.put(NotifactionController());
   @override
   Widget build(BuildContext context) {
+    NotifactionController controller = Get.put(NotifactionController());
     return Scaffold(
-        body: SingleChildScrollView(
-      child: FutureBuilder(
-        future: controller.getNotifaction(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<NotifactionModel> notifactionModel = snapshot.data;
-            return Column(
-              children: List.generate(
-                notifactionModel.length,
-                (index) {
-                  return Column(
-                    children: [
-                      Card(
+        body: FutureBuilder(
+      future: controller.getNotifaction(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<NotifactionModel> notifactionModel = snapshot.data;
+          return notifactionModel.length == 0
+              ? Center(child: Text('لا يوجد اشعارات'))
+              : ListView(
+                  children: List.generate(
+                    notifactionModel.length,
+                    (index) {
+                      return Card(
                         child: ListTile(
                           title: Text(
                               notifactionModel.elementAt(index).name ?? ''),
@@ -34,19 +33,16 @@ class NotifactionView extends GetView<NotifactionController> {
                           ),
                           trailing: Text('15 Oct'),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return CustomIndicator();
-          }
+                      );
+                    },
+                  ),
+                );
+        } else if (snapshot.hasError) {
+          return Center(child: CustomIndicator());
+        }
 
-          return CustomIndicator();
-        },
-      ),
+        return Center(child: CustomIndicator());
+      },
     ));
   }
 }

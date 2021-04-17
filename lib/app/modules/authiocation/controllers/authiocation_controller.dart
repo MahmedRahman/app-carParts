@@ -82,6 +82,7 @@ class AuthiocationController extends GetxController {
       final userModel = userModelFromJson(value);
       Get.find<UserAuth>().setUserToken(userModel.accessToken);
       await EntryPointController().getProfile();
+      setDeviceId();
       showSnackBar(
           title: AppName,
           message: "تم تسجيل الدخول بنجاح",
@@ -98,6 +99,13 @@ class AuthiocationController extends GetxController {
             btnController.reset();
           });
     });
+  }
+
+
+  void setDeviceId() async{
+    
+    await WebServices().setDeviceId(KFirebaseMessagingToken);
+
   }
 
   Future<String> _getId() async {

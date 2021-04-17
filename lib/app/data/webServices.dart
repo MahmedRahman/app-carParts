@@ -74,6 +74,19 @@ class WebServices extends ApiManger {
     return response;
   }
 
+  Future setDeviceId(String deviceId) async {
+    Response response =
+        await repPost('Account/SetDeviceId/', {
+          'id' : deviceId
+        });
+    return response;
+  }
+
+  Future getprepareList() async {
+    Response response = await repGet('Setting/FullGet');
+    return response;
+  }
+
   Future getMark() async {
     Response response = await repGet('Mark/Get');
     return response;
@@ -81,6 +94,17 @@ class WebServices extends ApiManger {
 
   Future getModel() async {
     Response response = await repGet('Model/Get');
+    return response;
+  }
+
+  Future addDeliveryOffer({
+    @required int orderId,
+    @required double price,
+  }) async {
+    Response response = await repPost('DeliveryOffer/Add', {
+      "OrderId": orderId,
+      "Price": price,
+    });
     return response;
   }
 
@@ -144,6 +168,12 @@ class WebServices extends ApiManger {
   Future acceptOffer(int offerid) async {
     Response response =
         await repPost('MerchantOffer/Accept/' + offerid.toString(), null);
+    return response;
+  }
+
+  Future acceptDeliveryOffer(int offerid) async {
+    Response response =
+        await repPost('DeliveryOffer/Accept/' + offerid.toString(), null);
     return response;
   }
 

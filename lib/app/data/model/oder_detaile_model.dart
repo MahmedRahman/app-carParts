@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:carpart/app/data/helper/AppEnumeration.dart';
-
 OderDetaileModel oderDetaileModelFromJson(String str) => OderDetaileModel.fromJson(json.decode(str));
 
 String oderDetaileModelToJson(OderDetaileModel data) => json.encode(data.toJson());
@@ -30,6 +28,10 @@ class OderDetaileModel {
         this.image,
         this.imageFile,
         this.imageBytes,
+        this.statusName,
+        this.lat,
+        this.lng,
+        this.distance,
     });
 
     int id;
@@ -43,13 +45,17 @@ class OderDetaileModel {
     DateTime date;
     int status;
     double price;
-    List<MerchantOffer> merchantOffers;
-    List<dynamic> deliveryOffers;
+    List<Offer> merchantOffers;
+    List<Offer> deliveryOffers;
     String vanNumber;
     String description;
-    String image;
+    dynamic image;
     dynamic imageFile;
     dynamic imageBytes;
+    String statusName;
+    double lat;
+    double lng;
+    double distance;
 
     factory OderDetaileModel.fromJson(Map<String, dynamic> json) => OderDetaileModel(
         id: json["Id"],
@@ -63,13 +69,17 @@ class OderDetaileModel {
         date: DateTime.parse(json["Date"]),
         status: json["Status"],
         price: json["Price"],
-        merchantOffers: List<MerchantOffer>.from(json["MerchantOffers"].map((x) => MerchantOffer.fromJson(x))),
-        deliveryOffers: List<dynamic>.from(json["DeliveryOffers"].map((x) => x)),
+        merchantOffers: List<Offer>.from(json["MerchantOffers"].map((x) => Offer.fromJson(x))),
+        deliveryOffers: List<Offer>.from(json["DeliveryOffers"].map((x) => Offer.fromJson(x))),
         vanNumber: json["VanNumber"],
         description: json["Description"],
         image: json["Image"],
         imageFile: json["ImageFile"],
         imageBytes: json["ImageBytes"],
+        statusName: json["StatusName"],
+        lat: json["Lat"].toDouble(),
+        lng: json["Lng"].toDouble(),
+        distance: json["Distance"].toDouble(),
     );
 
     Map<String, dynamic> toJson() => {
@@ -85,55 +95,67 @@ class OderDetaileModel {
         "Status": status,
         "Price": price,
         "MerchantOffers": List<dynamic>.from(merchantOffers.map((x) => x.toJson())),
-        "DeliveryOffers": List<dynamic>.from(deliveryOffers.map((x) => x)),
+        "DeliveryOffers": List<dynamic>.from(deliveryOffers.map((x) => x.toJson())),
         "VanNumber": vanNumber,
         "Description": description,
         "Image": image,
         "ImageFile": imageFile,
         "ImageBytes": imageBytes,
+        "StatusName": statusName,
+        "Lat": lat,
+        "Lng": lng,
+        "Distance": distance,
     };
 }
 
-class MerchantOffer {
-    MerchantOffer({
+class Offer {
+    Offer({
         this.id,
-        this.orderId,
-        this.date,
         this.status,
+        this.orderId,
         this.userId,
         this.userName,
-        this.name,
+        this.date,
         this.price,
+        this.statusName,
+        this.userAddress,
+        this.name,
     });
 
     int id;
-    int orderId;
-    DateTime date;
     int status;
+    int orderId;
     String userId;
     String userName;
-    String name;
+    DateTime date;
     double price;
+    String statusName;
+    dynamic userAddress;
+    String name;
 
-    factory MerchantOffer.fromJson(Map<String, dynamic> json) => MerchantOffer(
+    factory Offer.fromJson(Map<String, dynamic> json) => Offer(
         id: json["Id"],
-        orderId: json["OrderId"],
-        date: DateTime.parse(json["Date"]),
         status: json["Status"],
+        orderId: json["OrderId"],
         userId: json["UserId"],
         userName: json["UserName"],
-        name: json["Name"],
+        date: DateTime.parse(json["Date"]),
         price: json["Price"],
+        statusName: json["StatusName"],
+        userAddress: json["UserAddress"],
+        name: json["Name"] == null ? null : json["Name"],
     );
 
     Map<String, dynamic> toJson() => {
         "Id": id,
-        "OrderId": orderId,
-        "Date": date.toIso8601String(),
         "Status": status,
+        "OrderId": orderId,
         "UserId": userId,
         "UserName": userName,
-        "Name": name,
+        "Date": date.toIso8601String(),
         "Price": price,
+        "StatusName": statusName,
+        "UserAddress": userAddress,
+        "Name": name == null ? null : name,
     };
 }

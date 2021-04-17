@@ -30,4 +30,7 @@ abstract class Routes {
   static const PAYMENT_LIST = '/payment/list';
   static const PAYMENT_ADD = '/payment/add';
   static const STOPERROR = '/stoperror';
+  static const ORDER_ADD = '/order/add';
+  static const ORDER_LIST = '/order/list';
+  static const ORDER_DETAIL = '/order/detail';
 }

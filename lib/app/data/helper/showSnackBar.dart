@@ -1,11 +1,12 @@
 
 
+import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void showSnackBar({
-    @required String title,
+     String title = AppName,
     @required String message,
     @required snackbarStatus(),
   }) {

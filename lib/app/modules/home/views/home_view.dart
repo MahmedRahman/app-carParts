@@ -3,11 +3,13 @@ import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/AppUtils.dart';
+import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
 import 'package:carpart/app/modules/entry_point/bindings/entry_point_binding.dart';
 import 'package:carpart/app/modules/entry_point/controllers/entry_point_controller.dart';
 import 'package:carpart/app/modules/notifaction/views/notifaction_view.dart';
-import 'package:carpart/app/modules/order/views/order_create_view.dart';
-import 'package:carpart/app/modules/order/views/order_view.dart';
+import 'package:carpart/app/modules/order/add/views/order_add_view.dart';
+import 'package:carpart/app/modules/order/list/views/order_list_view.dart';
+
 import 'package:carpart/app/modules/profile/views/profile_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 
@@ -17,9 +19,16 @@ import 'package:get/get.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  
+  List<Widget> _stack = [
+    OrderAddView(),
+    OrderListView(),
+    NotifactionView(),
+    ProfileView()
+  ];
+
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(
@@ -51,8 +60,7 @@ class HomeView extends GetView<HomeController> {
                           ),
                         ),
                         child: Center(
-                            child: KRole !=
-                                    userRole.anonymous
+                            child: KRole != userRole.anonymous
                                 ? ListTile(
                                     leading: Container(
                                       child:
@@ -117,7 +125,9 @@ class HomeView extends GetView<HomeController> {
                         leading: Image.asset('images/drwar/about.png'),
                         onTap: () {
                           Get.back();
-                          Get.toNamed(Routes.AboutView);
+                          Get.toNamed(
+                            Routes.AboutView,
+                          );
                           // Update the state of the app.
                           // ...
                         },
@@ -168,6 +178,9 @@ class HomeView extends GetView<HomeController> {
                                   onTap: () {
                                     Get.back();
                                     Get.toNamed(Routes.SignupView);
+
+                                    // Get.to(SigninView(), fullscreenDialog: true);
+
                                     // Update the state of the app.
                                     // ...
                                   },
@@ -229,10 +242,15 @@ class HomeView extends GetView<HomeController> {
                                     leading:
                                         Image.asset('images/drwar/exit.png'),
                                     onTap: () {
-
                                       Get.back();
 
-                                      Get.find<UserAuth>().signout();
+                                      KRole = userRole.anonymous;
+
+                                      Get.find<UserAuth>().setUserToken(null);
+
+                                      Get.offAndToNamed(Routes.HOME);
+
+                                      // Get.find<UserAuth>().signout();
                                     },
                                   )
                                 : SizedBox.shrink()),
@@ -265,6 +283,7 @@ class HomeView extends GetView<HomeController> {
               });
             } else {
               controller.selectindex.value = value;
+              // _stack[value];
             }
           },
           items: [
@@ -327,15 +346,7 @@ class HomeView extends GetView<HomeController> {
         );
       }),
       body: Obx(() {
-        return IndexedStack(
-          index: controller.selectindex.value,
-          children: [
-            OrderCreateView(),
-            OrderView(),
-            NotifactionView(),
-            ProfileView(),
-          ],
-        );
+        return _stack[controller.selectindex.value];
       }),
     );
   }

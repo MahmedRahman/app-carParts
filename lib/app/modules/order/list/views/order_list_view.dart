@@ -2,33 +2,36 @@ import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/component/CustomIndicator.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/model/order_model.dart';
-
-import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
-import 'package:carpart/app/modules/order/controllers/order_controller.dart';
 import 'package:intl/intl.dart';
 
-class OrderView extends GetView<OrderController> {
+import '../controllers/order_list_controller.dart';
+
+class OrderListView extends GetView<OrderListController> {
   @override
   Widget build(BuildContext context) {
+    OrderListController controller = Get.put(OrderListController());
     return Scaffold(
       body: FutureBuilder(
         future: controller.getOrder(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<OrderModel> orderModelList = snapshot.data;
-            return ListView(
-              children: List.generate(
-                orderModelList.length,
-                (index) {
-                  return orderItem(
-                    orderModel: orderModelList.elementAt(index),
+            return orderModelList.length == 0
+                ? Text('لا يوجد طلبات')
+                : ListView(
+                    children: List.generate(
+                      orderModelList.length,
+                      (index) {
+                        return orderItem(
+                          orderModel: orderModelList.elementAt(index),
+                        );
+                      },
+                    ).toList(),
                   );
-                },
-              ).toList(),
-            );
           } else if (snapshot.hasError) {
             return Center(
               child: CustomIndicator(
@@ -52,8 +55,7 @@ class OrderView extends GetView<OrderController> {
           children: [
             ListTile(
               onTap: () {
-                Get.toNamed(Routes.OrderDetailesView,
-                    arguments: [orderModel.id]);
+                Get.toNamed(Routes.ORDER_DETAIL, arguments: [orderModel.id]);
               },
               isThreeLine: true,
               title: Text(orderModel.markName),
@@ -70,7 +72,7 @@ class OrderView extends GetView<OrderController> {
               trailing: Column(
                 children: [
                   Text(DateFormat.MMMMd().format(orderModel.date)),
-                  Text(OrderStatus.values[orderModel.status].toString().tr )
+                  Text(OrderStatus.values[orderModel.status].toString().tr)
                 ],
               ),
               leading: SizedBox(
