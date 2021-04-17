@@ -265,8 +265,10 @@ class OrderDetailView extends GetView<OrderDetailController> {
   }
 
   Widget offerDeliveryAgent(OderDetaileModel orderDetaileModel) {
-    var KMinPrice = (orderDetaileModel.distance * KMPriceMin.toInt()) + BaseDeliveryPrice;
-    var KMaxPrice = (orderDetaileModel.distance * KMPriceMax.toInt())+ BaseDeliveryPrice;
+    var KMinPrice =
+        (orderDetaileModel.distance * KMPriceMin.toInt()) + BaseDeliveryPrice;
+    var KMaxPrice =
+        (orderDetaileModel.distance * KMPriceMax.toInt()) + BaseDeliveryPrice;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -468,6 +470,10 @@ class OrderDetailView extends GetView<OrderDetailController> {
           ListTile(
             title: Text('الموديل'),
             trailing: Text(orderDetaileModel.modelName),
+          ),
+          ListTile(
+            title: Text('سنة الصنع'),
+            trailing: Text(orderDetaileModel.versionId.toString()),
           ),
           ListTile(
             title: Text('رقم الهيكل'),

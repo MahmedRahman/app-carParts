@@ -14,36 +14,39 @@ class OrderListView extends GetView<OrderListController> {
   @override
   Widget build(BuildContext context) {
     OrderListController controller = Get.put(OrderListController());
+    controller.getOrder();
     return Scaffold(
-      body: FutureBuilder(
-        future: controller.getOrder(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<OrderModel> orderModelList = snapshot.data;
-            return orderModelList.length == 0
-                ? Text('لا يوجد طلبات')
-                : ListView(
-                    children: List.generate(
-                      orderModelList.length,
-                      (index) {
-                        return orderItem(
-                          orderModel: orderModelList.elementAt(index),
-                        );
-                      },
-                    ).toList(),
-                  );
-          } else if (snapshot.hasError) {
+      body: GetX<OrderListController>(builder: (builder) {
+        return FutureBuilder(
+          future: controller.orderModelList.value,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<OrderModel> orderModelList = snapshot.data;
+              return orderModelList.length == 0
+                  ? Text('لا يوجد طلبات')
+                  : ListView(
+                      children: List.generate(
+                        orderModelList.length,
+                        (index) {
+                          return orderItem(
+                            orderModel: orderModelList.elementAt(index),
+                          );
+                        },
+                      ).toList(),
+                    );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: CustomIndicator(
+                  indicatorStatus: IndicatorStatus.error,
+                ),
+              );
+            }
             return Center(
-              child: CustomIndicator(
-                indicatorStatus: IndicatorStatus.error,
-              ),
+              child: CustomIndicator(),
             );
-          }
-          return Center(
-            child: CustomIndicator(),
-          );
-        },
-      ),
+          },
+        );
+      }),
     );
   }
 

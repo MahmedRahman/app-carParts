@@ -4,14 +4,19 @@ import 'package:get/get.dart';
 
 class OrderListController extends GetxController {
   //TODO: Implement OrderListController
+  //
+  //
 
-   Future getOrder() async {
+  final orderModelList = Future.value().obs;
+
+  Future getOrder() async {
     Response response = await WebServices().getOrder();
     print(response.bodyString);
     if (response == null) {
       return Future.error('error');
     } else {
       final orderModel = orderModelFromJson(response.bodyString);
+      orderModelList.value = Future.value(orderModel);
       return orderModel;
     }
   }
