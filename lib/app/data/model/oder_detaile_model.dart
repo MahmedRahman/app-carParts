@@ -49,7 +49,7 @@ class OderDetaileModel {
     List<Offer> deliveryOffers;
     String vanNumber;
     String description;
-    dynamic image;
+    String image ='';
     dynamic imageFile;
     dynamic imageBytes;
     String statusName;
