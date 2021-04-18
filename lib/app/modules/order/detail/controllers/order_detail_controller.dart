@@ -91,9 +91,8 @@ class OrderDetailController extends GetxController {
         showSnackBar(
           message: 'تم الاضافة بنجاح',
           snackbarStatus: () {
-             getOrderDetailes();
+            getOrderDetailes();
             restBtn();
-           
           },
         );
       } else {
@@ -107,6 +106,17 @@ class OrderDetailController extends GetxController {
     }
   }
 
+  setPaid() async {
+    Response response = await WebServices().setPaid(orderId: OrderId);
+    if (response.body['IsSuccess']) {
+      showSnackBar(
+          message: 'تم الدفع',
+          snackbarStatus: () {
+            restBtn();
+            getOrderDetailes();
+          });
+    }
+  }
 
   acceptDeliveryOffer({@required int offerId}) async {
     Response response = await WebServices().acceptDeliveryOffer(offerId);
@@ -121,5 +131,4 @@ class OrderDetailController extends GetxController {
     }
     return response;
   }
-
 }

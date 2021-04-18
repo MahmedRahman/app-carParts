@@ -163,6 +163,7 @@ class Setting {
     this.terms,
     this.callUs,
     this.BaseDeliveryPrice,
+    this.AdministrativeFees,
   });
 
   int id;
@@ -187,6 +188,7 @@ class Setting {
   String terms;
   String callUs;
   double BaseDeliveryPrice;
+  double AdministrativeFees;
 
   factory Setting.fromJson(Map<String, dynamic> json) => Setting(
         id: json["Id"],
@@ -211,6 +213,8 @@ class Setting {
         terms: json["Terms"],
         callUs: json["CallUs"],
         BaseDeliveryPrice: json["BaseDeliveryPrice"],
+AdministrativeFees: json["AdministrativeFees"],
+        
       );
 
   Map<String, dynamic> toJson() => {
@@ -236,5 +240,6 @@ class Setting {
         "Terms": terms,
         "CallUs": callUs,
         "BaseDeliveryPrice": BaseDeliveryPrice,
+         "AdministrativeFees": AdministrativeFees,
       };
 }

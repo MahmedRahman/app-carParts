@@ -198,7 +198,8 @@ class HomeView extends GetView<HomeController> {
                                       'images/drwar/login.svg'),
                                   onTap: () {
                                     Get.back();
-                                    Get.toNamed(Routes.SigninView);
+                                   // Get.to()
+                                    Get.offNamed(Routes.SigninView);
                                     // Update the state of the app.
                                     // ...
                                   },

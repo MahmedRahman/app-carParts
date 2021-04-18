@@ -49,13 +49,13 @@ class ProfileView extends GetView<ProfileController> {
                         onTap: () {},
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('اجمالى المبالغ المترتبة'),
-                       // trailing: Text('500 SR'),
+                       trailing: Text(KBalance.toString()),
                       ):SizedBox.fromSize(),
                        (KRole != userRole.Client) ?ListTile(
                         onTap: () {},
                         leading: Icon(Icons.wallet_giftcard),
                         title: Text('اجمالى المبالغ المدفوعة'),
-                       // trailing: Text('2500  SR'),
+                       trailing: Text(KPaidBalance.toString()),
                       ):SizedBox.fromSize(),
                        (KRole != userRole.anonymous) ? ListTile(
                         onTap: () {

@@ -2,7 +2,7 @@ var carMark = [];
 var carModel = [];
 var cityName = [];
 var bankName = [];
-var Cars =[];
+var Cars = [];
 /*
 var Cars = [
   {
@@ -30,12 +30,13 @@ String helpPhoneNumber;
 
 double KMPriceMin;
 double KMPriceMax;
+double KBalance;
+double KPaidBalance;
 
 double Klatitude = 24.713552;
 double Klongitude = 46.675297;
 double BaseDeliveryPrice;
-
-
+double KAdministrativeFees;
 
 enum userRole { Client, Merchant, DeliveryAgent, anonymous }
 
@@ -51,7 +52,11 @@ enum OrderStatus {
   MerchantOffer,
   MerchantOfferComplete,
   DeliveryAgentOffer,
-  DeliveryAgentOfferComplete
+  DeliveryAgentOfferComplete,
+  Paid,
+  MerchantGivePart,
+  DeliveryGetPart,
+  Complete,
 }
 
 enum RequestStatus { Request, Accept, Refuse }

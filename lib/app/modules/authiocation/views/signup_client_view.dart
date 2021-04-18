@@ -1,3 +1,6 @@
+import 'package:carpart/app/data/component/CustemDropdown.dart';
+import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
+import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/helper/AppValidation.dart';
 import 'package:carpart/app/modules/authiocation/controllers/authiocation_controller.dart';
 import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
@@ -37,6 +40,13 @@ class SignupView extends GetView<AuthiocationController> {
                 },
               ),
               CustemTextForm(
+                textHint: 'البريد الالكتروني',
+                inputcontroller: controller.email,
+                onValidator: (value) {
+                  return AppValidation.checkEmail(value);
+                },
+              ),
+              CustemTextForm(
                 textHint: 'كلمة المرور',
                 inputcontroller: controller.password,
                 onValidator: (value) {
@@ -49,8 +59,34 @@ class SignupView extends GetView<AuthiocationController> {
                   onValidator: (value) {
                     return AppValidation.validatePassword(value);
                   }),
+              CustemImagePicker(
+                onclick: (value) {
+                  controller.logoBytes = value;
+                },
+              ),
+              CustomDropdownButton(
+                dropdownDate: cityName,
+                onChanged: (value) {
+                  controller.cityid.value = int.parse(value);
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
               CustemCheckbox(),
               CustemButton(
+                title: 'إرسال',
+                buttonController: controller.btnController,
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    controller.createUser();
+                  } else {
+                    controller.bntrest();
+                  }
+                },
+              ),
+
+              /*CustemButton(
                 title: 'التالي',
                 buttonController: controller.btnController,
                 onPressed: () {
@@ -60,7 +96,7 @@ class SignupView extends GetView<AuthiocationController> {
                     controller.btnController.reset();
                   }
                 },
-              )
+              )*/
             ],
           ),
         ),

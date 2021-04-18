@@ -97,6 +97,12 @@ class WebServices extends ApiManger {
     return response;
   }
 
+  Future setPaid({@required int orderId,}) async {
+    Response response = await repPost('Order/SetPaid/' + orderId.toString(),{});
+    return response;
+  }
+  
+
   Future addDeliveryOffer({
     @required int orderId,
     @required double price,

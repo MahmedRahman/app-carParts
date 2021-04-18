@@ -96,6 +96,8 @@ class EntryPointController extends GetxController {
     KMPriceMax = prepareListModel.setting.kmPriceMax;
     helpPhoneNumber = prepareListModel.setting.helpPhoneNumber;
     BaseDeliveryPrice = prepareListModel.setting.BaseDeliveryPrice;
+    
+    KAdministrativeFees = prepareListModel.setting.AdministrativeFees;
     print(BaseDeliveryPrice);
 
     Cars.addAll(prepareListModel.mark);
@@ -129,6 +131,9 @@ class EntryPointController extends GetxController {
 
       Klatitude = response.body['Lat'];
       Klongitude = response.body['Lng'];
+KBalance = response.body['Balance'];
+
+      KPaidBalance = response.body['PaidBalance'];
 
       KRole = userRole.values[response.body['Role']];
     }

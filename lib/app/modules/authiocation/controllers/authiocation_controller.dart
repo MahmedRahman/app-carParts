@@ -87,7 +87,7 @@ class AuthiocationController extends GetxController {
           title: AppName,
           message: "تم تسجيل الدخول بنجاح",
           snackbarStatus: () {
-            Get.toNamed(Routes.HOME);
+            Get.offNamed(Routes.HOME);
             btnController.reset();
           });
     }, onError: (err) {

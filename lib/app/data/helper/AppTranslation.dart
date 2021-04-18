@@ -16,7 +16,11 @@ class AppTranslation extends Translations {
           'userRole.Client': 'مشترى',
           'userRole.Merchant': 'تاجر',
           'userRole.DeliveryAgent': 'مندوب توصيل',
-          'RequestStatus.Request' : 'جارى الطلب'
+          'RequestStatus.Request' : 'جارى الطلب' ,
+
+           'RequestStatus.Accept' : 'طلب مقبول',
+
+            'RequestStatus.Refuse' : 'طلب مرفوض'
         }
       };
 }

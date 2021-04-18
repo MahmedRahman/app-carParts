@@ -180,7 +180,7 @@ class AuthiocationHeader extends StatelessWidget {
                 Icons.close,
               ),
               onPressed: () {
-                Get.back();
+                Get.offNamed(Routes.HOME);
               },
             ),
           ),

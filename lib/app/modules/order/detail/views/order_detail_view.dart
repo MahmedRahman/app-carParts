@@ -59,6 +59,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
                 children: [
                   offerView(orderDetaileModel),
                   deliveryView(orderDetaileModel),
+                  orderPayment(orderDetaileModel)
                 ],
               )
             : SizedBox.shrink(),
@@ -129,6 +130,14 @@ class OrderDetailView extends GetView<OrderDetailController> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           trailing: Text(merchantOffer.userName),
+                        ),
+
+                                   ListTile(
+                          title: Text(
+                            'حالة الطلب',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          trailing: Text(RequestStatus.values[merchantOffer.status].toString().tr),
                         ),
                         Divider(),
                         ListTile(
@@ -403,21 +412,28 @@ class OrderDetailView extends GetView<OrderDetailController> {
                         ),
                         ListTile(
                           title: Text('حالة العرض'),
-                          trailing: Text(orderDetaileModel.deliveryOffers
-                              .elementAt(index)
-                              .status
-                              .toString()),
+                          trailing: Text(RequestStatus.values[orderDetaileModel
+                                  .deliveryOffers
+                                  .elementAt(index)
+                                  .status]
+                              .toString()
+                              .tr),
                         ),
-                        CustemButton(
-                          title: 'قبول',
-                          buttonController: controller.btnController,
-                          onPressed: () {
-                            controller.acceptDeliveryOffer(
-                                offerId: orderDetaileModel.deliveryOffers
+                        orderDetaileModel.deliveryOffers
                                     .elementAt(index)
-                                    .id);
-                          },
-                        )
+                                    .status ==
+                                0
+                            ? CustemButton(
+                                title: 'قبول',
+                                buttonController: controller.btnController,
+                                onPressed: () {
+                                  controller.acceptDeliveryOffer(
+                                      offerId: orderDetaileModel.deliveryOffers
+                                          .elementAt(index)
+                                          .id);
+                                },
+                              )
+                            : SizedBox.shrink(),
                       ],
                     );
                   }).toList(),
@@ -486,5 +502,51 @@ class OrderDetailView extends GetView<OrderDetailController> {
         ],
       ),
     );
+  }
+
+  Widget orderPayment(OderDetaileModel orderDetaileModel) {
+
+
+    return orderDetaileModel.status >= 4 ? Container(
+      
+      margin: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
+      width: Get.width,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.rectangle,
+        boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text('قيمة العرض'),
+            trailing:
+                Text(orderDetaileModel.merchantOffers.first.price.toString()),
+          ),
+          ListTile(
+            title: Text('قيمة عرض التوصيل'),
+            trailing:
+                Text(orderDetaileModel.deliveryOffers.first.price.toString()),
+          ),
+          ListTile(
+            title: Text('رسوم إدارية'),
+            trailing: Text(KAdministrativeFees.toString()),
+          ),
+          ListTile(
+            title: Text('الإجمالي'),
+            trailing: Text((orderDetaileModel.merchantOffers.first.price?? 0 +
+        orderDetaileModel.deliveryOffers.first.price??0 + KAdministrativeFees).toString()),
+          ),
+          CustemButton(
+            title: 'دفع',
+            buttonController: controller.btnController,
+            onPressed: () {
+              controller.setPaid();
+            },
+          )
+        ],
+      ),
+    ):SizedBox.shrink();
   }
 }

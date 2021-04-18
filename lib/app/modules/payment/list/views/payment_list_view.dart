@@ -31,7 +31,7 @@ class PaymentListView extends GetView<PaymentListController> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<PaymentModel> Listpayment = snapshot.data;
-              Listpayment.sort();
+             // Listpayment.sort();
               return Column(
                   children: List.generate(Listpayment.length, (index) {
                 PaymentModel payment = Listpayment.elementAt(index);
@@ -39,12 +39,14 @@ class PaymentListView extends GetView<PaymentListController> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Card(
                     child: ListTile(
-                      trailing: Text(payment.price.toStringAsFixed(0)),
-                      title: Text(DateFormat.MMMd().format(payment.date)),
-                      subtitle: Text(payment.status.toString()),
-                      leading: Text(RequestStatus.values[payment.id].toString().tr ,style: TextStyle(
-                        fontWeight: FontWeight.bold
-                      ),),
+                      title: Text(payment.price.toStringAsFixed(0)),
+                      
+                      subtitle: Text(
+                        RequestStatus.values[payment.status].toString().tr,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(DateFormat.MMMd().format(payment.date)),
+                     leading: Icon(Icons.money),
                     ),
                   ),
                 );
