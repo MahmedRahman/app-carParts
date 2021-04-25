@@ -16,22 +16,20 @@ class PaymentListView extends GetView<PaymentListController> {
       appBar: AppBar(
         title: Text('طلبات التحويل'),
         centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.offNamed(Routes.PAYMENT_ADD);
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Get.offNamed(Routes.PAYMENT_ADD);
+              }),
+        ],
       ),
       body: FutureBuilder(
           future: controller.getPaymentRequest(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<PaymentModel> Listpayment = snapshot.data;
-             // Listpayment.sort();
+              // Listpayment.sort();
               return Column(
                   children: List.generate(Listpayment.length, (index) {
                 PaymentModel payment = Listpayment.elementAt(index);
@@ -40,13 +38,12 @@ class PaymentListView extends GetView<PaymentListController> {
                   child: Card(
                     child: ListTile(
                       title: Text(payment.price.toStringAsFixed(0)),
-                      
                       subtitle: Text(
                         RequestStatus.values[payment.status].toString().tr,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       trailing: Text(DateFormat.MMMd().format(payment.date)),
-                     leading: Icon(Icons.money),
+                      leading: Icon(Icons.money),
                     ),
                   ),
                 );

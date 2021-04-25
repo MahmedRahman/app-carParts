@@ -1,14 +1,17 @@
 import 'package:carpart/app/data/component/CustemButton.dart';
 import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/component/CustomIndicator.dart';
+import 'package:carpart/app/data/component/MapSample.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/oder_detaile_model.dart';
 import 'package:carpart/app/data/model/offer_model.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 import '../controllers/order_detail_controller.dart';
@@ -23,29 +26,47 @@ class OrderDetailView extends GetView<OrderDetailController> {
       controller.getMerchantOffers();
     }
 
+    if (KRole == userRole.DeliveryAgent) {
+      Geolocator.getCurrentPosition().then((_latLng) {
+        Klatitude = _latLng.latitude;
+        Klongitude = _latLng.longitude;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('بيانات الطلب'),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          GetX<OrderDetailController>(builder: (builder) {
-            return FutureBuilder(
-                future: controller.oderModel.value,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return orderDetailes(snapshot.data);
-                  } else if (snapshot.hasError) {
-                    return Center(
-                        child: CustomIndicator(
-                      indicatorStatus: IndicatorStatus.error,
-                    ));
-                  }
-                  return Center(child: CustomIndicator());
-                });
-          }),
-        ],
+      body: GetX<OrderDetailController>(
+        builder: (builder) {
+          return FutureBuilder(
+            future: controller.oderModel.value,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView(
+                  children: [
+                    orderDetailes(snapshot.data),
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                    child: CustomIndicator(
+                  indicatorStatus: IndicatorStatus.error,
+                ));
+              }
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomIndicator(),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -57,7 +78,8 @@ class OrderDetailView extends GetView<OrderDetailController> {
         KRole == userRole.Client
             ? Column(
                 children: [
-                  offerView(orderDetaileModel),
+                  clientOfferMerchanView(orderDetaileModel),
+                  orderAdress(orderDetaileModel),
                   deliveryView(orderDetaileModel),
                   orderPayment(orderDetaileModel)
                 ],
@@ -69,7 +91,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
         KRole == userRole.DeliveryAgent
             ? Column(
                 children: [
-                  offerView(orderDetaileModel),
+                  clientOfferMerchanView(orderDetaileModel),
                   offerDeliveryAgent(orderDetaileModel),
                 ],
               )
@@ -78,7 +100,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
     );
   }
 
-  Widget offerView(OderDetaileModel orderDetaileModel) {
+  Widget clientOfferMerchanView(OderDetaileModel orderDetaileModel) {
     return Container(
       child: orderDetaileModel.merchantOffers.length == 0
           ? Container(
@@ -101,63 +123,90 @@ class OrderDetailView extends GetView<OrderDetailController> {
               child: Column(
                 children: List.generate(orderDetaileModel.merchantOffers.length,
                     (index) {
-                  Offer merchantOffer =
+                  MerchantOffer merchantOffer =
                       orderDetaileModel.merchantOffers.elementAt(index);
-//(merchantOffer.status = 1)
-                  return Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    width: Get.width,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.rectangle,
-                      boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
-                    ),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text(
-                            'أسم التاجر',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          trailing: Text(merchantOffer.userName),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'عنوان التاجر',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          trailing: Text(merchantOffer.userName),
-                        ),
 
-                                   ListTile(
-                          title: Text(
-                            'حالة الطلب',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          trailing: Text(RequestStatus.values[merchantOffer.status].toString().tr),
+                  return Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        width: Get.width,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.rectangle,
+                            boxShadow: [
+                              BoxShadow(color: Colors.grey, blurRadius: 2)
+                            ],
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              dense: true,
+                              title: Text(
+                                'أسم التاجر',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              trailing: Text(merchantOffer.userName),
+                            ),
+                            Divider(),
+                            ListTile(
+                              dense: true,
+                              title: Text(
+                                'عنوان التاجر',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Obx(() {
+                                return Text(
+                                  controller.destinationAddresses.value,
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              }),
+                            ),
+                            Divider(),
+                            Column(
+                                children: List.generate(
+                                    merchantOffer.details.length, (index) {
+                              DeliveryOffer detail =
+                                  merchantOffer.details.elementAt(index);
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      detail.name.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text('|'),
+                                    Text(detail.price.toString()),
+                                    RequestStatus.values[detail.status] ==
+                                            RequestStatus.Accept
+                                        ? SizedBox.shrink()
+                                        : Text('|'),
+                                    RequestStatus.values[detail.status] ==
+                                            RequestStatus.Accept
+                                        ? SizedBox.shrink()
+                                        : TextButton(
+                                            onPressed: () {
+                                              controller.acceptMerchantOffer(
+                                                offerId: detail.id,
+                                              );
+                                            },
+                                            child: Text('قبول'))
+                                  ],
+                                ),
+                              );
+                            }).toList()),
+                          ],
                         ),
-                        Divider(),
-                        ListTile(
-                          title: Text(merchantOffer.name),
-                          trailing: Text(merchantOffer.price.toString()),
-                        ),
-                        merchantOffer.status != 1
-                            ? TextButton(
-                                child: Text('قبول'),
-                                onPressed: () {
-                                  controller.acceptMerchantOffer(
-                                    offerId: orderDetaileModel.merchantOffers
-                                        .elementAt(index)
-                                        .id,
-                                  );
-                                },
-                              )
-                            : SizedBox.shrink(),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 }),
               ),
@@ -278,7 +327,10 @@ class OrderDetailView extends GetView<OrderDetailController> {
         (orderDetaileModel.distance * KMPriceMin.toInt()) + BaseDeliveryPrice;
     var KMaxPrice =
         (orderDetaileModel.distance * KMPriceMax.toInt()) + BaseDeliveryPrice;
-
+    controller.getdistance(
+      orderDetaileModel.merchantOffers.first.lat,
+      orderDetaileModel.merchantOffers.first.lng,
+    );
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -294,8 +346,9 @@ class OrderDetailView extends GetView<OrderDetailController> {
           children: [
             ListTile(
               title: Text('انت تبعد عن المتجر'),
-              trailing: Text(
-                  orderDetaileModel.distance.toStringAsFixed(2) + ' ' + 'كم'),
+              trailing: Obx(() {
+                return Text(controller.distance.value);
+              }),
             ),
             ListTile(
               title: Text('المتجر يبعد عن العميل'),
@@ -450,103 +503,164 @@ class OrderDetailView extends GetView<OrderDetailController> {
         color: Colors.white,
         shape: BoxShape.rectangle,
         boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomImageCached(
-            imageUrl: "https://carpart.atpnet.net/Files/Order/" +
-                orderDetaileModel.userId.toString() +
-                "/" +
-                orderDetaileModel.id.toString() +
-                "/" +
-                orderDetaileModel.image.toString(),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          ListTile(
-            title: Text('رقم الطلب'),
-            trailing: Text(orderDetaileModel.id.toString()),
-          ),
-          ListTile(
-            title: Text('حالة الطلب'),
-            trailing: Text(
-                OrderStatus.values[orderDetaileModel.status].toString().tr),
-          ),
-          ListTile(
-            title: Text('تاريخ الطلب'),
-            trailing: Text(DateFormat.MMMMd().format(orderDetaileModel.date)),
-          ),
-          ListTile(
-            title: Text('ألماركة'),
-            trailing: Text(orderDetaileModel.markName),
-          ),
-          ListTile(
-            title: Text('الموديل'),
-            trailing: Text(orderDetaileModel.modelName),
-          ),
-          ListTile(
-            title: Text('سنة الصنع'),
-            trailing: Text(orderDetaileModel.versionId.toString()),
-          ),
-          ListTile(
-            title: Text('رقم الهيكل'),
-            trailing: Text(orderDetaileModel.vanNumber),
-          ),
-          ListTile(
-            title: Text('وصف الطلب'),
-            subtitle: Text(orderDetaileModel.description),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  orderDetaileModel.markName,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'رقم الطلب' + ' : ' + orderDetaileModel.id.toString(),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(orderDetaileModel.modelName),
+                Text('تاريخ الطلب' +
+                    ' : ' +
+                    DateFormat.MMMMd()
+                        .format(orderDetaileModel.date)
+                        .toString()),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text('موديل' + ' : ' + orderDetaileModel.versionId.toString()),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'رقم الهيكيل' + ' : ' + orderDetaileModel.vanNumber.toString(),
+              style: TextStyle(color: Colors.red),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'وصف الطلب',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(orderDetaileModel.description),
+          ],
+        ),
       ),
     );
   }
 
   Widget orderPayment(OderDetaileModel orderDetaileModel) {
-
-
-    return orderDetaileModel.status >= 4 ? Container(
-      
-      margin: const EdgeInsets.all(15),
-      padding: const EdgeInsets.all(15),
-      width: Get.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.rectangle,
-        boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
-      ),
-      child: Column(
-        children: [
-          ListTile(
-            title: Text('قيمة العرض'),
-            trailing:
-                Text(orderDetaileModel.merchantOffers.first.price.toString()),
-          ),
-          ListTile(
-            title: Text('قيمة عرض التوصيل'),
-            trailing:
-                Text(orderDetaileModel.deliveryOffers.first.price.toString()),
-          ),
-          ListTile(
-            title: Text('رسوم إدارية'),
-            trailing: Text(KAdministrativeFees.toString()),
-          ),
-          ListTile(
-            title: Text('الإجمالي'),
-            trailing: Text((orderDetaileModel.merchantOffers.first.price?? 0 +
-        orderDetaileModel.deliveryOffers.first.price??0 + KAdministrativeFees).toString()),
-          ),
-          CustemButton(
-            title: 'دفع',
-            buttonController: controller.btnController,
-            onPressed: () {
-              controller.setPaid();
-            },
+    return orderDetaileModel.status >= 4
+        ? Container(
+            margin: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
+            width: Get.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.rectangle,
+              boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text('قيمة العرض'),
+                  /*
+                  trailing: Text(
+                      orderDetaileModel.merchantOffers.first.price.toString()),
+                      */
+                ),
+                ListTile(
+                  title: Text('قيمة عرض التوصيل'),
+                  trailing: Text(
+                      orderDetaileModel.deliveryOffers.first.price.toString()),
+                ),
+                ListTile(
+                  title: Text('رسوم إدارية'),
+                  trailing: Text(KAdministrativeFees.toString()),
+                ),
+                ListTile(
+                  title: Text('الإجمالي'),
+/*
+                  trailing: Text((orderDetaileModel
+                              .merchantOffers.first.price ??
+                          0 + orderDetaileModel.deliveryOffers.first.price ??
+                          0 + KAdministrativeFees)
+                      .toString()),
+*/
+                ),
+                CustemButton(
+                  title: 'دفع',
+                  buttonController: controller.btnController,
+                  onPressed: () {
+                    controller.setPaid();
+                  },
+                )
+              ],
+            ),
           )
-        ],
-      ),
-    ):SizedBox.shrink();
+        : SizedBox.shrink();
+  }
+
+  Widget orderAdress(OderDetaileModel orderDetaileModel) {
+    return OrderStatus.values[orderDetaileModel.status] ==
+            OrderStatus.MerchantOfferComplete
+        ? Column(
+            children: [
+              SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                width: Get.width * .9,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Geolocator.getCurrentPosition().then(
+                      (_latLng) {
+                        Klatitude = _latLng.latitude;
+                        Klongitude = _latLng.longitude;
+                      //  controller.setLocation();
+                      },
+                    );
+                  },
+                  child: Text('التوصيل لعنواني'),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: Get.width * .9,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await Get.to(MapScreen(), arguments: orderDetaileModel.id);
+                    //controller.setLocation();
+                  },
+                  child: Text('التوصيل لعنوان مختلف'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xff445969),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+            ],
+          )
+        : SizedBox.shrink();
   }
 }

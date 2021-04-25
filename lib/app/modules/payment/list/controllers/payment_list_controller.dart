@@ -1,5 +1,6 @@
+import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/model/payment_model.dart';
-import 'package:carpart/app/data/webServices.dart';
+import 'package:carpart/app/api/webServices.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 
@@ -13,8 +14,12 @@ class PaymentListController extends GetxController {
   }
 
   Future getPaymentRequest() async {
-    Response response = await WebServices().getPaymentRequest();
-    final paymentModel = paymentModelFromJson(response.bodyString);
-    return paymentModel;
+    ResponsModel responsModel = await WebServices().getPaymentRequest();
+
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      final paymentModel = paymentModelFromJson(response.bodyString);
+      return paymentModel;
+    }
   }
 }

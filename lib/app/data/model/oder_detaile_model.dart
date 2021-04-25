@@ -26,8 +26,6 @@ class OderDetaileModel {
         this.vanNumber,
         this.description,
         this.image,
-        this.imageFile,
-        this.imageBytes,
         this.statusName,
         this.lat,
         this.lng,
@@ -45,13 +43,11 @@ class OderDetaileModel {
     DateTime date;
     int status;
     double price;
-    List<Offer> merchantOffers;
-    List<Offer> deliveryOffers;
+    List<MerchantOffer> merchantOffers;
+    List<DeliveryOffer> deliveryOffers;
     String vanNumber;
     String description;
-    String image ='';
-    dynamic imageFile;
-    dynamic imageBytes;
+    String image;
     String statusName;
     double lat;
     double lng;
@@ -68,17 +64,15 @@ class OderDetaileModel {
         versionId: json["VersionId"],
         date: DateTime.parse(json["Date"]),
         status: json["Status"],
-        price: json["Price"],
-        merchantOffers: List<Offer>.from(json["MerchantOffers"].map((x) => Offer.fromJson(x))),
-        deliveryOffers: List<Offer>.from(json["DeliveryOffers"].map((x) => Offer.fromJson(x))),
+        price: json["Price"].toDouble(),
+        merchantOffers: List<MerchantOffer>.from(json["MerchantOffers"].map((x) => MerchantOffer.fromJson(x))),
+        deliveryOffers: List<DeliveryOffer>.from(json["DeliveryOffers"].map((x) => DeliveryOffer.fromJson(x))),
         vanNumber: json["VanNumber"],
         description: json["Description"],
         image: json["Image"],
-        imageFile: json["ImageFile"],
-        imageBytes: json["ImageBytes"],
         statusName: json["StatusName"],
-        lat: json["Lat"].toDouble(),
-        lng: json["Lng"].toDouble(),
+        lat: json["Lat"],
+        lng: json["Lng"],
         distance: json["Distance"].toDouble(),
     );
 
@@ -99,8 +93,6 @@ class OderDetaileModel {
         "VanNumber": vanNumber,
         "Description": description,
         "Image": image,
-        "ImageFile": imageFile,
-        "ImageBytes": imageBytes,
         "StatusName": statusName,
         "Lat": lat,
         "Lng": lng,
@@ -108,8 +100,8 @@ class OderDetaileModel {
     };
 }
 
-class Offer {
-    Offer({
+class DeliveryOffer {
+    DeliveryOffer({
         this.id,
         this.status,
         this.orderId,
@@ -118,7 +110,6 @@ class Offer {
         this.date,
         this.price,
         this.statusName,
-        this.userAddress,
         this.name,
     });
 
@@ -130,19 +121,17 @@ class Offer {
     DateTime date;
     double price;
     String statusName;
-    dynamic userAddress;
     String name;
 
-    factory Offer.fromJson(Map<String, dynamic> json) => Offer(
+    factory DeliveryOffer.fromJson(Map<String, dynamic> json) => DeliveryOffer(
         id: json["Id"],
         status: json["Status"],
         orderId: json["OrderId"],
-        userId: json["UserId"],
-        userName: json["UserName"],
+        userId: json["UserId"] == null ? null : json["UserId"],
+        userName: json["UserName"] == null ? null : json["UserName"],
         date: DateTime.parse(json["Date"]),
-        price: json["Price"],
+        price: json["Price"].toDouble(),
         statusName: json["StatusName"],
-        userAddress: json["UserAddress"],
         name: json["Name"] == null ? null : json["Name"],
     );
 
@@ -150,12 +139,47 @@ class Offer {
         "Id": id,
         "Status": status,
         "OrderId": orderId,
-        "UserId": userId,
-        "UserName": userName,
+        "UserId": userId == null ? null : userId,
+        "UserName": userName == null ? null : userName,
         "Date": date.toIso8601String(),
         "Price": price,
         "StatusName": statusName,
-        "UserAddress": userAddress,
         "Name": name == null ? null : name,
+    };
+}
+
+class MerchantOffer {
+    MerchantOffer({
+        this.userId,
+        this.userName,
+        this.userAddress,
+        this.lat,
+        this.lng,
+        this.details,
+    });
+
+    String userId;
+    String userName;
+    dynamic userAddress;
+    double lat;
+    double lng;
+    List<DeliveryOffer> details;
+
+    factory MerchantOffer.fromJson(Map<String, dynamic> json) => MerchantOffer(
+        userId: json["UserId"],
+        userName: json["UserName"],
+        userAddress: json["UserAddress"],
+        lat: json["Lat"].toDouble(),
+        lng: json["Lng"].toDouble(),
+        details: List<DeliveryOffer>.from(json["Details"].map((x) => DeliveryOffer.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "UserId": userId,
+        "UserName": userName,
+        "UserAddress": userAddress,
+        "Lat": lat,
+        "Lng": lng,
+        "Details": List<dynamic>.from(details.map((x) => x.toJson())),
     };
 }

@@ -14,16 +14,11 @@ class BankListView extends GetView<BankListController> {
       appBar: AppBar(
         title: Text('حساباتى البنكية'),
         centerTitle: true,
+           actions: [
+          IconButton(icon: Icon(Icons.add), onPressed: (){  Get.offNamed(Routes.BANK_ADD);})
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.offNamed(Routes.BANK_ADD);
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+    
       body: FutureBuilder(
           future: controller.getUserBank(),
           builder: (context, snapshot) {

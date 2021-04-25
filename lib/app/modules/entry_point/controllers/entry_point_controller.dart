@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/auth.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/model/PrepareListModel.dart';
 import 'package:carpart/app/data/model/setting_model.dart';
-import 'package:carpart/app/data/webServices.dart';
+import 'package:carpart/app/api/webServices.dart';
 
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:carpart/main.dart';
@@ -50,7 +51,6 @@ class EntryPointController extends GetxController {
   getToken() async {
     String token = await FirebaseMessaging.instance.getToken();
     KFirebaseMessagingToken = token;
-    
   }
 
   void Start() async {
@@ -69,73 +69,61 @@ class EntryPointController extends GetxController {
   }
 
   Future getprepareList() async {
-    Response response = await WebServices().getprepareList();
-    print(response.bodyString);
+    ResponsModel responsModel = await WebServices().getprepareList();
+    if (responsModel.success) {
+      Response response = responsModel.data;
 
-    final prepareListModel = prepareListModelFromJson(response.bodyString);
+      final prepareListModel = prepareListModelFromJson(response.bodyString);
 
-    prepareListModel.cities.forEach((element) {
-      cityName.add({
-        "id": "" + element.id.toString() + "",
-        "title": "" + element.name + "",
+      prepareListModel.cities.forEach((element) {
+        cityName.add({
+          "id": "" + element.id.toString() + "",
+          "title": "" + element.name + "",
+        });
       });
-    });
 
-    prepareListModel.bank.forEach((element) {
-      bankName.add({
-        "id": "" + element.id.toString() + "",
-        "title": "" + element.name.toString() + "",
+      prepareListModel.bank.forEach((element) {
+        bankName.add({
+          "id": "" + element.id.toString() + "",
+          "title": "" + element.name.toString() + "",
+        });
       });
-    });
 
-    pageAbout = Future.value(prepareListModel.setting.about);
-    pageCallus = Future.value(prepareListModel.setting.callUs);
-    pageTream = Future.value(prepareListModel.setting.terms);
+      pageAbout = Future.value(prepareListModel.setting.about);
+      pageCallus = Future.value(prepareListModel.setting.callUs);
+      pageTream = Future.value(prepareListModel.setting.terms);
 
-    KMPriceMin = prepareListModel.setting.kmPriceMin;
-    KMPriceMax = prepareListModel.setting.kmPriceMax;
-    helpPhoneNumber = prepareListModel.setting.helpPhoneNumber;
-    BaseDeliveryPrice = prepareListModel.setting.BaseDeliveryPrice;
-    
-    KAdministrativeFees = prepareListModel.setting.AdministrativeFees;
-    print(BaseDeliveryPrice);
+      KMPriceMin = prepareListModel.setting.kmPriceMin;
+      KMPriceMax = prepareListModel.setting.kmPriceMax;
+      helpPhoneNumber = prepareListModel.setting.helpPhoneNumber;
+      BaseDeliveryPrice = prepareListModel.setting.BaseDeliveryPrice;
 
-    Cars.addAll(prepareListModel.mark);
+      KAdministrativeFees = prepareListModel.setting.AdministrativeFees;
+      print(BaseDeliveryPrice);
 
-/*
-    Cars.map(
-      (e) {
-        print(e.id);
-      },
-    ).toList();
-    List<dynamic> ListCity = jsonDecode(response.bodyString);
-    ListCity.forEach((element) {
-      cityName.add({
-        "id": "" + element['Id'].toString() + "",
-        "title": "" + element['Name'].toString() + "",
-      });
-    });
-
-    */
+      Cars.addAll(prepareListModel.mark);
+    }
   }
 
   Future getProfile() async {
-    Response response = await WebServices().getProfile();
+    ResponsModel responsModel = await WebServices().getProfile();
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.statusCode == 401) {
+        KRole = userRole.anonymous;
+      } else {
+        KName = response.body['Name'];
+        KEmail = response.body['Email'];
+        KCity = response.body['CityName'];
 
-    if (response.statusCode == 401) {
-      KRole = userRole.anonymous;
-    } else {
-      KName = response.body['Name'];
-      KEmail = response.body['Email'];
-      KCity = response.body['CityName'];
+        Klatitude = response.body['Lat'];
+        Klongitude = response.body['Lng'];
+        KBalance = response.body['Balance'];
 
-      Klatitude = response.body['Lat'];
-      Klongitude = response.body['Lng'];
-KBalance = response.body['Balance'];
+        KPaidBalance = response.body['PaidBalance'];
 
-      KPaidBalance = response.body['PaidBalance'];
-
-      KRole = userRole.values[response.body['Role']];
+        KRole = userRole.values[response.body['Role']];
+      }
     }
   }
 }

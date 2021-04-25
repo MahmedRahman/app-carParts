@@ -51,6 +51,7 @@ enum OrderStatus {
   Request,
   MerchantOffer,
   MerchantOfferComplete,
+  SetLocation,
   DeliveryAgentOffer,
   DeliveryAgentOfferComplete,
   Paid,

@@ -1,6 +1,7 @@
+import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
-import 'package:carpart/app/data/webServices.dart';
+import 'package:carpart/app/api/webServices.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -19,23 +20,25 @@ class BankAddController extends GetxController {
   }
 
   addBank() async {
-    Response response =
+    ResponsModel responsModel =
         await WebServices().addUserBank(int.parse(bankId.text), iBAN.text);
 
-    print(response.bodyString);
-
-    if (response.body['IsSuccess']) {
-      showSnackBar(
-          title: AppName, message: 'تم الحفظ بنجاح', snackbarStatus: () {
-            Get.offNamed(Routes.BANK_LIST);
-          });
-    } else {
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.body['IsSuccess']) {
         showSnackBar(
-          title: AppName, message: 'خطاء فى حفظ البيانات', snackbarStatus: () {
-            
-          });
+            title: AppName,
+            message: 'تم الحفظ بنجاح',
+            snackbarStatus: () {
+              Get.offNamed(Routes.BANK_LIST);
+            });
+      } else {
+        showSnackBar(
+            title: AppName,
+            message: 'خطأ فى حفظ البيانات',
+            snackbarStatus: () {});
+      }
+      return response;
     }
-
-    return response;
   }
 }

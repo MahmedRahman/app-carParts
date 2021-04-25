@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/auth.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
@@ -7,7 +8,7 @@ import 'package:carpart/app/data/helper/AppUtils.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/client_model.dart';
 import 'package:carpart/app/data/model/userModel.dart';
-import 'package:carpart/app/data/webServices.dart';
+import 'package:carpart/app/api/webServices.dart';
 import 'package:carpart/app/modules/entry_point/controllers/entry_point_controller.dart';
 
 import 'package:carpart/app/routes/app_pages.dart';
@@ -40,7 +41,7 @@ class AuthiocationController extends GetxController {
   void createUser() async {
     String deviceId = await _getId();
 
-    Response response = await WebServices().createUser(
+    ResponsModel responsModel = await WebServices().createUser(
         name: name.text,
         email: email.text,
         password: password.text,
@@ -49,25 +50,28 @@ class AuthiocationController extends GetxController {
         deviceId: deviceId,
         logoBytes: logoBytes);
 
-    if (response.statusCode == 200) {
-      if (response.body['IsSuccess']) {
-        showSnackBar(
-            title: AppName,
-            message: 'تم تسجيل الحساب بنجاح',
-            snackbarStatus: () {
-              Get.toNamed(Routes.SigninView);
-            });
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.statusCode == 200) {
+        if (response.body['IsSuccess']) {
+          showSnackBar(
+              title: AppName,
+              message: 'تم تسجيل الحساب بنجاح',
+              snackbarStatus: () {
+                Get.toNamed(Routes.SigninView);
+              });
+        } else {
+          showSnackBar(
+              title: AppName,
+              message: response.body['Message'],
+              snackbarStatus: () {});
+        }
       } else {
         showSnackBar(
             title: AppName,
-            message: response.body['Message'],
+            message: 'خطاء فى عملية التسجيل',
             snackbarStatus: () {});
       }
-    } else {
-      showSnackBar(
-          title: AppName,
-          message: 'خطاء فى عملية التسجيل',
-          snackbarStatus: () {});
     }
   }
 
@@ -83,13 +87,9 @@ class AuthiocationController extends GetxController {
       Get.find<UserAuth>().setUserToken(userModel.accessToken);
       await EntryPointController().getProfile();
       setDeviceId();
-      showSnackBar(
-          title: AppName,
-          message: "تم تسجيل الدخول بنجاح",
-          snackbarStatus: () {
-            Get.offNamed(Routes.HOME);
-            btnController.reset();
-          });
+
+      Get.offNamed(Routes.HOME);
+      btnController.reset();
     }, onError: (err) {
       //print(err);
       showSnackBar(
@@ -101,11 +101,8 @@ class AuthiocationController extends GetxController {
     });
   }
 
-
-  void setDeviceId() async{
-    
+  void setDeviceId() async {
     await WebServices().setDeviceId(KFirebaseMessagingToken);
-
   }
 
   Future<String> _getId() async {
@@ -121,34 +118,48 @@ class AuthiocationController extends GetxController {
   }
 
   void bntrest() {
-    btnController.reset();
+    btnController.stop();
   }
 
   void upgrateMerchant() async {
-    Response response = await WebServices().upgrateMerchant(
-      businessName: businessName.text,
-      registrationImageBytes: registrationImageBytes,
-    );
-
-    if (response.statusCode == 200) {
-      if (response.body['IsSuccess']) {
-        showSnackBar(
-            title: AppName,
-            message: 'تم تقدم طلب ترقية',
-            snackbarStatus: () {
-              Get.offNamed(Routes.HOME);
-            });
-      } else {
-        showSnackBar(
-            title: AppName,
-            message: response.body['Message'],
-            snackbarStatus: () {});
-      }
-    } else {
+    if (GetUtils.isNullOrBlank(businessName.text) ||
+        GetUtils.isNullOrBlank(registrationImageBytes)) {
+        
       showSnackBar(
-          title: AppName,
-          message: 'خطاء فى عملية الترقية',
-          snackbarStatus: () {});
+          message: 'برجاء ملئ البيانات المطلوبة', snackbarStatus: () {
+              bntrest();
+          });
+    } else {
+        bntrest();
+      ResponsModel responsModel = await WebServices().upgrateMerchant(
+        businessName: businessName.text,
+        registrationImageBytes: registrationImageBytes,
+      );
+
+      if (responsModel.success) {
+        Response response = responsModel.data;
+
+        if (response.statusCode == 200) {
+          if (response.body['IsSuccess']) {
+            showSnackBar(
+                title: AppName,
+                message: 'تم تقدم طلب ترقية',
+                snackbarStatus: () {
+                  Get.offNamed(Routes.HOME);
+                });
+          } else {
+            showSnackBar(
+                title: AppName,
+                message: response.body['Message'],
+                snackbarStatus: () {});
+          }
+        } else {
+          showSnackBar(
+              title: AppName,
+              message: 'خطاء فى عملية الترقية',
+              snackbarStatus: () {});
+        }
+      }
     }
   }
 
@@ -160,7 +171,7 @@ class AuthiocationController extends GetxController {
   String drivingLicenseBytes;
 
   void upgrateDelivery() async {
-    Response response = await WebServices().upgrateDelivery(
+    ResponsModel responsModel = await WebServices().upgrateDelivery(
       nationalNumber: nationalNumber.text,
       nationalIdBytes: nationalIdBytes,
       carBackBytes: carBackBytes,
@@ -169,10 +180,11 @@ class AuthiocationController extends GetxController {
       drivingLicenseBytes: drivingLicenseBytes,
     );
 
-    if (response.body['IsSuccess']) {
-      Get.toNamed(Routes.HOME);
-    } else {
-//sh
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.body['IsSuccess']) {
+        Get.toNamed(Routes.HOME);
+      }
     }
   }
 }

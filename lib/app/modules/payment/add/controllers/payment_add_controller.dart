@@ -1,6 +1,7 @@
+import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
-import 'package:carpart/app/data/webServices.dart';
+import 'package:carpart/app/api/webServices.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -17,25 +18,25 @@ class PaymentAddController extends GetxController {
   }
 
   addPaymentRequest() async {
-    Response response =
+    ResponsModel responsModel =
         await WebServices().addPaymentRequest(int.parse(price.text));
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.body['IsSuccess']) {
+        showSnackBar(
+            title: AppName,
+            message: 'تم حفظ بنجاح',
+            snackbarStatus: () {
+              Get.offNamed(Routes.PAYMENT_LIST);
+            });
+      } else {
+        showSnackBar(
+            title: AppName,
+            message: 'خطاء فى حفظ البيانات',
+            snackbarStatus: () {});
+      }
 
-    if (response.body['IsSuccess']) {
-      showSnackBar(
-          title: AppName,
-          message: 'تم حفظ بنجاح',
-          snackbarStatus: () {
-            Get.offNamed(Routes.PAYMENT_LIST);
-          });
-    } else {
-            showSnackBar(
-          title: AppName,
-          message: 'خطاء فى حفظ البيانات',
-          snackbarStatus: () {
-           
-          });
+      return response;
     }
-
-    return response;
   }
 }

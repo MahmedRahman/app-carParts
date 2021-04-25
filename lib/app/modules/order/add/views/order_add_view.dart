@@ -119,14 +119,13 @@ class OrderAddView extends GetView<OrderAddController> {
                                     onChanged: (value) {
                                       controller.carMarkid = value;
                                       controller.carModelId = 0;
-
                                       markSelectIndex.value = value;
                                       modelsSelectIndex.value = 0;
                                       modelsList.clear();
                                       modelsList.addAll(
                                           Cars.elementAt(value - 1).models);
                                     },
-                                    hint: Text('أختيار نوع العربية'),
+                                    hint: Text('اختيار ماركة المركبة'),
                                     value: markSelectIndex.value == 0
                                         ? null
                                         : markSelectIndex.value,
@@ -169,7 +168,7 @@ class OrderAddView extends GetView<OrderAddController> {
                                       controller.carModelId = value;
                                       modelsSelectIndex.value = value;
                                     },
-                                    hint: Text('أختيار موديل العربية'),
+                                    hint: Text('اختيار نوع المركبة'),
                                     value: modelsSelectIndex.value == 0
                                         ? null
                                         : modelsSelectIndex.value,
@@ -213,6 +212,7 @@ class OrderAddView extends GetView<OrderAddController> {
                               controller.carImageBytes = value;
                             },
                           ),
+                          /*
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: SizedBox(
@@ -220,7 +220,7 @@ class OrderAddView extends GetView<OrderAddController> {
                               height: 350,
                               child: MapSample(),
                             ),
-                          ),
+                          ),*/
                           CustemButton(
                             title: 'ارسال',
                             buttonController: controller.btnSubmit,

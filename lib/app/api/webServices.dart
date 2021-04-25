@@ -1,4 +1,5 @@
-import 'package:carpart/app/data/ApiManger.dart';
+import 'package:carpart/app/api/ApiManger.dart';
+import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,7 @@ class WebServices extends ApiManger {
     }
   }
 
-  Future createUser({
+  Future<ResponsModel> createUser({
     @required String name,
     @required String phoneNumber,
     @required String password,
@@ -40,7 +41,7 @@ class WebServices extends ApiManger {
     @required String deviceId,
     String logoBytes,
   }) async {
-    Response response = await repPost('Account/Register', {
+    ResponsModel response = await repPost('Account/Register', {
       "Name": name,
       "PhoneNumber": phoneNumber,
       "UserName": phoneNumber,
@@ -57,10 +58,10 @@ class WebServices extends ApiManger {
     return response;
   }
 
-  Future upgrateMerchant(
+  Future<ResponsModel> upgrateMerchant(
       {@required String businessName,
       @required String registrationImageBytes}) async {
-    Response response = await repPost('Account/Upgrade?role=1', {
+    ResponsModel response = await repPost('Account/Upgrade?role=1', {
       "BusinessName": businessName,
       "RegistrationImageBytes": registrationImageBytes,
       "Lat": Klatitude,
@@ -69,57 +70,67 @@ class WebServices extends ApiManger {
     return response;
   }
 
-  Future getcity() async {
-    Response response = await repGet('City/Get');
+  Future<ResponsModel> getcity() async {
+    ResponsModel response = await repGet('City/Get');
     return response;
   }
 
-  Future setDeviceId(String deviceId) async {
-    Response response =
-        await repPost('Account/SetDeviceId/', {
-          'id' : deviceId
-        });
+  Future<ResponsModel> setDeviceId(String deviceId) async {
+    ResponsModel response =
+        await repPost('Account/SetDeviceId/', {'id': deviceId});
     return response;
   }
 
-  Future getprepareList() async {
-    Response response = await repGet('Setting/FullGet');
+  Future<ResponsModel> setLocation({
+    @required int orderid,
+    @required double lat,
+    @required double lng,
+  }) async {
+    ResponsModel response =
+        await repPost('Order/SetLocation/{$orderid}?lat={$lat}&lng={$lng}', '');
     return response;
   }
 
-  Future getMark() async {
-    Response response = await repGet('Mark/Get');
+  Future<ResponsModel> getprepareList() async {
+    ResponsModel response = await repGet('Setting/FullGet');
     return response;
   }
 
-  Future getModel() async {
-    Response response = await repGet('Model/Get');
+  Future<ResponsModel> getMark() async {
+    ResponsModel response = await repGet('Mark/Get');
     return response;
   }
 
-  Future setPaid({@required int orderId,}) async {
-    Response response = await repPost('Order/SetPaid/' + orderId.toString(),{});
+  Future<ResponsModel> getModel() async {
+    ResponsModel response = await repGet('Model/Get');
     return response;
   }
-  
 
-  Future addDeliveryOffer({
+  Future<ResponsModel> setPaid({
+    @required int orderId,
+  }) async {
+    ResponsModel response =
+        await repPost('Order/SetPaid/' + orderId.toString(), {});
+    return response;
+  }
+
+  Future<ResponsModel> addDeliveryOffer({
     @required int orderId,
     @required double price,
   }) async {
-    Response response = await repPost('DeliveryOffer/Add', {
+    ResponsModel response = await repPost('DeliveryOffer/Add', {
       "OrderId": orderId,
       "Price": price,
     });
     return response;
   }
 
-  Future getNotifaction() async {
-    Response response = await repGet('Account/Notification');
+  Future<ResponsModel> getNotifaction() async {
+    ResponsModel response = await repGet('Account/Notification');
     return response;
   }
 
-  Future createorder({
+  Future<ResponsModel> createorder({
     @required int markid,
     @required int modelId,
     @required String versionId,
@@ -127,7 +138,7 @@ class WebServices extends ApiManger {
     @required String description,
     String imageBytes,
   }) async {
-    Response response = await repPost('Order/Add', {
+    ResponsModel response = await repPost('Order/Add', {
       "MarkId": markid,
       "ModelId": modelId,
       "VersionId": versionId,
@@ -141,22 +152,22 @@ class WebServices extends ApiManger {
     return response;
   }
 
-  Future getOrder() async {
-    Response response = await repGet('Order/Get');
+  Future<ResponsModel> getOrder() async {
+    ResponsModel response = await repGet('Order/Get');
     return response;
   }
 
-  Future getOrderDetailes(int OrderId) async {
-    Response response = await repGet('Order/Get/$OrderId');
+  Future<ResponsModel> getOrderDetailes(int OrderId) async {
+    ResponsModel response = await repGet('Order/Get/$OrderId');
     return response;
   }
 
-  Future addOffer({
+  Future<ResponsModel> addOffer({
     @required int orderId,
     @required String name,
     @required double price,
   }) async {
-    Response response = await repPost('MerchantOffer/Add', {
+    ResponsModel response = await repPost('MerchantOffer/Add', {
       "OrderId": orderId,
       "Name": name,
       "Price": price,
@@ -165,61 +176,62 @@ class WebServices extends ApiManger {
     return response;
   }
 
-  Future getMerchantOffers(int OrderId) async {
-    Response response =
+  Future<ResponsModel> getMerchantOffers(int OrderId) async {
+    ResponsModel response =
         await repGet('MerchantOffer/Getall/' + OrderId.toString());
     return response;
   }
 
-  Future acceptOffer(int offerid) async {
-    Response response =
+  Future<ResponsModel> acceptOffer(int offerid) async {
+    ResponsModel response =
         await repPost('MerchantOffer/Accept/' + offerid.toString(), null);
     return response;
   }
 
-  Future acceptDeliveryOffer(int offerid) async {
-    Response response =
+  Future<ResponsModel> acceptDeliveryOffer(int offerid) async {
+    ResponsModel response =
         await repPost('DeliveryOffer/Accept/' + offerid.toString(), null);
     return response;
   }
 
-  Future addUserBank(int bankId, String iBAN) async {
-    Response response =
+  Future<ResponsModel> addUserBank(int bankId, String iBAN) async {
+    ResponsModel response =
         await repPost('UserBank/Add', {"BankId": bankId, "IBAN": iBAN});
     return response;
   }
 
-  Future getBank() async {
-    Response response = await repGet('Bank/Get');
+  Future<ResponsModel> getBank() async {
+    ResponsModel response = await repGet('Bank/Get');
     return response;
   }
 
-  Future getUserBank() async {
-    Response response = await repGet('UserBank/Get');
+  Future<ResponsModel> getUserBank() async {
+    ResponsModel response = await repGet('UserBank/Get');
     return response;
   }
 
-  Future addPaymentRequest(int price) async {
-    Response response = await repPost('PaymentRequest/Add', {"Price": price});
+  Future<ResponsModel> addPaymentRequest(int price) async {
+    ResponsModel response =
+        await repPost('PaymentRequest/Add', {"Price": price});
     return response;
   }
 
-  Future getPaymentRequest() async {
-    Response response = await repGet('PaymentRequest/Get');
+  Future<ResponsModel> getPaymentRequest() async {
+    ResponsModel response = await repGet('PaymentRequest/Get');
     return response;
   }
 
-  Future getSetting() async {
-    Response response = await repGet('Setting/Get');
+  Future<ResponsModel> getSetting() async {
+    ResponsModel response = await repGet('Setting/Get');
     return response;
   }
 
-  Future getProfile() async {
-    Response response = await repGet('Account/GetProfile');
+  Future<ResponsModel> getProfile() async {
+    ResponsModel response = await repGet('Account/GetProfile');
     return response;
   }
 
-  Future upgrateDelivery({
+  Future<ResponsModel> upgrateDelivery({
     @required String nationalNumber,
     @required String nationalIdBytes,
     @required String drivingLicenseBytes,
@@ -227,7 +239,7 @@ class WebServices extends ApiManger {
     @required String carBackBytes,
     @required String carPaperBytes,
   }) async {
-    Response response = await repPost('Account/Upgrade?role=2', {
+    ResponsModel response = await repPost('Account/Upgrade?role=2', {
       "NationalNumber": nationalNumber,
       "NationalIdBytes": nationalIdBytes,
       "DrivingLicenseBytes": drivingLicenseBytes,
@@ -237,4 +249,26 @@ class WebServices extends ApiManger {
     });
     return response;
   }
+
+  Future<ResponsModel> getdistance({
+    @required double originslat,
+    @required double originslang,
+    @required double destinationslat,
+    @required double destinationslang,
+  }) async {
+    ResponsModel response = await repGet(
+        'https://maps.googleapis.com/maps/api/distancematrix/json?origins=$originslat,$originslang&destinations=$destinationslat,$destinationslang&key=AIzaSyC8ph0Arqdy0u0I5kEqV44sXFPUSM7iOb0');
+    return response;
+  }
+
+
+    Future<ResponsModel> getplace({
+    @required String address,
+  }) async {
+    ResponsModel response = await repGet(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$address&types=address&language=ar&key=AIzaSyC8ph0Arqdy0u0I5kEqV44sXFPUSM7iOb0');
+    return response;
+  }
+
+  
 }

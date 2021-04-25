@@ -13,14 +13,14 @@ class AppTranslation extends Translations {
           'OrderStatus.MerchantOfferComplete': 'عرض تاجر مكتمل',
           'OrderStatus.DeliveryAgentOffer': 'عروض توصيل',
           'OrderStatus.DeliveryAgentOfferComplete': 'عرض توصيل مكتمل',
+          'OrderStatus.SetLocation': 'تم أختيار العنوان',
+          'OrderStatus.Paid': 'مدفوع',
           'userRole.Client': 'مشترى',
           'userRole.Merchant': 'تاجر',
           'userRole.DeliveryAgent': 'مندوب توصيل',
-          'RequestStatus.Request' : 'جارى الطلب' ,
-
-           'RequestStatus.Accept' : 'طلب مقبول',
-
-            'RequestStatus.Refuse' : 'طلب مرفوض'
+          'RequestStatus.Request': 'جارى الطلب',
+          'RequestStatus.Accept': 'طلب مقبول',
+          'RequestStatus.Refuse': 'طلب مرفوض'
         }
       };
 }

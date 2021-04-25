@@ -12,20 +12,26 @@ class PaymentAddView extends GetView<PaymentAddController> {
       appBar: AppBar(
         title: Text('أضافة بيانات التحويل'),
         centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FocusScope.of(context).unfocus();
+        actions: [
+          IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () {
+                FocusScope.of(context).unfocus();
 
-          controller.addPaymentRequest();
-        },
-        child: Icon(Icons.save),
+                controller.addPaymentRequest();
+              })
+        ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'الرجاء كتابة المبلغ المراد تحويلة',
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(
+            height: 10,
           ),
           CustemTextForm(
             textHint: 'أدخل المبلغ المراد تحويلة',

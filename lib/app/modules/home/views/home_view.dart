@@ -1,4 +1,5 @@
 import 'package:carpart/app/data/auth.dart';
+import 'package:carpart/app/data/component/MapSample.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
@@ -12,6 +13,7 @@ import 'package:carpart/app/modules/order/list/views/order_list_view.dart';
 
 import 'package:carpart/app/modules/profile/views/profile_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,7 +25,7 @@ class HomeView extends GetView<HomeController> {
     OrderAddView(),
     OrderListView(),
     NotifactionView(),
-    ProfileView()
+    ProfileView(),
   ];
 
   @override
@@ -72,9 +74,11 @@ class HomeView extends GetView<HomeController> {
                                           color: Colors.white),
                                     ),
                                     subtitle: Text(
-                                      KEmail + " " + KRole.toString().tr,
+                                      KEmail,
                                       style: headline3.copyWith(
-                                          color: Colors.white),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   )
                                 : SizedBox.shrink()),
@@ -198,7 +202,7 @@ class HomeView extends GetView<HomeController> {
                                       'images/drwar/login.svg'),
                                   onTap: () {
                                     Get.back();
-                                   // Get.to()
+                                    // Get.to()
                                     Get.offNamed(Routes.SigninView);
                                     // Update the state of the app.
                                     // ...
@@ -248,7 +252,7 @@ class HomeView extends GetView<HomeController> {
                                       KRole = userRole.anonymous;
 
                                       Get.find<UserAuth>().setUserToken(null);
-
+controller.selectindex.value =0;
                                       Get.offAndToNamed(Routes.HOME);
 
                                       // Get.find<UserAuth>().signout();
@@ -269,6 +273,7 @@ class HomeView extends GetView<HomeController> {
       bottomNavigationBar: Obx(() {
         return BottomNavigationBar(
           currentIndex: controller.selectindex.value,
+          backgroundColor: Colors.white70,
           selectedItemColor: KAccentColor,
           unselectedItemColor: KScandaryColor,
           selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),

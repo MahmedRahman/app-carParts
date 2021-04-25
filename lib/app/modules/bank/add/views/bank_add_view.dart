@@ -14,33 +14,47 @@ class BankAddView extends GetView<BankAddController> {
       appBar: AppBar(
         title: Text('أضافة حساب بنكى'),
         centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FocusScope.of(context).unfocus();
+        actions: [IconButton(icon: Icon(Icons.save), onPressed: () {
+                    FocusScope.of(context).unfocus();
           controller.addBank();
-        },
-        child: Icon(
-          Icons.save,
-          color: Colors.white,
-        ),
+        })],
       ),
+   
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             height: 10,
+          ),
+
+            Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'أسم البنك',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+            ),
           ),
           SizedBox(
             height: 10,
           ),
           CustomDropdownButton(
             dropdownDate: bankName,
-            onChanged: (value){
-              controller.bankId.text =value;
+            onChanged: (value) {
+              controller.bankId.text = value;
             },
           ),
           SizedBox(
-            height: 10,
+            height: 15,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'رقم اى بان',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+            ),
           ),
           CustemTextForm(
             textHint: 'iban ',

@@ -1,8 +1,9 @@
+import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/order_model.dart';
-import 'package:carpart/app/data/webServices.dart';
+import 'package:carpart/app/api/webServices.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class OrderAddController extends GetxController {
 
   createorder() async {
     if (KRole == userRole.anonymous) {
+      clearFormData();
       Get.toNamed(Routes.SigninView);
     }
 
@@ -34,7 +36,7 @@ class OrderAddController extends GetxController {
           },
         );
       } else {
-        Response response = await WebServices().createorder(
+        ResponsModel responsModel = await WebServices().createorder(
           markid: carMarkid,
           modelId: carModelId,
           versionId: versionYear.text,
@@ -43,6 +45,8 @@ class OrderAddController extends GetxController {
           imageBytes: carImageBytes,
         );
 
+        if(responsModel.success){
+          Response response = responsModel.data;
         if (response.body['IsSuccess']) {
           showSnackBar(
             message: 'تم حفظ البيانات',
@@ -60,6 +64,9 @@ class OrderAddController extends GetxController {
             },
           );
         }
+        }
+
+
       }
     }
   }
