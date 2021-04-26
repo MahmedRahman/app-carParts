@@ -1,4 +1,5 @@
 import 'package:carpart/app/data/auth.dart';
+import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
@@ -21,10 +22,7 @@ class ProfileView extends GetView<ProfileController> {
                   Stack(
                     children: [
                       Center(
-                        child: Image.asset(
-                          'images/drwar/user.png',
-                          width: 100,
-                        ),
+                        child: CustomImageCached(imageUrl: KUserImage,)
                       ),
                       Positioned(
                         bottom: 1,
@@ -63,22 +61,22 @@ class ProfileView extends GetView<ProfileController> {
                       ],
                     ),
                   ),
-                 /* Column(
+                 Column(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.logout),
+                        icon: Icon(Icons.edit),
                         onPressed: () {
 //                          Get.back();
 
-                          KRole = userRole.anonymous;
+                         // KRole = userRole.anonymous;
 
-                          Get.find<UserAuth>().setUserToken(null);
+                          //Get.find<UserAuth>().setUserToken(null);
 
-                          Get.offAndToNamed(Routes.HOME);
+                        //  Get.offAndToNamed(Routes.HOME);
                         },
                       ),
                     ],
-                  )*/
+                  )
                 ],
               ),
             ),

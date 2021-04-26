@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 
 import 'package:carpart/app/modules/authiocation/bindings/authiocation_binding.dart';
+import 'package:carpart/app/modules/authiocation/signup/bindings/authiocation_signup_binding.dart';
+import 'package:carpart/app/modules/authiocation/signup/views/authiocation_signup_view.dart';
 import 'package:carpart/app/modules/authiocation/views/authiocation_view.dart';
 import 'package:carpart/app/modules/authiocation/views/frogatepassword_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
-import 'package:carpart/app/modules/authiocation/views/signup_complate_view.dart';
-import 'package:carpart/app/modules/authiocation/views/signup_merchant_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signup_delivery_view.dart';
-import 'package:carpart/app/modules/authiocation/views/signup_client_view.dart';
+import 'package:carpart/app/modules/authiocation/views/signup_merchant_view.dart';
 import 'package:carpart/app/modules/authiocation/views/splash_view.dart';
 import 'package:carpart/app/modules/bank/add/bindings/bank_add_binding.dart';
 import 'package:carpart/app/modules/bank/add/views/bank_add_view.dart';
@@ -25,7 +25,6 @@ import 'package:carpart/app/modules/order/detail/bindings/order_detail_binding.d
 import 'package:carpart/app/modules/order/detail/views/order_detail_view.dart';
 import 'package:carpart/app/modules/order/list/bindings/order_list_binding.dart';
 import 'package:carpart/app/modules/order/list/views/order_list_view.dart';
-
 import 'package:carpart/app/modules/page/bindings/page_binding.dart';
 import 'package:carpart/app/modules/page/views/about_view.dart';
 import 'package:carpart/app/modules/page/views/contactus_view.dart';
@@ -76,21 +75,13 @@ class AppPages {
       page: () => SignupDealerView(),
       binding: AuthiocationBinding(),
     ),
-    GetPage(
-      name: Routes.SignupView,
-      page: () => SignupView(),
-      binding: AuthiocationBinding(),
-    ),
+
     GetPage(
       name: Routes.FrogatepasswordView,
       page: () => FrogatepasswordView(),
       binding: AuthiocationBinding(),
     ),
-    GetPage(
-      name: Routes.SignupcomplateView,
-      page: () => SignupcomplateView(),
-      binding: AuthiocationBinding(),
-    ),
+
     GetPage(
       name: Routes.PAGE,
       page: () => PageView(),
@@ -165,6 +156,11 @@ class AppPages {
       name: Routes.ORDER_DETAIL,
       page: () => OrderDetailView(),
       binding: OrderDetailBinding(),
+    ),
+    GetPage(
+      name: Routes.AUTHIOCATION_SIGNUP,
+      page: () => AuthiocationSignupView(),
+      binding: AuthiocationSignupBinding(),
     ),
   ];
 }

@@ -180,14 +180,60 @@ class OrderAddView extends GetView<OrderAddController> {
                           SizedBox(
                             height: 10,
                           ),
-                          CustemTextForm(
+                          Obx(() {
+                            return Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.rectangle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(.15),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                    )
+                                  ],
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    
+                                    isExpanded: true,
+                                    items: verisionYears.map(
+                                      (e) {
+                                        return new DropdownMenuItem(
+                                          
+                                          child: new Text(e.toString()),
+                                          value: e,
+                                        );
+                                      },
+                                    ).toList(),
+                                    onChanged: (value) {
+                                      controller.versionYear.value =
+                                          value.toString();
+                                      print(value);
+                                    },
+                                    hint: Text('اختيار سنة صنع المركبة'),
+                                    value: controller.versionYear.value == ''
+                                        ? null
+                                        : controller.versionYear.value,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                          /*CustemTextForm(
                             textHint: 'سنة الصنع',
                             inputcontroller: controller.versionYear,
                             textInputType: TextInputType.number,
                             onValidator: (value) {
                               return AppValidation.checkEmpty(value);
                             },
-                          ),
+                          ),*/
                           SizedBox(
                             height: 10,
                           ),
@@ -212,20 +258,14 @@ class OrderAddView extends GetView<OrderAddController> {
                               controller.carImageBytes = value;
                             },
                           ),
-                          /*
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              width: Get.width,
-                              height: 350,
-                              child: MapSample(),
-                            ),
-                          ),*/
+              
                           CustemButton(
                             title: 'ارسال',
                             buttonController: controller.btnSubmit,
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
+                                markSelectIndex.value = 0;
+                                modelsSelectIndex.value = 0;
                                 controller.createorder();
                               } else {
                                 controller.restBtn();

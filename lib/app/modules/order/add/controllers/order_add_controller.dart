@@ -13,7 +13,8 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 class OrderAddController extends GetxController {
   var carMarkid = 0;
   var carModelId = 0;
-  TextEditingController versionYear = new TextEditingController();
+  var versionYear = ''.obs;
+  //TextEditingController versionYear = new TextEditingController();
   TextEditingController vanNumber = new TextEditingController();
   TextEditingController description = new TextEditingController();
   String carImageBytes;
@@ -28,9 +29,9 @@ class OrderAddController extends GetxController {
     }
 
     if (KRole == userRole.Client) {
-      if (carMarkid == 0 || carModelId == 0) {
+      if (carMarkid == 0 || carModelId == 0 || versionYear.value == '') {
         showSnackBar(
-          message: 'برجاء تحديد نوع و موديل السيارة',
+          message: 'برجاء تحديد ماركة و نوع وسنة المركبة',
           snackbarStatus: () {
             btnSubmit.stop();
           },
@@ -39,34 +40,32 @@ class OrderAddController extends GetxController {
         ResponsModel responsModel = await WebServices().createorder(
           markid: carMarkid,
           modelId: carModelId,
-          versionId: versionYear.text,
+          versionId: versionYear.value,
           vanNumber: vanNumber.text,
           description: description.text,
           imageBytes: carImageBytes,
         );
 
-        if(responsModel.success){
+        if (responsModel.success) {
           Response response = responsModel.data;
-        if (response.body['IsSuccess']) {
-          showSnackBar(
-            message: 'تم حفظ البيانات',
-            snackbarStatus: () {
-              btnSubmit.stop();
-              clearFormData();
-              Get.find<HomeController>().selectindex.value = 1;
-            },
-          );
-        } else {
-          showSnackBar(
-            message: 'خطاء فى البيانات المرسالة',
-            snackbarStatus: () {
-              btnSubmit.stop();
-            },
-          );
+          if (response.body['IsSuccess']) {
+            showSnackBar(
+              message: 'تم ارسال الطلب بنجاح',
+              snackbarStatus: () {
+                btnSubmit.stop();
+                clearFormData();
+                Get.find<HomeController>().selectindex.value = 1;
+              },
+            );
+          } else {
+            showSnackBar(
+              message: 'خطاء فى البيانات المرسالة',
+              snackbarStatus: () {
+                btnSubmit.stop();
+              },
+            );
+          }
         }
-        }
-
-
       }
     }
   }
@@ -76,7 +75,7 @@ class OrderAddController extends GetxController {
   }
 
   clearFormData() {
-    versionYear.clear();
+    versionYear.value='';
     vanNumber.clear();
     description.clear();
     carMarkid = 0;

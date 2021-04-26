@@ -3,6 +3,7 @@ import 'package:carpart/app/data/component/MapSample.dart';
 import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppUtils.dart';
+import 'package:carpart/app/data/helper/AppValidation.dart';
 import 'package:carpart/app/modules/authiocation/controllers/authiocation_controller.dart';
 import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
@@ -29,6 +30,9 @@ class SignupDealerView extends GetView<AuthiocationController> {
               CustemTextForm(
                 textHint: 'اسم النشاط التجاري',
                 inputcontroller: controller.businessName,
+                onValidator: (value){
+                 return AppValidation.checkEmpty(value);
+                },
               ),
               CustemImagePicker(
                 onclick: (value) {

@@ -71,33 +71,40 @@ class OrderListView extends GetView<OrderListController> {
         child: Card(
           child: Row(
             children: [
-              SizedBox(
-                width: Get.width * .3,
-                height: 200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    orderModel.image == null
-                        ? Container(
-                            color: Colors.white,
-                            child: Placeholder(
-                              fallbackHeight: 150,
-                            ))
-                        : Expanded(
-                            child: Container(
-                              color: Colors.white,
-                              child: CustomImageCached(
-                                imageUrl:
-                                    "https://carpart.atpnet.net/Files/Order/" +
-                                        orderModel.userId.toString() +
-                                        "/" +
-                                        orderModel.id.toString() +
-                                        "/" +
-                                        orderModel.image.toString(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: Get.width * .3,
+                  height: 200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      orderModel.image == null
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Placeholder(
+                                fallbackHeight: 150,
+                              ))
+                          : Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: CustomImageCached(
+                                  imageUrl:
+                                      "https://carpart.atpnet.net/Files/Order/" +
+                                          orderModel.userId.toString() +
+                                          "/" +
+                                          orderModel.id.toString() +
+                                          "/" +
+                                          orderModel.image.toString(),
+                                ),
                               ),
                             ),
-                          ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -108,25 +115,43 @@ class OrderListView extends GetView<OrderListController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text('رقم  الطلب' + ' : ' + orderModel.id.toString(),style: TextStyle(
-                                color: Colors.grey,fontSize: 16
-                      ),),
-                      Text(orderModel.markName +
-                          ' , ' +
-                          orderModel.modelName +
-                          ' , ' +
-                          orderModel.versionId.toString(),style: TextStyle(
-                            color: Colors.black,fontSize: 18,
-                          ),),
-                      Text(DateFormat.MMMMd().format(orderModel.date),style: TextStyle(
-                            color: Colors.black,fontSize: 12,
-                          ),),
-                      Text(OrderStatus.values[orderModel.status].toString().tr,style: TextStyle(
-                            color: Colors.red,fontSize: 18,
-                          ),),
-                      Text(StringExtension.displayTimeAgoFromTimestamp(orderModel.date.toString()),style: TextStyle(
-                            color: Colors.black,fontSize: 12,
-                          ),),
+                      Text(
+                        'رقم  الطلب' + ' : ' + orderModel.id.toString(),
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      ),
+                      Text(
+                        orderModel.markName +
+                            ' , ' +
+                            orderModel.modelName +
+                            ' , ' +
+                            orderModel.versionId.toString(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        DateFormat.yMMMd().format(orderModel.date),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        OrderStatus.values[orderModel.status].toString().tr,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        StringExtension.displayTimeAgoFromTimestamp(
+                            orderModel.date.toString()),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -139,7 +164,7 @@ class OrderListView extends GetView<OrderListController> {
   }
 }
 
- extension StringExtension on String {
+extension StringExtension on String {
   static String displayTimeAgoFromTimestamp(String timestamp) {
     final year = int.parse(timestamp.substring(0, 4));
     final month = int.parse(timestamp.substring(5, 7));
@@ -178,6 +203,6 @@ class OrderListView extends GetView<OrderListController> {
     timeAgo = timeValue.toString() + ' ' + timeUnit;
     timeAgo += timeValue > 1 ? '' : '';
 
-    return   'منذ' + ' ' + timeAgo;
+    return 'منذ' + ' ' + timeAgo;
   }
 }

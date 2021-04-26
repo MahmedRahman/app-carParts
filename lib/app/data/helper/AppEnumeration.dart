@@ -3,26 +3,12 @@ var carModel = [];
 var cityName = [];
 var bankName = [];
 var Cars = [];
-/*
-var Cars = [
-  {
-    "Id": 1,
-    "Name": "فيات",
-    "Models": [
-      {"Id": 1, "Name": "تيبو", "MarkId": 1, "MarkName": null},
-      {"Id": 2, "Name": "128", "MarkId": 1, "MarkName": null}
-    ]
-  },
-  {
-    "Id": 2,
-    "Name": "رينو",
-    "Models": [
-      {"Id": 3, "Name": "ميجان", "MarkId": 2, "MarkName": null},
-      {"Id": 4, "Name": "لوجان", "MarkId": 2, "MarkName": null}
-    ]
-  }
+
+var verisionYears = [
+  '2021','2020','2019','2018' 
+  //, '2017' , '2016' , '2015' ,'2014' ,'2013' ,'2012'
 ];
-*/
+
 Future pageAbout;
 Future pageCallus;
 Future pageTream;
@@ -43,6 +29,7 @@ enum userRole { Client, Merchant, DeliveryAgent, anonymous }
 String KName = '';
 String KEmail = '';
 String KCity = '';
+String KUserImage = '';
 String KFirebaseMessagingToken = '';
 
 userRole KRole = userRole.anonymous;

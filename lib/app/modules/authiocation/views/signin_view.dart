@@ -13,6 +13,15 @@ class SigninView extends GetView<AuthiocationController> {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
+
+    if (GetUtils.isNullOrBlank(Get.arguments)) {
+      controller.phoneNumber.text = '';
+      controller.password.text = '';
+    } else {
+      controller.phoneNumber.text = Get.arguments[0];
+      controller.password.text = Get.arguments[1];
+    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -140,7 +149,7 @@ class SigninView extends GetView<AuthiocationController> {
                     ),
                     InkWell(
                       onTap: () {
-                        Get.offNamed(Routes.SignupView);
+                        Get.offNamed(Routes.AUTHIOCATION_SIGNUP);
                       },
                       child: Text(
                         'من هنا',

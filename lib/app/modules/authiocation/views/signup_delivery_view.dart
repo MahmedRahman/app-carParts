@@ -61,16 +61,7 @@ class SignupDeliveryView extends GetView<AuthiocationController> {
                 buttonController:controller.btnController,
                 onPressed: () {
                   controller.upgrateDelivery();
-                  /*
-                  AppUtils().showSnackBar(
-                    AppName,
-                    'لقد قمت بالتسجيل انت الان تتمتع بصلاحيات المندوب',
-                    snackbarStatus: (value) {
-                      if (value == SnackbarStatus.CLOSED) {
-                        Get.toNamed(Routes.HOME);
-                      }
-                    },
-                  );*/
+   
                 },
               )
             ],

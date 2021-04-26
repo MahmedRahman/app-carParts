@@ -75,6 +75,11 @@ class WebServices extends ApiManger {
     return response;
   }
 
+ Future<ResponsModel> sendSms(String phoneNumber) async {
+    ResponsModel response = await repPost('Home/SendSms/' + phoneNumber , {});
+    return response;
+  }
+
   Future<ResponsModel> setDeviceId(String deviceId) async {
     ResponsModel response =
         await repPost('Account/SetDeviceId/', {'id': deviceId});

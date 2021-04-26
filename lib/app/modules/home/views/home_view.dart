@@ -165,8 +165,6 @@ class HomeView extends GetView<HomeController> {
                                   onTap: () {
                                     Get.back();
                                     Get.toNamed(Routes.SignupDealerView);
-                                    // Update the state of the app.
-                                    // ...
                                   },
                                 )
                               : SizedBox.shrink()),
@@ -175,18 +173,14 @@ class HomeView extends GetView<HomeController> {
                               ? ListTile(
                                   title: Text(
                                     'تسجيل جديد',
-                                    style:
-                                        headline4.copyWith(color: Colors.white),
+                                    style: headline4.copyWith(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   leading: Image.asset('images/drwar/sign.png'),
                                   onTap: () {
                                     Get.back();
-                                    Get.toNamed(Routes.SignupView);
-
-                                    // Get.to(SigninView(), fullscreenDialog: true);
-
-                                    // Update the state of the app.
-                                    // ...
+                                    Get.toNamed(Routes.AUTHIOCATION_SIGNUP);
                                   },
                                 )
                               : SizedBox.shrink()),
@@ -229,8 +223,6 @@ class HomeView extends GetView<HomeController> {
                         onTap: () {
                           Get.back();
                           Get.toNamed(Routes.ContactusView);
-                          // Update the state of the app.
-                          // ...
                         },
                       ),
                       Container(
@@ -248,14 +240,10 @@ class HomeView extends GetView<HomeController> {
                                         Image.asset('images/drwar/exit.png'),
                                     onTap: () {
                                       Get.back();
-
                                       KRole = userRole.anonymous;
-
                                       Get.find<UserAuth>().setUserToken(null);
-controller.selectindex.value =0;
+                                      controller.selectindex.value = 0;
                                       Get.offAndToNamed(Routes.HOME);
-
-                                      // Get.find<UserAuth>().signout();
                                     },
                                   )
                                 : SizedBox.shrink()),

@@ -34,8 +34,8 @@ class AuthiocationController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    phoneNumber.text = "01223560607";
-    password.text = "123456";
+    phoneNumber.text = "";
+    password.text = "";
   }
 
   void createUser() async {

@@ -63,9 +63,16 @@ class EntryPointController extends GetxController {
 
   Future fillLookUpTable() async {
     await getprepareList();
-    if (KRole != userRole.anonymous) {
+
+    if (GetUtils.isNullOrBlank(Get.find<UserAuth>().getUserToken())) {
+      KRole = userRole.anonymous;
+    } else {
       await getProfile();
     }
+
+    //if (KRole != userRole.anonymous) {
+
+    // }
   }
 
   Future getprepareList() async {
@@ -109,21 +116,23 @@ class EntryPointController extends GetxController {
     ResponsModel responsModel = await WebServices().getProfile();
     if (responsModel.success) {
       Response response = responsModel.data;
-      if (response.statusCode == 401) {
-        KRole = userRole.anonymous;
-      } else {
-        KName = response.body['Name'];
-        KEmail = response.body['Email'];
-        KCity = response.body['CityName'];
 
-        Klatitude = response.body['Lat'];
-        Klongitude = response.body['Lng'];
-        KBalance = response.body['Balance'];
+      KName = response.body['Name'];
+      KEmail = response.body['Email'];
+      KCity = response.body['CityName'];
 
-        KPaidBalance = response.body['PaidBalance'];
+      Klatitude = response.body['Lat'];
+      Klongitude = response.body['Lng'];
+      KBalance = response.body['Balance'];
 
-        KRole = userRole.values[response.body['Role']];
-      }
+      KPaidBalance = response.body['PaidBalance'];
+
+      KRole = userRole.values[response.body['Role']];
+
+      KUserImage = 'https://carpart.atpnet.net/Files/Merchant/' +
+          response.body['Id'].toString() +
+          '/' +
+          response.body['RegistrationImage'].toString();
     }
   }
 }

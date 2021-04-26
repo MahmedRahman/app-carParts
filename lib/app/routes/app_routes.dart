@@ -33,4 +33,5 @@ abstract class Routes {
   static const ORDER_ADD = '/order/add';
   static const ORDER_LIST = '/order/list';
   static const ORDER_DETAIL = '/order/detail';
+  static const AUTHIOCATION_SIGNUP = '/authiocation/signup';
 }

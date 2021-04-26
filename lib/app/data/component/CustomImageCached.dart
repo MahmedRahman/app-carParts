@@ -8,16 +8,21 @@ class CustomImageCached extends StatelessWidget {
   final String imageUrl;
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      placeholder: (context, url) => Center(
-        child: CustomIndicator(
-          indicatorStatus: IndicatorStatus.imageplaceholder,
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25)
       ),
-      errorWidget: (context, url, error) => Center(
-        child: CustomIndicator(
-          indicatorStatus: IndicatorStatus.error,
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        placeholder: (context, url) => Center(
+          child: CustomIndicator(
+            indicatorStatus: IndicatorStatus.imageplaceholder,
+          ),
+        ),
+        errorWidget: (context, url, error) => Center(
+          child: CustomIndicator(
+            indicatorStatus: IndicatorStatus.error,
+          ),
         ),
       ),
     );

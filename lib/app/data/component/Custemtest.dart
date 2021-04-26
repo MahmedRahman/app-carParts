@@ -1,25 +1,26 @@
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-class CustemButton extends StatelessWidget {
-  // final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+class CustemButtonTest extends StatelessWidget {
+   final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
 
-  const CustemButton(
-      {@required this.title,
-      this.backgroundColor = KAccentColor,
-      this.buttonIcons = Icons.arrow_back_ios,
-      this.onPressed,
-      this.buttonController});
-
+   CustemButtonTest({
+    @required this.title,
+    this.backgroundColor = KAccentColor,
+    this.buttonIcons = Icons.arrow_back_ios,
+    @required this.onPressed,
+  });
+//   this.buttonController
   final String title;
   final Color backgroundColor;
   final IconData buttonIcons;
   final Function onPressed;
-  final RoundedLoadingButtonController buttonController;
 
   @override
   Widget build(BuildContext context) {
+   
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Container(
@@ -40,11 +41,19 @@ class CustemButton extends StatelessWidget {
             title,
             style: TextStyle(color: Colors.white),
           ),
-          controller: buttonController,
+          controller: _btnController,
           onPressed: () async {
-            FocusScope.of(context).unfocus();
-             onPressed();
-           // buttonController.stop();
+            try {
+              FocusScope.of(context).unfocus();
+
+              await onPressed();
+
+              if (GetUtils.isNullOrBlank(_btnController)) {
+                _btnController.reset();
+              }
+            } on Exception catch (_) {
+              _btnController.reset();
+            }
           },
         ),
       ),

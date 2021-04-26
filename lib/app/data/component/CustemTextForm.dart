@@ -36,7 +36,8 @@ class CustemTextForm extends StatelessWidget {
       child: TextFormField(
         keyboardType: textInputType ?? TextInputType.multiline,
         controller: inputcontroller,
-        maxLines: textmaxLines, // when user presses enter it will adapt to it
+        maxLines: textmaxLines,
+        obscureText: textInputType == TextInputType.visiblePassword ? true : false,
         validator: onValidator,
         decoration: InputDecoration(
           suffixIcon: Icon(textIconData),
