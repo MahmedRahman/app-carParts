@@ -215,107 +215,200 @@ class OrderDetailView extends GetView<OrderDetailController> {
   }
 
   Widget offerMerchant(OderDetaileModel orderDetaileModel) {
+    var inputtype = 0.obs;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       width: Get.width,
       constraints: BoxConstraints(minHeight: 150),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.rectangle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 2,
-          )
-        ],
-      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'عروض الاسعار',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-                //TextButton(onPressed: () {}, child: Text('مفرد')),
-                // TextButton(onPressed: () {}, child: Text('متعدد'))
-              ],
-            ),
-            Divider(),
-            GetX<OrderDetailController>(builder: (builder) {
-              return FutureBuilder(
-                  future: controller.MerchantOffersList.value,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      List<OfferModel> offerList = snapshot.data;
-                      return offerList.length == 0
-                          ? Text('لم يتم تقديم اى عروض')
-                          : Column(
-                              children:
-                                  List.generate(offerList.length, (index) {
-                                return ListTile(
-                                  title: Text(offerList
-                                      .elementAt(index)
-                                      .name
-                                      .toString()),
-                                  trailing: Text(offerList
-                                      .elementAt(index)
-                                      .price
-                                      .toString()),
-                                );
-                              }),
-                            );
-                    } else if (snapshot.hasError) {
-                      return CustomIndicator(
-                        indicatorStatus: IndicatorStatus.error,
-                      );
-                    }
-                    return CustomIndicator();
-                  });
-            }),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'ادخل عرض السعر',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-                TextButton(onPressed: () {}, child: Text('مفرد')),
-                // TextButton(onPressed: () {}, child: Text('متعدد'))
-              ],
-            ),
-            ListTile(
-              title: Text('ماركة القطعة'),
-              subtitle: SizedBox(
-                  child: TextFormField(
-                controller: controller.offerName,
-              )),
-            ),
-            ListTile(
-              title: Text('سعر'),
-              subtitle: SizedBox(
-                  child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: controller.offerPrice,
-              )),
-            ),
-            Divider(),
-            CustemButton(
-              title: 'ارسال',
-              buttonController: controller.btnController,
-              onPressed: () {
-                controller.addMerchantOffer();
-              },
-            ),
+            orderDetaileModel.merchantOffers.length == 0
+                ? Obx(() {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'عرض السعر',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    primary: inputtype.value == 0
+                                        ? KAccentColor
+                                        : Colors.white),
+                                onPressed: () {
+                                  inputtype.value = 0;
+                                },
+                                child: Text(
+                                  'مفرد',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  primary: inputtype.value == 1
+                                      ? KAccentColor
+                                      : Colors.white, // background
+                                ),
+                                onPressed: () {
+                                  inputtype.value = 1;
+                                },
+                                child: Text(
+                                  'متعدد',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        inputtype.value == 1
+                            ? GetX<OrderDetailController>(builder: (builder) {
+                                return FutureBuilder(
+                                    future: controller.MerchantOffersList.value,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        List<OfferModel> offerList =
+                                            snapshot.data;
+                                        return offerList.length == 0
+                                            ? Text('لم يتم تقديم اى عروض')
+                                            : Column(
+                                                children: List.generate(
+                                                    offerList.length, (index) {
+                                                  return Card(
+                                                    child: ListTile(
+                                                      title: Text(offerList
+                                                          .elementAt(index)
+                                                          .name
+                                                          .toString()),
+                                                      trailing: Text(offerList
+                                                          .elementAt(index)
+                                                          .price
+                                                          .toString()),
+                                                    ),
+                                                  );
+                                                }),
+                                              );
+                                      } else if (snapshot.hasError) {
+                                        return CustomIndicator(
+                                          indicatorStatus:
+                                              IndicatorStatus.error,
+                                        );
+                                      }
+                                      return CustomIndicator();
+                                    });
+                              })
+                            : Container(),
+                        Divider(),
+                        Column(
+                          children: [
+                            ListTile(
+                              title: Text('ماركة القطعة'),
+                              subtitle: SizedBox(
+                                  child: TextFormField(
+                                controller: controller.offerName,
+                              )),
+                            ),
+                            ListTile(
+                              title: Text('سعر'),
+                              subtitle: SizedBox(
+                                  child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.offerPrice,
+                              )),
+                            ),
+                            Divider(),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CustemButton(
+                                      title: 'ارسال',
+                                      onPressed: () {
+                                        inputtype.value == 1
+                                            ? controller.addMultiMerchantOffer()
+                                            : controller.addMerchantOffer();
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                inputtype.value == 1
+                                    ? Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CustemButton(
+                                            backgroundColor: KScandaryColor,
+                                            title: 'اضافة',
+                                            onPressed: () {
+                                              controller
+                                                  .addMerchantMultiOffer();
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    );
+                  })
+                : Column(
+                    children: [
+                      Text(
+                        'العروض المقدمة',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.left,
+                      ),
+                      Column(
+                        children: List.generate(
+                            orderDetaileModel
+                                .merchantOffers.first.details.length, (index) {
+                          return Card(
+                            child: ListTile(
+                              title: Text(orderDetaileModel
+                                  .merchantOffers.first.details
+                                  .elementAt(index)
+                                  .name
+                                  .toString()),
+                              trailing: Text(orderDetaileModel
+                                  .merchantOffers.first.details
+                                  .elementAt(index)
+                                  .price
+                                  .toString()),
+                            ),
+                          );
+                        }),
+                      )
+                    ],
+                  ),
           ],
         ),
       ),
@@ -381,7 +474,6 @@ class OrderDetailView extends GetView<OrderDetailController> {
                       ),
                       CustemButton(
                         title: 'ارسال',
-                        buttonController: controller.btnController,
                         onPressed: () {
                           double offerPrice =
                               double.parse(controller.offerPrice.text);
@@ -391,9 +483,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
                           } else {
                             showSnackBar(
                                 message: 'يجب ان يكون الرقم المضاف بين رقمين',
-                                snackbarStatus: () {
-                                  controller.restBtn();
-                                });
+                                snackbarStatus: () {});
                           }
                         },
                       )
@@ -478,7 +568,6 @@ class OrderDetailView extends GetView<OrderDetailController> {
                                 0
                             ? CustemButton(
                                 title: 'قبول',
-                                buttonController: controller.btnController,
                                 onPressed: () {
                                   controller.acceptDeliveryOffer(
                                       offerId: orderDetaileModel.deliveryOffers
@@ -580,10 +669,9 @@ class OrderDetailView extends GetView<OrderDetailController> {
               children: [
                 ListTile(
                   title: Text('قيمة العرض'),
-                  /*
-                  trailing: Text(
-                      orderDetaileModel.merchantOffers.first.price.toString()),
-                      */
+                  trailing: Text(orderDetaileModel
+                      .merchantOffers.first.details.first.price
+                      .toString()),
                 ),
                 ListTile(
                   title: Text('قيمة عرض التوصيل'),
@@ -596,21 +684,20 @@ class OrderDetailView extends GetView<OrderDetailController> {
                 ),
                 ListTile(
                   title: Text('الإجمالي'),
-/*
                   trailing: Text((orderDetaileModel
-                              .merchantOffers.first.price ??
+                              .merchantOffers.first.details.first.price ??
                           0 + orderDetaileModel.deliveryOffers.first.price ??
                           0 + KAdministrativeFees)
                       .toString()),
-*/
                 ),
-                CustemButton(
-                  title: 'دفع',
-                  buttonController: controller.btnController,
-                  onPressed: () {
-                    controller.setPaid();
-                  },
-                )
+                OrderStatus.values[orderDetaileModel.status] == OrderStatus.Paid
+                    ? CustemButton(
+                        title: 'دفع',
+                        onPressed: () {
+                          controller.setPaid();
+                        },
+                      )
+                    : Container()
               ],
             ),
           )
@@ -633,7 +720,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
                       (_latLng) {
                         Klatitude = _latLng.latitude;
                         Klongitude = _latLng.longitude;
-                      //  controller.setLocation();
+                        controller.setLocation();
                       },
                     );
                   },
@@ -648,7 +735,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
                 child: ElevatedButton(
                   onPressed: () async {
                     await Get.to(MapScreen(), arguments: orderDetaileModel.id);
-                    //controller.setLocation();
+                    controller.setLocation();
                   },
                   child: Text('التوصيل لعنوان مختلف'),
                   style: ElevatedButton.styleFrom(

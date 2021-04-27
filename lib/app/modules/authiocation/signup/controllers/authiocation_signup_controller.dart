@@ -7,7 +7,7 @@ import 'package:carpart/app/routes/app_pages.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
+
 
 class AuthiocationSignupController extends GetxController {
   TextEditingController name = new TextEditingController();
@@ -17,8 +17,7 @@ class AuthiocationSignupController extends GetxController {
   TextEditingController confirmPassword = new TextEditingController();
   TextEditingController businessName = new TextEditingController();
 
-  final RoundedLoadingButtonController btnController =
-      new RoundedLoadingButtonController();
+
 
   var cityid = 0.obs;
 
@@ -30,7 +29,7 @@ class AuthiocationSignupController extends GetxController {
     String deviceId = await _getId();
 
     if (cityid.value == 0) {
-      bntrest();
+  
       showSnackBar(message: 'برجاء اختيار المدينة', snackbarStatus: () {});
     } else {
       ResponsModel responsModel = await WebServices().createUser(
@@ -51,7 +50,7 @@ class AuthiocationSignupController extends GetxController {
               title: AppName,
               message: 'تم تسجيل الحساب بنجاح',
               snackbarStatus: () {
-                bntrest();
+            
                 Get.toNamed(Routes.SigninView,arguments: [phoneNumber.text,password.text]);
               });
         } else {
@@ -59,11 +58,11 @@ class AuthiocationSignupController extends GetxController {
               title: AppName,
               message: response.body['Message'],
               snackbarStatus: () {
-                bntrest();
+              
               });
         }
       } else{
-        bntrest();
+     
       }
     }
   }
@@ -90,7 +89,5 @@ class AuthiocationSignupController extends GetxController {
     }
   }
 
-  void bntrest() {
-    btnController.stop();
-  }
+
 }

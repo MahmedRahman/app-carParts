@@ -58,6 +58,7 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                         ),
                         Text(KEmail),
+                         Text(KCity),
                       ],
                     ),
                   ),

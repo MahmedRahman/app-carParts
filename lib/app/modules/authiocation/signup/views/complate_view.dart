@@ -72,13 +72,10 @@ class ComplateView extends GetView {
               ),
               CustemButton(
                 title: 'إرسال',
-                buttonController: controller.btnController,
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     controller.createUser();
-                  } else {
-                    controller.bntrest();
-                  }
+                  } 
                 },
               )
             ],

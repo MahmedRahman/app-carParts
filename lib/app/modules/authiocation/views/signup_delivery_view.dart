@@ -58,7 +58,7 @@ class SignupDeliveryView extends GetView<AuthiocationController> {
               ),
               CustemButton(
                 title: 'تسجيل',
-                buttonController:controller.btnController,
+            
                 onPressed: () {
                   controller.upgrateDelivery();
    

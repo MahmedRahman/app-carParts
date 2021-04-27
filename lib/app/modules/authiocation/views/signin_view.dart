@@ -118,13 +118,11 @@ class SigninView extends GetView<AuthiocationController> {
                 ),
                 CustemButton(
                   title: 'تسجيل دخول',
-                  buttonController: controller.btnController,
+
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       controller.siginWithPhoneNumber();
-                    } else {
-                      controller.btnController.reset();
-                    }
+                    } 
                   },
                 ),
                 SizedBox(

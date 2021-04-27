@@ -2,6 +2,8 @@ import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:flutter_google_places/flutter_google_places.dart';
+
 import 'package:get/get.dart';
 
 class MapSample extends StatefulWidget {
@@ -111,6 +113,27 @@ class MapScreenState extends State<MapScreen> {
   GoogleMapController _controller;
   var allMarker = List<Marker>().obs;
 
+ Future<void> _showSearchDialog() async {
+ /*
+    var p = await PlacesAutocomplete.show(
+        context: context,
+        apiKey: 'AIzaSyC8ph0Arqdy0u0I5kEqV44sXFPUSM7iOb0',
+        mode: Mode.fullscreen,
+        language: "ar",
+        region: "ar",
+        offset: 0,
+        hint: "Type here...",
+        radius: 1000,
+        types: [],
+        strictbounds: false,
+    );
+    */
+        //components: [Component(Component.country, "ar")]);
+   // _getLocationFromPlaceId(p!.placeId!);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     allMarker.add(
@@ -131,6 +154,16 @@ class MapScreenState extends State<MapScreen> {
               icon: Icon(Icons.done),
               onPressed: () {
                 Get.back();
+              },
+            ),
+          ), Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                _showSearchDialog();
+                //Get.back();
+                //
               },
             ),
           ),

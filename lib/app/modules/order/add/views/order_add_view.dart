@@ -1,5 +1,6 @@
 import 'package:carpart/app/data/component/CustemButton.dart';
 import 'package:carpart/app/data/component/CustemTextForm.dart';
+
 import 'package:carpart/app/data/component/MapSample.dart';
 import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
@@ -201,12 +202,10 @@ class OrderAddView extends GetView<OrderAddController> {
                                 ),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
-                                    
                                     isExpanded: true,
                                     items: verisionYears.map(
                                       (e) {
                                         return new DropdownMenuItem(
-                                          
                                           child: new Text(e.toString()),
                                           value: e,
                                         );
@@ -258,20 +257,28 @@ class OrderAddView extends GetView<OrderAddController> {
                               controller.carImageBytes = value;
                             },
                           ),
-              
                           CustemButton(
                             title: 'ارسال',
-                            buttonController: controller.btnSubmit,
+                         
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 markSelectIndex.value = 0;
                                 modelsSelectIndex.value = 0;
                                 controller.createorder();
-                              } else {
-                                controller.restBtn();
-                              }
+                              } 
                             },
                           ),
+                          /*
+                          CustemButtonTest(
+                            onPressedbnt: (callback) async {
+                             await Future.delayed(Duration(seconds: 2), () {
+                                print('x1');
+                                print('x2');
+                              });
+                            callback();
+                            },
+                            child: Text('hi'),
+                          )*/
                         ],
                       ),
                     ),

@@ -1,6 +1,6 @@
 import 'package:carpart/app/data/component/CustemButton.dart';
 import 'package:carpart/app/data/component/CustemTextForm.dart';
-import 'package:carpart/app/data/component/Custemtest.dart';
+
 import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/modules/authiocation/signup/controllers/authiocation_signup_controller.dart';

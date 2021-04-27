@@ -7,7 +7,6 @@ import 'package:carpart/app/data/model/offer_model.dart';
 import 'package:carpart/app/api/webServices.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class OrderDetailController extends GetxController {
   int OrderId;
@@ -15,17 +14,10 @@ class OrderDetailController extends GetxController {
   TextEditingController offerName = new TextEditingController();
   TextEditingController offerPrice = new TextEditingController();
 
-  final RoundedLoadingButtonController btnController =
-      new RoundedLoadingButtonController();
-
   final MerchantOffersList = Future.value().obs;
   final oderModel = Future.value().obs;
   var distance = ''.obs;
   var destinationAddresses = ''.obs;
-
-  restBtn() {
-    btnController.stop();
-  }
 
   Future getOrderDetailes() async {
     ResponsModel responsModel = await WebServices().getOrderDetailes(OrderId);
@@ -39,33 +31,82 @@ class OrderDetailController extends GetxController {
     }
   }
 
+  List<OfferModel> offerMultiList = new List<OfferModel>();
+  addMerchantMultiOffer() async {
+    if (GetUtils.isNullOrBlank(offerPrice.text) ||
+        GetUtils.isNullOrBlank(offerName.text)) {
+      showSnackBar(message: 'برجاء تحديد سعر للقطعة', snackbarStatus: () {});
+    } else {
+      offerMultiList.add(
+        OfferModel(
+          orderId: OrderId,
+          name: offerName.text,
+          price: double.parse(offerPrice.text.toString()),
+        ),
+      );
+    }
+    offerName.clear();
+    offerPrice.clear();
+    MerchantOffersList.value = Future.value(offerMultiList);
+  }
+
   addMerchantOffer() async {
-    ResponsModel responsModel = await WebServices().addOffer(
-      orderId: OrderId,
-      name: offerName.text,
-      price: double.parse(offerPrice.text.toString()),
-    );
+    if (GetUtils.isNullOrBlank(offerPrice.text) ||
+        GetUtils.isNullOrBlank(offerName.text)) {
+      showSnackBar(message: 'برجاء تحديد سعر للقطعة', snackbarStatus: () {});
+    } else {
+      ResponsModel responsModel = await WebServices().addOffer(
+        orderId: OrderId,
+        name: offerName.text,
+        price: double.parse(offerPrice.text.toString()),
+      );
 
-    if (responsModel.success) {
-      Response response = responsModel.data;
+      if (responsModel.success) {
+        Response response = responsModel.data;
 
-      if (response.body['IsSuccess']) {
-        showSnackBar(
-          message: 'تم الاضافة بنجاح',
-          snackbarStatus: () {
-            restBtn();
-            getMerchantOffers();
-          },
-        );
-      } else {
-        showSnackBar(
-          message: 'خطاء فى اضافة البيانات',
-          snackbarStatus: () {
-            restBtn();
-          },
-        );
+        if (response.body['IsSuccess']) {
+          showSnackBar(
+            message: 'تم الاضافة بنجاح',
+            snackbarStatus: () {
+              getOrderDetailes();
+              getMerchantOffers();
+            },
+          );
+        } else {
+          showSnackBar(
+            message: 'خطاء فى اضافة البيانات',
+            snackbarStatus: () {},
+          );
+        }
       }
     }
+  }
+
+  addMultiMerchantOffer() async {
+    ResponsModel responsModel = await WebServices().addMultiOffer(
+   offerMultiList
+    );
+  if (responsModel.success) {
+        Response response = responsModel.data;
+
+        if (response.body['IsSuccess']) {
+          showSnackBar(
+            message: 'تم الاضافة بنجاح',
+            snackbarStatus: () {
+              getOrderDetailes();
+              getMerchantOffers();
+            },
+          );
+        } else {
+          showSnackBar(
+            message: 'خطاء فى اضافة البيانات',
+            snackbarStatus: () {},
+          );
+        }
+  }
+
+
+
   }
 
   Future getMerchantOffers() async {
@@ -107,15 +148,12 @@ class OrderDetailController extends GetxController {
           message: 'تم الاضافة بنجاح',
           snackbarStatus: () {
             getOrderDetailes();
-            restBtn();
           },
         );
       } else {
         showSnackBar(
           message: 'خطاء فى اضافة البيانات',
-          snackbarStatus: () {
-            restBtn();
-          },
+          snackbarStatus: () {},
         );
       }
     }
@@ -130,7 +168,6 @@ class OrderDetailController extends GetxController {
         showSnackBar(
             message: 'تم الدفع',
             snackbarStatus: () {
-              restBtn();
               getOrderDetailes();
             });
       }
@@ -146,7 +183,6 @@ class OrderDetailController extends GetxController {
         showSnackBar(
             message: 'تم اختيار العرض المقدم',
             snackbarStatus: () {
-              restBtn();
               getOrderDetailes();
             });
       }
@@ -161,7 +197,9 @@ class OrderDetailController extends GetxController {
       lng: Klongitude,
     );
 
-    if (responsModel.success) {}
+    if (responsModel.success) {
+      getOrderDetailes();
+    }
   }
 
   getdistance(double lat, double lang) async {
@@ -177,8 +215,8 @@ class OrderDetailController extends GetxController {
       final googelDistanceModel =
           googelDistanceModelFromJson(response.bodyString);
 
-
-    destinationAddresses.value = googelDistanceModel.destinationAddresses.toString();
+      destinationAddresses.value =
+          googelDistanceModel.destinationAddresses.toString();
 
       distance.value =
           googelDistanceModel.rows.first.elements.first.distance.text;

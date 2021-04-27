@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:carpart/app/api/ApiManger.dart';
 import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
+import 'package:carpart/app/data/model/offer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -75,8 +78,8 @@ class WebServices extends ApiManger {
     return response;
   }
 
- Future<ResponsModel> sendSms(String phoneNumber) async {
-    ResponsModel response = await repPost('Home/SendSms/' + phoneNumber , {});
+  Future<ResponsModel> sendSms(String phoneNumber) async {
+    ResponsModel response = await repPost('Home/SendSms/' + phoneNumber, {});
     return response;
   }
 
@@ -92,7 +95,7 @@ class WebServices extends ApiManger {
     @required double lng,
   }) async {
     ResponsModel response =
-        await repPost('Order/SetLocation/{$orderid}?lat={$lat}&lng={$lng}', '');
+        await repPost('Order/SetLocation/$orderid?lat=$lat&lng=$lng', '');
     return response;
   }
 
@@ -131,7 +134,8 @@ class WebServices extends ApiManger {
   }
 
   Future<ResponsModel> getNotifaction() async {
-    ResponsModel response = await repGet('Account/Notification');
+    ResponsModel response =
+        await repGet('Account/Notification', showLoading: false);
     return response;
   }
 
@@ -158,12 +162,13 @@ class WebServices extends ApiManger {
   }
 
   Future<ResponsModel> getOrder() async {
-    ResponsModel response = await repGet('Order/Get');
+    ResponsModel response = await repGet('Order/Get', showLoading: false);
     return response;
   }
 
   Future<ResponsModel> getOrderDetailes(int OrderId) async {
-    ResponsModel response = await repGet('Order/Get/$OrderId');
+    ResponsModel response =
+        await repGet('Order/Get/$OrderId', showLoading: false);
     return response;
   }
 
@@ -266,8 +271,7 @@ class WebServices extends ApiManger {
     return response;
   }
 
-
-    Future<ResponsModel> getplace({
+  Future<ResponsModel> getplace({
     @required String address,
   }) async {
     ResponsModel response = await repGet(
@@ -275,5 +279,12 @@ class WebServices extends ApiManger {
     return response;
   }
 
-  
+  Future<ResponsModel> addMultiOffer(List<OfferModel> offerMultiList) async {
+    String jsonTags = jsonEncode(offerMultiList);
+
+    ResponsModel response =
+        await repPost('MerchantOffer/AddMulti', jsonTags);
+
+    return response;
+  }
 }

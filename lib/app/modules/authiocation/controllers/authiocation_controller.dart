@@ -15,7 +15,7 @@ import 'package:carpart/app/routes/app_pages.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
+
 
 class AuthiocationController extends GetxController {
   TextEditingController name = new TextEditingController();
@@ -24,8 +24,7 @@ class AuthiocationController extends GetxController {
   TextEditingController email = new TextEditingController();
   TextEditingController confirmPassword = new TextEditingController();
   TextEditingController businessName = new TextEditingController();
-  final RoundedLoadingButtonController btnController =
-      new RoundedLoadingButtonController();
+
   String registrationImageBytes;
 
   String logoBytes;
@@ -89,14 +88,14 @@ class AuthiocationController extends GetxController {
       setDeviceId();
 
       Get.offNamed(Routes.HOME);
-      btnController.reset();
+    
     }, onError: (err) {
       //print(err);
       showSnackBar(
           title: AppName,
           message: err.toString(),
           snackbarStatus: () {
-            btnController.reset();
+            
           });
     });
   }
@@ -117,9 +116,6 @@ class AuthiocationController extends GetxController {
     }
   }
 
-  void bntrest() {
-    btnController.stop();
-  }
 
   void upgrateMerchant() async {
     if (GetUtils.isNullOrBlank(businessName.text) ||
@@ -127,10 +123,10 @@ class AuthiocationController extends GetxController {
         
       showSnackBar(
           message: 'برجاء ملئ البيانات المطلوبة', snackbarStatus: () {
-              bntrest();
+         
           });
     } else {
-        bntrest();
+   
       ResponsModel responsModel = await WebServices().upgrateMerchant(
         businessName: businessName.text,
         registrationImageBytes: registrationImageBytes,

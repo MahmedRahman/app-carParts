@@ -5,6 +5,7 @@ import 'package:carpart/app/data/helper/AppTranslation.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
@@ -46,6 +47,7 @@ void main() async {
   await GetStorage.init();
   await initServices();
 
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -61,11 +63,30 @@ void main() async {
       locale: Locale('ar', 'EG'),
       fallbackLocale: Locale('ar', 'EG'),
       translations: AppTranslation(),
+      builder:   EasyLoading.init(),
     ),
   );
+  configLoading();
 }
 
 void initServices() async {
   await Get.putAsync<UserAuth>(() async => await UserAuth());
   await Get.putAsync<connectivity>(() async => await connectivity());
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
+   
 }

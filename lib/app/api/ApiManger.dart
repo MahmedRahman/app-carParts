@@ -4,6 +4,7 @@ import 'package:carpart/app/data/auth.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
 
@@ -27,10 +28,13 @@ class ApiManger extends GetConnect {
     }
   }
 
+  Future<ResponsModel> repPost(url, body, {bool showLoading = true}) async {
+    if (showLoading) {
+      EasyLoading.show(status: 'جارى التحميل');
+    }
 
-
-  Future<ResponsModel> repPost(url, body) async {
     print("Api Request " + baes_url + url);
+
     login();
 
     Response response = await post(baes_url + url, body, headers: header);
@@ -38,6 +42,10 @@ class ApiManger extends GetConnect {
     try {
       switch (response.statusCode) {
         case 200:
+          if (showLoading) {
+            EasyLoading.showSuccess('تم التحميل');
+          }
+
           return ResponsModel(
             code: response.statusCode,
             success: true,
@@ -46,6 +54,10 @@ class ApiManger extends GetConnect {
           break;
 
         default:
+          if (showLoading) {
+            EasyLoading.showError('خطاء');
+          }
+
           Get.to(ErrorView(
             api_url: url.toString(),
             api_body: body.toString(),
@@ -58,6 +70,10 @@ class ApiManger extends GetConnect {
           );
       }
     } catch (e) {
+      if (showLoading) {
+        EasyLoading.showError('خطاء');
+      }
+
       Get.to(ErrorView(
         api_url: response.headers.toString(),
         api_body: e.toString(),
@@ -71,7 +87,11 @@ class ApiManger extends GetConnect {
     }
   }
 
-  Future<ResponsModel> repGet(url) async {
+  Future<ResponsModel> repGet(url, {bool showLoading = true}) async {
+    if (showLoading) {
+      EasyLoading.show(status: 'جارى التحميل');
+    }
+
     print("Api Request " + baes_url + url);
     login();
     Response response;
@@ -90,6 +110,9 @@ class ApiManger extends GetConnect {
     try {
       switch (response.statusCode) {
         case 200:
+          if (showLoading) {
+            EasyLoading.showSuccess('تم التحميل');
+          }
           return ResponsModel(
             code: response.statusCode,
             success: true,
@@ -98,6 +121,9 @@ class ApiManger extends GetConnect {
           break;
 
         default:
+          if (showLoading) {
+            EasyLoading.showError('خطاء');
+          }
           Get.to(ErrorView(
             api_url: url.toString(),
             api_body: '',
@@ -110,6 +136,9 @@ class ApiManger extends GetConnect {
           );
       }
     } catch (e) {
+      if (showLoading) {
+        EasyLoading.showError('خطاء');
+      }
       Get.to(ErrorView(
         api_url: response.headers.toString(),
         api_body: e.toString(),

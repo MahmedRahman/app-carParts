@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:get/get.dart';
+
 List<OfferModel> offerModelFromJson(String str) => List<OfferModel>.from(json.decode(str).map((x) => OfferModel.fromJson(x)));
 
 String offerModelToJson(List<OfferModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -43,7 +45,7 @@ class OfferModel {
     Map<String, dynamic> toJson() => {
         "Id": id,
         "OrderId": orderId,
-        "Date": date.toIso8601String(),
+        "Date": GetUtils.isNullOrBlank(date)? DateTime.now().toIso8601String() :date.toIso8601String(),
         "Status": status,
         "UserId": userId,
         "UserName": userName,

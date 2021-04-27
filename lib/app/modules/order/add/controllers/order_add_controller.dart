@@ -8,7 +8,7 @@ import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
+
 
 class OrderAddController extends GetxController {
   var carMarkid = 0;
@@ -19,8 +19,7 @@ class OrderAddController extends GetxController {
   TextEditingController description = new TextEditingController();
   String carImageBytes;
 
-  final RoundedLoadingButtonController btnSubmit =
-      new RoundedLoadingButtonController();
+
 
   createorder() async {
     if (KRole == userRole.anonymous) {
@@ -33,7 +32,7 @@ class OrderAddController extends GetxController {
         showSnackBar(
           message: 'برجاء تحديد ماركة و نوع وسنة المركبة',
           snackbarStatus: () {
-            btnSubmit.stop();
+         
           },
         );
       } else {
@@ -52,7 +51,7 @@ class OrderAddController extends GetxController {
             showSnackBar(
               message: 'تم ارسال الطلب بنجاح',
               snackbarStatus: () {
-                btnSubmit.stop();
+             
                 clearFormData();
                 Get.find<HomeController>().selectindex.value = 1;
               },
@@ -61,7 +60,7 @@ class OrderAddController extends GetxController {
             showSnackBar(
               message: 'خطاء فى البيانات المرسالة',
               snackbarStatus: () {
-                btnSubmit.stop();
+              
               },
             );
           }
@@ -70,9 +69,7 @@ class OrderAddController extends GetxController {
     }
   }
 
-  restBtn() {
-    btnSubmit.stop();
-  }
+
 
   clearFormData() {
     versionYear.value='';

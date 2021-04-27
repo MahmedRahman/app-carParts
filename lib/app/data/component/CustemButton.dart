@@ -1,6 +1,7 @@
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:flutter/material.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:get/get.dart';
+
 
 class CustemButton extends StatelessWidget {
   // final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
@@ -9,14 +10,13 @@ class CustemButton extends StatelessWidget {
       {@required this.title,
       this.backgroundColor = KAccentColor,
       this.buttonIcons = Icons.arrow_back_ios,
-      this.onPressed,
-      this.buttonController});
+      this.onPressed});
 
   final String title;
   final Color backgroundColor;
   final IconData buttonIcons;
   final Function onPressed;
-  final RoundedLoadingButtonController buttonController;
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +34,22 @@ class CustemButton extends StatelessWidget {
             )
           ],
         ),
-        child: RoundedLoadingButton(
-          color: backgroundColor,
-          child: Text(
-            title,
-            style: TextStyle(color: Colors.white),
+        child: SizedBox(
+          width: Get.width*.9,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: backgroundColor,
+              
+            ),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              onPressed();
+            },
+            child: Text(
+              title,
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-          controller: buttonController,
-          onPressed: () async {
-            FocusScope.of(context).unfocus();
-             onPressed();
-           // buttonController.stop();
-          },
         ),
       ),
     );

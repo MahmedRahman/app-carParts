@@ -49,7 +49,7 @@ class SignupDealerView extends GetView<AuthiocationController> {
               ),
               CustemButton(
                 title: 'تسجيل',
-                buttonController: controller.btnController,
+
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     controller.upgrateMerchant();
