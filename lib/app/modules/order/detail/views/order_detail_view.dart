@@ -655,6 +655,11 @@ class OrderDetailView extends GetView<OrderDetailController> {
   }
 
   Widget orderPayment(OderDetaileModel orderDetaileModel) {
+    /*
+    var KToal = orderDetaileModel.merchantOffers.first.details.first.price ??
+        0 + orderDetaileModel.deliveryOffers.first.price ??
+        0 + KAdministrativeFees;
+*/
     return orderDetaileModel.status >= 4
         ? Container(
             margin: const EdgeInsets.all(15),
@@ -669,14 +674,16 @@ class OrderDetailView extends GetView<OrderDetailController> {
               children: [
                 ListTile(
                   title: Text('قيمة العرض'),
-                  trailing: Text(orderDetaileModel
-                      .merchantOffers.first.details.first.price
-                      .toString()),
+                  trailing: Text(
+                    orderDetaileModel.merchantOffers.first.details.first.price
+                        .toString(),
+                  ),
                 ),
                 ListTile(
                   title: Text('قيمة عرض التوصيل'),
                   trailing: Text(
-                      orderDetaileModel.deliveryOffers.first.price.toString()),
+                    orderDetaileModel.deliveryOffers.first.price.toString(),
+                  ),
                 ),
                 ListTile(
                   title: Text('رسوم إدارية'),
@@ -685,12 +692,13 @@ class OrderDetailView extends GetView<OrderDetailController> {
                 ListTile(
                   title: Text('الإجمالي'),
                   trailing: Text((orderDetaileModel
-                              .merchantOffers.first.details.first.price ??
-                          0 + orderDetaileModel.deliveryOffers.first.price ??
-                          0 + KAdministrativeFees)
+                              .merchantOffers.first.details.first.price 
+                           + orderDetaileModel.deliveryOffers.first.price 
+                           + KAdministrativeFees)
                       .toString()),
                 ),
-                OrderStatus.values[orderDetaileModel.status] == OrderStatus.Paid
+                OrderStatus.values[orderDetaileModel.status] ==
+                        OrderStatus.DeliveryAgentOfferComplete
                     ? CustemButton(
                         title: 'دفع',
                         onPressed: () {

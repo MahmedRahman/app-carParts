@@ -28,7 +28,8 @@ class OtpView extends GetView {
           CustemTextForm(
             inputcontroller: textEditing,
             textInputType: TextInputType.number,
-            textHint: 'برجاء كتابة كود التفعيل',
+            textHint: controller.smsCode,
+
           ),
           SizedBox(
             height: 10,
@@ -41,8 +42,9 @@ class OtpView extends GetView {
                   Get.to(ComplateView());
                 } else {
                   showSnackBar(
-                      message: 'برجاء كتابة كود تفعيل صحيح',
-                      snackbarStatus: () {});
+                    message: 'برجاء كتابة كود تفعيل صحيح',
+                    snackbarStatus: () {},
+                  );
                 }
                 // controller.sendSms();
               },

@@ -129,10 +129,12 @@ class EntryPointController extends GetxController {
 
       KRole = userRole.values[response.body['Role']];
 
-      KUserImage = 'https://carpart.atpnet.net/Files/Merchant/' +
-          response.body['Id'].toString() +
-          '/' +
-          response.body['RegistrationImage'].toString();
+      GetUtils.isNullOrBlank(response.body['Logo'].toString())
+          ? KUserImage = 'https://via.placeholder.com/75'
+          : KUserImage = 'https://carpart.atpnet.net/Files/User/Client/' +
+              response.body['Id'].toString() +
+              '/' +
+              response.body['Logo'].toString();
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
+import 'package:carpart/app/modules/profile/views/profile_profile_detailes_edit_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,78 +17,87 @@ class ProfileView extends GetView<ProfileController> {
         child: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Stack(
-                    children: [
-                      Center(
-                        child: CustomImageCached(imageUrl: KUserImage,)
-                      ),
-                      Positioned(
-                        bottom: 1,
-                        left: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xff445969),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 3,
-                              horizontal: 15,
-                            ),
-                            child: Text(
-                              KRole.toString().tr,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.all(0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  children: [
+                    Stack(
                       children: [
-                        Text(
-                          KName,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        CustomImageCached(
+                          imageUrl: KUserImage,
                         ),
-                        Text(KEmail),
-                         Text(KCity),
+                        Positioned(
+                          bottom: 1,
+                          left: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xff445969),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 3,
+                                horizontal: 15,
+                              ),
+                              child: Text(
+                                KRole.toString().tr,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                  ),
-                 Column(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-//                          Get.back();
-
-                         // KRole = userRole.anonymous;
-
-                          //Get.find<UserAuth>().setUserToken(null);
-
-                        //  Get.offAndToNamed(Routes.HOME);
-                        },
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            KName,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Text(KEmail),
+                          //Text(KCity),
+                        ],
                       ),
-                    ],
-                  )
-                ],
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () async {
+                            await Get.to(
+                              ProfileDetailesEditView(),
+                              fullscreenDialog: true,
+                            );
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(25),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [BoxShadow(color: KScandaryColor)]),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(color: KScandaryColor),
+                  ],
+                ),
                 child: SizedBox(
                   width: Get.width,
                   child: Column(
@@ -177,8 +187,9 @@ class ProfileView extends GetView<ProfileController> {
                               width: 50,
                               height: 50,
                               decoration: BoxDecoration(
-                                  color: Color(0xff445969),
-                                  borderRadius: BorderRadius.circular(50)),
+                                color: Color(0xff445969),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
                               child: Image.asset('images/instagram.png'),
                             ),
                           ),

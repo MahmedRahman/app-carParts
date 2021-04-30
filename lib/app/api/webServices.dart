@@ -4,6 +4,7 @@ import 'package:carpart/app/api/ApiManger.dart';
 import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/model/offer_model.dart';
+import 'package:carpart/app/modules/profile/model/profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -282,9 +283,22 @@ class WebServices extends ApiManger {
   Future<ResponsModel> addMultiOffer(List<OfferModel> offerMultiList) async {
     String jsonTags = jsonEncode(offerMultiList);
 
-    ResponsModel response =
-        await repPost('MerchantOffer/AddMulti', jsonTags);
+    ResponsModel response = await repPost('MerchantOffer/AddMulti', jsonTags);
 
+    return response;
+  }
+
+  Future<ResponsModel> isPhonelExist(String phone) async {
+    ResponsModel response =
+        await repPost('Account/PhonelExist?phone=$phone', {});
+    return response;
+  }
+
+  Future<ResponsModel> setProfile(ProfileModel profileModel) async {
+    ResponsModel response = await repPost(
+      'Account/Profile',
+      profileModel.toJson(),
+    );
     return response;
   }
 }

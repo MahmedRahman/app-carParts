@@ -64,8 +64,10 @@ class AuthiocationSignupView extends GetView<AuthiocationSignupController> {
                 onPressed: () {
                   if (checkboxValue) {
                     if (_formKey.currentState.validate()) {
-                      controller.sendSms();
-                      Get.to(OtpView(), fullscreenDialog: true);
+
+controller.isPhonelExist();
+
+                      
                     }
                   } else {
                     showSnackBar(

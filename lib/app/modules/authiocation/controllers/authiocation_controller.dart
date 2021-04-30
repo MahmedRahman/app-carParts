@@ -16,7 +16,6 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class AuthiocationController extends GetxController {
   TextEditingController name = new TextEditingController();
   TextEditingController phoneNumber = new TextEditingController();
@@ -88,15 +87,10 @@ class AuthiocationController extends GetxController {
       setDeviceId();
 
       Get.offNamed(Routes.HOME);
-    
     }, onError: (err) {
       //print(err);
       showSnackBar(
-          title: AppName,
-          message: err.toString(),
-          snackbarStatus: () {
-            
-          });
+          title: AppName, message: err.toString(), snackbarStatus: () {});
     });
   }
 
@@ -116,17 +110,12 @@ class AuthiocationController extends GetxController {
     }
   }
 
-
   void upgrateMerchant() async {
     if (GetUtils.isNullOrBlank(businessName.text) ||
         GetUtils.isNullOrBlank(registrationImageBytes)) {
-        
       showSnackBar(
-          message: 'برجاء ملئ البيانات المطلوبة', snackbarStatus: () {
-         
-          });
+          message: 'برجاء ملئ البيانات المطلوبة', snackbarStatus: () {});
     } else {
-   
       ResponsModel responsModel = await WebServices().upgrateMerchant(
         businessName: businessName.text,
         registrationImageBytes: registrationImageBytes,
@@ -179,7 +168,13 @@ class AuthiocationController extends GetxController {
     if (responsModel.success) {
       Response response = responsModel.data;
       if (response.body['IsSuccess']) {
-        Get.toNamed(Routes.HOME);
+        showSnackBar(
+            message: 'تم تقديم الطلب بنجاح',
+            snackbarStatus: () {
+              Get.toNamed(Routes.HOME);
+            });
+      } else {
+        showSnackBar(message: response.body['Message'], snackbarStatus: () {});
       }
     }
   }

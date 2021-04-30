@@ -3,13 +3,14 @@ import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/api/webServices.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
+import 'package:carpart/app/modules/authiocation/signup/views/otp_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class AuthiocationSignupController extends GetxController {
+  
   TextEditingController name = new TextEditingController();
   TextEditingController phoneNumber = new TextEditingController();
   TextEditingController password = new TextEditingController();
@@ -18,18 +19,30 @@ class AuthiocationSignupController extends GetxController {
   TextEditingController businessName = new TextEditingController();
 
 
-
   var cityid = 0.obs;
 
   String logoBytes;
 
   String smsCode;
 
+  void isPhonelExist() async {
+    ResponsModel responsModel =
+        await WebServices().isPhonelExist(phoneNumber.text);
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.body['IsSuccess']) {
+        sendSms();
+        Get.to(OtpView(), fullscreenDialog: true);
+      } else {
+        showSnackBar(message: 'رقم جوال مسجل من قبل', snackbarStatus: () {});
+      }
+    }
+  }
+
   void createUser() async {
     String deviceId = await _getId();
 
     if (cityid.value == 0) {
-  
       showSnackBar(message: 'برجاء اختيار المدينة', snackbarStatus: () {});
     } else {
       ResponsModel responsModel = await WebServices().createUser(
@@ -50,20 +63,16 @@ class AuthiocationSignupController extends GetxController {
               title: AppName,
               message: 'تم تسجيل الحساب بنجاح',
               snackbarStatus: () {
-            
-                Get.toNamed(Routes.SigninView,arguments: [phoneNumber.text,password.text]);
+                Get.toNamed(Routes.SigninView,
+                    arguments: [phoneNumber.text, password.text]);
               });
         } else {
           showSnackBar(
               title: AppName,
               message: response.body['Message'],
-              snackbarStatus: () {
-              
-              });
+              snackbarStatus: () {});
         }
-      } else{
-     
-      }
+      } else {}
     }
   }
 
@@ -84,10 +93,11 @@ class AuthiocationSignupController extends GetxController {
       Response response = responsModel.data;
       if (response.body['IsSuccess']) {
         smsCode = response.body['Data'];
+
+        showSnackBar(message: response.body['Data'], snackbarStatus: () {});
+
         print(response.body['Data']);
       }
     }
   }
-
-
 }
