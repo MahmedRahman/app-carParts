@@ -203,9 +203,11 @@ class AuthiocationHeader extends StatelessWidget {
                 ),
               ),
               Container(
-                child: Text(
-                  title,
-                  style: headline2,
+                child: Center(
+                  child: Text(
+                    title,
+                    style: headline2,
+                  ),
                 ),
               ),
             ],

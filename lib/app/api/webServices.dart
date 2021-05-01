@@ -45,19 +45,22 @@ class WebServices extends ApiManger {
     @required String deviceId,
     String logoBytes,
   }) async {
-    ResponsModel response = await repPost('Account/Register', {
-      "Name": name,
-      "PhoneNumber": phoneNumber,
-      "UserName": phoneNumber,
-      "Password": password,
-      "ConfirmPassword": password,
-      "Email": email,
-      "LogoBytes": logoBytes,
-      "CityId": cityid,
-      "Lat": 9.1,
-      "Lng": 10.1,
-      "DeviceId": deviceId
-    });
+    ResponsModel response = await repPost(
+        'Account/Register',
+        {
+          "Name": name,
+          "PhoneNumber": phoneNumber,
+          "UserName": phoneNumber,
+          "Password": password,
+          "ConfirmPassword": password,
+          "Email": email,
+          "LogoBytes": logoBytes,
+          "CityId": cityid,
+          "Lat": 9.1,
+          "Lng": 10.1,
+          "DeviceId": deviceId
+        },
+        showLoading: true);
 
     return response;
   }
@@ -65,12 +68,15 @@ class WebServices extends ApiManger {
   Future<ResponsModel> upgrateMerchant(
       {@required String businessName,
       @required String registrationImageBytes}) async {
-    ResponsModel response = await repPost('Account/Upgrade?role=1', {
-      "BusinessName": businessName,
-      "RegistrationImageBytes": registrationImageBytes,
-      "Lat": Klatitude,
-      "Lng": Klongitude,
-    });
+    ResponsModel response = await repPost(
+        'Account/Upgrade?role=1',
+        {
+          "BusinessName": businessName,
+          "RegistrationImageBytes": registrationImageBytes,
+          "Lat": Klatitude,
+          "Lng": Klongitude,
+        },
+        showLoading: true);
     return response;
   }
 
@@ -148,16 +154,19 @@ class WebServices extends ApiManger {
     @required String description,
     String imageBytes,
   }) async {
-    ResponsModel response = await repPost('Order/Add', {
-      "MarkId": markid,
-      "ModelId": modelId,
-      "VersionId": versionId,
-      "VanNumber": vanNumber,
-      "Description": description,
-      "ImageBytes": imageBytes.toString(),
-      "Lat": Klatitude,
-      "Lng": Klongitude,
-    });
+    ResponsModel response = await repPost(
+        'Order/Add',
+        {
+          "MarkId": markid,
+          "ModelId": modelId,
+          "VersionId": versionId,
+          "VanNumber": vanNumber,
+          "Description": description,
+          "ImageBytes": imageBytes.toString(),
+          "Lat": Klatitude,
+          "Lng": Klongitude,
+        },
+        showLoading: true);
 
     return response;
   }
@@ -296,9 +305,30 @@ class WebServices extends ApiManger {
 
   Future<ResponsModel> setProfile(ProfileModel profileModel) async {
     ResponsModel response = await repPost(
-      'Account/Profile',
-      profileModel.toJson(),
-    );
+        'Account/Profile', profileModel.toJson(),
+        showLoading: true);
+    return response;
+  }
+
+  Future<ResponsModel> setNotifactionRead(String notifactionid) async {
+    ResponsModel response =
+        await repPost('Account/SetRead/' + notifactionid.toString(), {});
+    return response;
+  }
+
+  Future<ResponsModel> setForgotPassword(String phonenumber) async {
+    ResponsModel response = await repPost(
+        'Account/ForgotPassword?userName=' + phonenumber.toString(), {});
+    return response;
+  }
+
+  Future<ResponsModel> setResetPassword(String phonenumber) async {
+    ResponsModel response = await repPost(' api/Account/ResetPassword', {
+      "UserName": "sample string 1",
+      "Password": "sample string 2",
+      "ConfirmPassword": "sample string 3",
+      "Code": "sample string 4"
+    });
     return response;
   }
 }

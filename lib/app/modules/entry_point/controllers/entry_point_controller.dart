@@ -106,7 +106,22 @@ class EntryPointController extends GetxController {
       BaseDeliveryPrice = prepareListModel.setting.BaseDeliveryPrice;
 
       KAdministrativeFees = prepareListModel.setting.AdministrativeFees;
-      print(BaseDeliveryPrice);
+
+      Kwhatapp = GetUtils.isNullOrBlank(prepareListModel.setting.whatsUpNumber)
+          ? 'https://tsp.sa'
+          : 'https://wa.me/'+prepareListModel.setting.whatsUpNumber;
+
+      KTwitter = GetUtils.isNullOrBlank(prepareListModel.setting.twitter)
+          ? 'https://tsp.sa'
+          : prepareListModel.setting.twitter;
+
+      KInstegram = GetUtils.isNullOrBlank(prepareListModel.setting.instagram)
+          ? 'https://tsp.sa'
+          : prepareListModel.setting.instagram;
+
+      KSnapChat = GetUtils.isNullOrBlank(prepareListModel.setting.snapchat)
+          ? 'https://tsp.sa'
+          : prepareListModel.setting.snapchat;
 
       Cars.addAll(prepareListModel.mark);
     }
@@ -117,8 +132,8 @@ class EntryPointController extends GetxController {
     if (responsModel.success) {
       Response response = responsModel.data;
 
-      KName = response.body['Name'];
-      KEmail = response.body['Email'];
+      KName.value = response.body['Name'];
+      KEmail.value = response.body['Email'];
       KCity = response.body['CityName'];
 
       Klatitude = response.body['Lat'];
@@ -130,11 +145,13 @@ class EntryPointController extends GetxController {
       KRole = userRole.values[response.body['Role']];
 
       GetUtils.isNullOrBlank(response.body['Logo'].toString())
-          ? KUserImage = 'https://via.placeholder.com/75'
-          : KUserImage = 'https://carpart.atpnet.net/Files/User/Client/' +
+          ? KUserImage.value = 'https://via.placeholder.com/75'
+          : KUserImage.value = 'https://carpart.atpnet.net/Files/User/Client/' +
               response.body['Id'].toString() +
               '/' +
               response.body['Logo'].toString();
+
+      NotifactionCount.value = response.body['UnreadNotificationCount'];
     }
   }
 }

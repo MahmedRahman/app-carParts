@@ -6,31 +6,33 @@ import 'package:carpart/app/data/component/CustemTextForm.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FrogatepasswordView extends GetView<AuthiocationController> {
+class FrogatepasswordRestView extends GetView<AuthiocationController> {
   @override
   Widget build(BuildContext context) {
-    AuthiocationController controller = Get.put(AuthiocationController());
+    //AuthiocationController controller = Get.put(AuthiocationController());
     return SafeArea(
       child: Scaffold(
-        body: Column(
+        body: ListView(
           children: [
             AuthiocationHeader(
-              title: 'نسيت كلمة السر',
+              title: 'برجاء كتابة كلمة السر',
             ),
-           
             CustemTextForm(
-              textHint: 'رقم الجوال',
-              inputcontroller: controller.phoneNumber,
-              textInputType: TextInputType.phone,
+              textHint: 'كلمة السر الجديدة',
+              //textInputType: TextInputType.phone,
             ),
             CustemButton(
-              title: 'إرسال',
+              title: 'ارسال',
               onPressed: () {
-                controller.setForgotPassword();
-                //Get.toNamed(Routes.HOME);
-                //
+              //  if()
+                //controller.setForgotPassword();
               },
-            )
+            ),
+            SizedBox(
+              height: 10,
+            ),
+           
+         
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 var carMark = [];
 var carModel = [];
 var cityName = [];
@@ -24,12 +26,20 @@ double Klongitude = 46.675297;
 double BaseDeliveryPrice;
 double KAdministrativeFees;
 
+var NotifactionCount= 0.obs;
+
+String Kwhatapp = '';
+String KTwitter = '';
+String KInstegram = '';
+String KSnapChat = '';
+
 enum userRole { Client, Merchant, DeliveryAgent, anonymous }
 
-String KName = '';
-String KEmail = '';
+var KName = ''.obs;
+var KEmail = ''.obs;
+var KUserImage = ''.obs;
 String KCity = '';
-String KUserImage = '';
+
 String KFirebaseMessagingToken = '';
 
 userRole KRole = userRole.anonymous;

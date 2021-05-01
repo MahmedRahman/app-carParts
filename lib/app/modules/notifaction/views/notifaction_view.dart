@@ -20,24 +20,41 @@ class NotifactionView extends GetView<NotifactionController> {
           if (snapshot.hasData) {
             List<NotifactionModel> notifactionModel = snapshot.data;
             return notifactionModel.length == 0
-                ? Center(child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Lottie.asset('images/nonotifaction.json',width: Get.width),
-                    Text('لا يوجد اشعارات'),
-                  ],
-                ))
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'images/nonotifaction.json',
+                          width: Get.width,
+                        ),
+                        Text('لا يوجد اشعارات'),
+                      ],
+                    ),
+                  )
                 : ListView(
                     children: List.generate(
                       notifactionModel.length,
                       (index) {
                         return Card(
+                          color: notifactionModel.elementAt(index).isRead
+                              ? Colors.white
+                              : Colors.grey,
                           child: ListTile(
-                            onTap: (){
-                            Get.toNamed(Routes.ORDER_DETAIL, arguments: [notifactionModel.elementAt(index).refId]);
-                              
-                            },
+                              onTap: () {
+                                controller.setNotifactionRead(notifactionModel
+                                    .elementAt(index)
+                                    .id
+                                    .toString());
+                                //SetRead
+                                Get.toNamed(
+                                  Routes.ORDER_DETAIL,
+                                  arguments: [
+                                    notifactionModel.elementAt(index).refId
+                                  ],
+                                );
+                              },
                               title: Text(
                                   notifactionModel.elementAt(index).name ?? ''),
                               subtitle: Text(

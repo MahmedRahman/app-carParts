@@ -28,7 +28,7 @@ class ApiManger extends GetConnect {
     }
   }
 
-  Future<ResponsModel> repPost(url, body, {bool showLoading = true}) async {
+  Future<ResponsModel> repPost(url, body, {bool showLoading = false}) async {
     if (showLoading) {
       EasyLoading.show(status: 'جارى التحميل');
     }
@@ -87,7 +87,7 @@ class ApiManger extends GetConnect {
     }
   }
 
-  Future<ResponsModel> repGet(url, {bool showLoading = true}) async {
+  Future<ResponsModel> repGet(url, {bool showLoading = false}) async {
     if (showLoading) {
       EasyLoading.show(status: 'جارى التحميل');
     }
@@ -124,12 +124,14 @@ class ApiManger extends GetConnect {
           if (showLoading) {
             EasyLoading.showError('خطاء');
           }
-          Get.to(ErrorView(
-            api_url: url.toString(),
-            api_body: '',
-            api_header: header.toString(),
-            api_status_code: response.statusCode.toString(),
-          ));
+          Get.to(
+            ErrorView(
+              api_url: url.toString(),
+              api_body: '',
+              api_header: header.toString(),
+              api_status_code: response.statusCode.toString(),
+            ),
+          );
           return ResponsModel(
             code: response.statusCode,
             success: false,

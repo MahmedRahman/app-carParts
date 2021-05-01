@@ -19,16 +19,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
   print(message.data);
   flutterLocalNotificationsPlugin.show(
-      message.data.hashCode,
-      message.data['title'],
-      message.data['body'],
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channel.description,
-        ),
-      ));
+    message.data.hashCode,
+    message.data['title'],
+    message.data['body'],
+    NotificationDetails(
+      android: AndroidNotificationDetails(
+        channel.id,
+        channel.name,
+        channel.description,
+      ),
+    ),
+  );
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -47,7 +48,6 @@ void main() async {
   await GetStorage.init();
   await initServices();
 
-
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -63,7 +63,7 @@ void main() async {
       locale: Locale('ar', 'EG'),
       fallbackLocale: Locale('ar', 'EG'),
       translations: AppTranslation(),
-      builder:   EasyLoading.init(),
+      builder: EasyLoading.init(),
     ),
   );
   configLoading();
@@ -88,5 +88,4 @@ void configLoading() {
     ..maskColor = Colors.blue.withOpacity(0.5)
     ..userInteractions = true
     ..dismissOnTap = false;
-   
 }

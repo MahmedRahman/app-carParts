@@ -181,7 +181,7 @@ class OrderAddView extends GetView<OrderAddController> {
                           SizedBox(
                             height: 10,
                           ),
-                          Obx(() {
+                          /* Obx(() {
                             return Padding(
                               padding: const EdgeInsets.all(10),
                               child: Container(
@@ -224,7 +224,46 @@ class OrderAddView extends GetView<OrderAddController> {
                                 ),
                               ),
                             );
-                          }),
+                          }),*/
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.rectangle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(.15),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                  )
+                                ],
+                              ),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return AppValidation.checkEmpty(value);
+                                },
+                                readOnly: true,
+                                style: TextStyle(fontSize: 16),
+                                controller: controller.versionYearController,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  hintText: 'اختيار سنة صنع المركبة',
+                                  border: InputBorder.none,
+                                  suffixIcon: Icon(
+                                    Icons.calendar_today,
+                                  ),
+                                ),
+                                onTap: () => handleReadOnlyInputClick(context),
+                              ),
+                            ),
+                          ),
+
                           /*CustemTextForm(
                             textHint: 'سنة الصنع',
                             inputcontroller: controller.versionYear,
@@ -259,13 +298,12 @@ class OrderAddView extends GetView<OrderAddController> {
                           ),
                           CustemButton(
                             title: 'ارسال',
-                         
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 markSelectIndex.value = 0;
                                 modelsSelectIndex.value = 0;
                                 controller.createorder();
-                              } 
+                              }
                             },
                           ),
                           /*
@@ -297,6 +335,25 @@ class OrderAddView extends GetView<OrderAddController> {
                     ),
                   ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void handleReadOnlyInputClick(context) {
+    showBottomSheet(
+      context: context,
+      builder: (BuildContext context) => Container(
+        width: MediaQuery.of(context).size.width,
+        child: YearPicker(
+          selectedDate: DateTime(1997),
+          firstDate: DateTime(1995),
+          lastDate: DateTime.now(),
+          onChanged: (val) {
+            controller.versionYearController.text = val.year.toString();
+            print(val);
+            Navigator.pop(context);
+          },
         ),
       ),
     );

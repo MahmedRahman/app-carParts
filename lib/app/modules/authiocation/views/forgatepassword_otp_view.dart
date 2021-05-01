@@ -1,4 +1,5 @@
 import 'package:carpart/app/modules/authiocation/controllers/authiocation_controller.dart';
+import 'package:carpart/app/modules/authiocation/views/forgatepassword_rest_view.dart';
 import 'package:carpart/app/modules/authiocation/views/signin_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:carpart/app/data/component/CustemButton.dart';
@@ -6,31 +7,36 @@ import 'package:carpart/app/data/component/CustemTextForm.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FrogatepasswordView extends GetView<AuthiocationController> {
+class FrogatepasswordOtpView extends GetView<AuthiocationController> {
   @override
   Widget build(BuildContext context) {
-    AuthiocationController controller = Get.put(AuthiocationController());
+    //AuthiocationController controller = Get.put(AuthiocationController());
     return SafeArea(
       child: Scaffold(
-        body: Column(
+        body: ListView(
           children: [
             AuthiocationHeader(
-              title: 'نسيت كلمة السر',
+              title: 'برجاء كتابة الكود المرسل على رقم الجوال',
             ),
-           
             CustemTextForm(
-              textHint: 'رقم الجوال',
-              inputcontroller: controller.phoneNumber,
+              textHint: 'الكود المرسل',
               textInputType: TextInputType.phone,
             ),
             CustemButton(
-              title: 'إرسال',
+              title: 'تاكيد',
               onPressed: () {
-                controller.setForgotPassword();
-                //Get.toNamed(Routes.HOME);
-                //
+
+Get.to(FrogatepasswordRestView());
+
+              //  if()
+                //controller.setForgotPassword();
               },
-            )
+            ),
+            SizedBox(
+              height: 10,
+            ),
+           
+            
           ],
         ),
       ),

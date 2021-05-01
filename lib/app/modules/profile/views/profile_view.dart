@@ -6,8 +6,11 @@ import 'package:carpart/app/modules/home/controllers/home_controller.dart';
 import 'package:carpart/app/modules/profile/views/profile_profile_detailes_edit_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:carpart/app/modules/profile/controllers/profile_controller.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileView extends GetView<ProfileController> {
   @override
@@ -20,72 +23,77 @@ class ProfileView extends GetView<ProfileController> {
               padding: const EdgeInsets.all(0),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  children: [
-                    Stack(
-                      children: [
-                        CustomImageCached(
-                          imageUrl: KUserImage,
-                        ),
-                        Positioned(
-                          bottom: 1,
-                          left: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xff445969),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 3,
-                                horizontal: 15,
-                              ),
-                              child: Text(
-                                KRole.toString().tr,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: Obx(() {
+                  return Row(
+                    children: [
+                      Stack(
                         children: [
-                          Text(
-                            KName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            width: 80,
+                            child: CustomImageCached(
+                              imageUrl: KUserImage.value,
                             ),
                           ),
-                          SizedBox(
-                            height: 2,
-                          ),
-                          Text(KEmail),
-                          //Text(KCity),
+                          Positioned(
+                            bottom: 1,
+                            left: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xff445969),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 3,
+                                  horizontal: 15,
+                                ),
+                                child: Text(
+                                  KRole.toString().tr,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () async {
-                            await Get.to(
-                              ProfileDetailesEditView(),
-                              fullscreenDialog: true,
-                            );
-                          },
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              KName.value,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(KEmail.value),
+                            //Text(KCity),
+                          ],
                         ),
-                      ],
-                    )
-                  ],
-                ),
+                      ),
+                      Column(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              await Get.to(
+                                ProfileDetailesEditView(),
+                                fullscreenDialog: true,
+                              );
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                }),
               ),
             ),
             Padding(
@@ -108,7 +116,6 @@ class ProfileView extends GetView<ProfileController> {
                         },
                         leading: Image.asset('images/cart-car.png'),
                         title: Text('الطلبات'),
-                        //trailing: Text('23'),
                       ),
                       (KRole != userRole.Client)
                           ? ListTile(
@@ -146,7 +153,11 @@ class ProfileView extends GetView<ProfileController> {
                             )
                           : SizedBox.fromSize(),
                       ListTile(
-                        onTap: () {},
+                        onTap: () async {
+                          await canLaunch('tel:+$helpPhoneNumber')
+                              ? await launch('tel:+$helpPhoneNumber')
+                              : throw 'Could not launch tel:+$helpPhoneNumber';
+                        },
                         leading: Image.asset('images/support.png'),
                         title: Text('مركز المساعدة'),
                         trailing: Text(helpPhoneNumber),
@@ -159,7 +170,9 @@ class ProfileView extends GetView<ProfileController> {
                         title: Text('اتصل بنا'),
                       ),
                       ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          Share.share('check out my website https://tsp.sa');
+                        },
                         leading: Icon(Icons.share),
                         title: Text('شارك التطبيق'),
                       ),
@@ -168,7 +181,11 @@ class ProfileView extends GetView<ProfileController> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              await canLaunch(Kwhatapp)
+                                  ? await launch(Kwhatapp)
+                                  : throw 'Could not launch $Kwhatapp';
+                            },
                             child: Container(
                               width: 50,
                               height: 50,
@@ -182,7 +199,11 @@ class ProfileView extends GetView<ProfileController> {
                             width: 5,
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              await canLaunch(KInstegram)
+                                  ? await launch(KInstegram)
+                                  : throw 'Could not launch $KInstegram';
+                            },
                             child: Container(
                               width: 50,
                               height: 50,
@@ -197,7 +218,11 @@ class ProfileView extends GetView<ProfileController> {
                             width: 5,
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              await canLaunch(KTwitter)
+                                  ? await launch(KTwitter)
+                                  : throw 'Could not launch $KTwitter';
+                            },
                             child: Container(
                               width: 50,
                               height: 50,
@@ -211,7 +236,11 @@ class ProfileView extends GetView<ProfileController> {
                             width: 5,
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              await canLaunch(KSnapChat)
+                                  ? await launch(KSnapChat)
+                                  : throw 'Could not launch $KSnapChat';
+                            },
                             child: Container(
                               width: 50,
                               height: 50,

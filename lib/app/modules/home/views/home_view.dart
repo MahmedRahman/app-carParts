@@ -1,4 +1,6 @@
+import 'package:badges/badges.dart';
 import 'package:carpart/app/data/auth.dart';
+import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/component/MapSample.dart';
 import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
@@ -19,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
+import 'package:share/share.dart';
 
 class HomeView extends GetView<HomeController> {
   List<Widget> _stack = [
@@ -61,27 +64,36 @@ class HomeView extends GetView<HomeController> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        child: Center(
-                            child: KRole != userRole.anonymous
-                                ? ListTile(
-                                    leading: Container(
-                                      child:
-                                          Image.asset('images/drwar/user.png'),
-                                    ),
-                                    title: Text(
-                                      KName,
-                                      style: headline3.copyWith(
-                                          color: Colors.white),
-                                    ),
-                                    subtitle: Text(
-                                      KEmail,
-                                      style: headline3.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  )
-                                : SizedBox.shrink()),
+                        child: Obx(
+                         () {
+                            return Center(
+                                child: KRole != userRole.anonymous
+                                    ? ListTile(
+                                        leading: Container(
+                                          child:
+                                              SizedBox(
+                                                width: 75,
+                                                child: CustomImageCached(
+                                                  imageUrl: KUserImage.value,
+                                                ),
+                                              ),
+                                        ),
+                                        title: Text(
+                                          KName.value,
+                                          style: headline3.copyWith(
+                                              color: Colors.white),
+                                        ),
+                                        subtitle: Text(
+                                          KEmail.value,
+                                          style: headline3.copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox.shrink());
+                          }
+                        ),
                       )
                     : Container(
                         height: Get.height * .3,
@@ -210,6 +222,7 @@ class HomeView extends GetView<HomeController> {
                         ),
                         leading: Image.asset('images/drwar/shareappmenu.png'),
                         onTap: () {
+                          Share.share('check out my website https://tsp.sa');
                           // Update the state of the app.
                           // ...
                         },
@@ -313,11 +326,25 @@ class HomeView extends GetView<HomeController> {
                 padding: const EdgeInsets.only(
                   bottom: 8,
                 ),
-                child: SvgPicture.asset(
-                  'images/menu/notifications.svg',
-                  color: controller.selectindex.value == 2
-                      ? KAccentColor
-                      : KScandaryColor,
+                child: Obx(
+                  () {
+                    return Badge(
+                      badgeContent: Text(
+                        NotifactionCount.value.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      showBadge: NotifactionCount.value == 0 ? false : true,
+                      badgeColor: KPrimaryColor,
+                      child: SvgPicture.asset(
+                        'images/menu/notifications.svg',
+                        color: controller.selectindex.value == 2
+                            ? KAccentColor
+                            : KScandaryColor,
+                      ),
+                    );
+                  },
                 ),
               ),
               label: 'التنبيهات',

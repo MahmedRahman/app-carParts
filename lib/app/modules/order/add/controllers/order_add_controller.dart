@@ -14,7 +14,7 @@ class OrderAddController extends GetxController {
   var carMarkid = 0;
   var carModelId = 0;
   var versionYear = ''.obs;
-  //TextEditingController versionYear = new TextEditingController();
+  TextEditingController versionYearController = new TextEditingController();
   TextEditingController vanNumber = new TextEditingController();
   TextEditingController description = new TextEditingController();
   String carImageBytes;
@@ -28,9 +28,9 @@ class OrderAddController extends GetxController {
     }
 
     if (KRole == userRole.Client) {
-      if (carMarkid == 0 || carModelId == 0 || versionYear.value == '') {
+      if (carMarkid == 0 || carModelId == 0 ) {
         showSnackBar(
-          message: 'برجاء تحديد ماركة و نوع وسنة المركبة',
+          message: 'برجاء تحديد ماركة و نوع المركبة',
           snackbarStatus: () {
          
           },
@@ -39,7 +39,7 @@ class OrderAddController extends GetxController {
         ResponsModel responsModel = await WebServices().createorder(
           markid: carMarkid,
           modelId: carModelId,
-          versionId: versionYear.value,
+          versionId: versionYearController.text,
           vanNumber: vanNumber.text,
           description: description.text,
           imageBytes: carImageBytes,

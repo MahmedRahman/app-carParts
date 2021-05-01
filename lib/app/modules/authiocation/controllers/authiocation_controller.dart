@@ -9,6 +9,7 @@ import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/client_model.dart';
 import 'package:carpart/app/data/model/userModel.dart';
 import 'package:carpart/app/api/webServices.dart';
+import 'package:carpart/app/modules/authiocation/views/forgatepassword_otp_view.dart';
 import 'package:carpart/app/modules/entry_point/controllers/entry_point_controller.dart';
 
 import 'package:carpart/app/routes/app_pages.dart';
@@ -34,6 +35,26 @@ class AuthiocationController extends GetxController {
     super.onInit();
     phoneNumber.text = "";
     password.text = "";
+  }
+
+  void setForgotPassword() async {
+    ResponsModel responsModel =
+        await WebServices().setForgotPassword(phoneNumber.text);
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      //print(response.body['Data']);
+      showSnackBar(
+        message: response.body['Data'],
+        snackbarStatus: () {
+          Get.to(FrogatepasswordOtpView());
+        },
+      );
+    } else {
+      showSnackBar(
+        message: 'برجاء التاكد من رقم الموبيل',
+        snackbarStatus: () {},
+      );
+    }
   }
 
   void createUser() async {
@@ -156,25 +177,36 @@ class AuthiocationController extends GetxController {
   String drivingLicenseBytes;
 
   void upgrateDelivery() async {
-    ResponsModel responsModel = await WebServices().upgrateDelivery(
-      nationalNumber: nationalNumber.text,
-      nationalIdBytes: nationalIdBytes,
-      carBackBytes: carBackBytes,
-      carFrontBytes: carFrontBytes,
-      carPaperBytes: carPaperBytes,
-      drivingLicenseBytes: drivingLicenseBytes,
-    );
+    if (GetUtils.isNullOrBlank(nationalNumber.text) ||
+        GetUtils.isNullOrBlank(nationalIdBytes) ||
+        GetUtils.isNullOrBlank(carBackBytes) ||
+        GetUtils.isNullOrBlank(carFrontBytes) ||
+        GetUtils.isNullOrBlank(carPaperBytes) ||
+        GetUtils.isNullOrBlank(drivingLicenseBytes)) {
+      showSnackBar(
+          message: 'برجاء ملئ البيانات المطلوبة', snackbarStatus: () {});
+    } else {
+      ResponsModel responsModel = await WebServices().upgrateDelivery(
+        nationalNumber: nationalNumber.text,
+        nationalIdBytes: nationalIdBytes,
+        carBackBytes: carBackBytes,
+        carFrontBytes: carFrontBytes,
+        carPaperBytes: carPaperBytes,
+        drivingLicenseBytes: drivingLicenseBytes,
+      );
 
-    if (responsModel.success) {
-      Response response = responsModel.data;
-      if (response.body['IsSuccess']) {
-        showSnackBar(
-            message: 'تم تقديم الطلب بنجاح',
-            snackbarStatus: () {
-              Get.toNamed(Routes.HOME);
-            });
-      } else {
-        showSnackBar(message: response.body['Message'], snackbarStatus: () {});
+      if (responsModel.success) {
+        Response response = responsModel.data;
+        if (response.body['IsSuccess']) {
+          showSnackBar(
+              message: 'تم تقديم الطلب بنجاح',
+              snackbarStatus: () {
+                Get.toNamed(Routes.HOME);
+              });
+        } else {
+          showSnackBar(
+              message: response.body['Message'], snackbarStatus: () {});
+        }
       }
     }
   }

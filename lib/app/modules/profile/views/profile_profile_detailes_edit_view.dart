@@ -1,3 +1,4 @@
+import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/modules/profile/controllers/profile_controller.dart';
@@ -31,14 +32,21 @@ class ProfileDetailesEditView extends GetView {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),    
-          CustemImagePicker(),
+          ),
+          CustomImageCached(
+            imageUrl: KUserImage.value,
+          ),
+          CustemImagePicker(
+            onclick: (value) {
+              profileController.imagelogo = value;
+            },
+          ),
           ListTile(
             dense: true,
             title: Text('الاسم الشخصى'),
             subtitle: TextFormField(
               controller: profileController.nameText,
-            //  initialValue: 'KName',
+              //  initialValue: 'KName',
             ),
           ),
           ListTile(
@@ -46,7 +54,6 @@ class ProfileDetailesEditView extends GetView {
             title: Text('البريد الالكترونى'),
             subtitle: TextFormField(
               controller: profileController.emailText,
-              //: 'KEmail',
             ),
           ),
           SizedBox(
