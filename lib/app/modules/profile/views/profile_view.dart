@@ -3,6 +3,7 @@ import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/modules/home/controllers/home_controller.dart';
+import 'package:carpart/app/modules/home/views/home_view.dart';
 import 'package:carpart/app/modules/profile/views/profile_profile_detailes_edit_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,42 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('حسابى'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () async {
+              await Get.to(
+                ProfileDetailesEditView(),
+                fullscreenDialog: true,
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              KRole = userRole.anonymous;
+              Get.find<UserAuth>().setUserToken(null);
+              Kselectindex.value = 0;
+              NotifactionCount.value = 0;
+              Get.offAndToNamed(Routes.HOME);
+            },
+          )
+        ],
+      ),
+      drawer: CustomDrawer(),
       body: SafeArea(
         child: ListView(
           children: [
+            SizedBox(
+              height: 20,
+            ),
             Padding(
               padding: const EdgeInsets.all(0),
               child: Padding(
@@ -28,11 +62,10 @@ class ProfileView extends GetView<ProfileController> {
                     children: [
                       Stack(
                         children: [
-                          SizedBox(
-                            width: 80,
-                            child: CustomImageCached(
-                              imageUrl: KUserImage.value,
-                            ),
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.grey,
+                            backgroundImage: NetworkImage(KUserImage.value),
                           ),
                           Positioned(
                             bottom: 1,
@@ -67,30 +100,19 @@ class ProfileView extends GetView<ProfileController> {
                             Text(
                               KName.value,
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                                  fontWeight: FontWeight.bold, fontSize: 20),
                             ),
                             SizedBox(
                               height: 2,
                             ),
-                            Text(KEmail.value),
+                            Text(
+                              KEmail.value,
+                              style: TextStyle(fontSize: 14),
+                            ),
                             //Text(KCity),
                           ],
                         ),
                       ),
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () async {
-                              await Get.to(
-                                ProfileDetailesEditView(),
-                                fullscreenDialog: true,
-                              );
-                            },
-                          ),
-                        ],
-                      )
                     ],
                   );
                 }),
@@ -112,7 +134,7 @@ class ProfileView extends GetView<ProfileController> {
                     children: [
                       ListTile(
                         onTap: () {
-                          Get.find<HomeController>().selectindex.value = 1;
+                          Kselectindex.value = 1;
                         },
                         leading: Image.asset('images/cart-car.png'),
                         title: Text('الطلبات'),

@@ -2,6 +2,7 @@ import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:carpart/app/data/component/CustomIndicator.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/model/order_model.dart';
+import 'package:carpart/app/modules/home/views/home_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,11 @@ class OrderListView extends GetView<OrderListController> {
     OrderListController controller = Get.put(OrderListController());
     controller.getOrder();
     return Scaffold(
+          appBar: AppBar(
+        title: Text('الطلبات'),
+        centerTitle: true,
+      ),
+      drawer: CustomDrawer(),
       body: GetX<OrderListController>(
         builder: (builder) {
           return FutureBuilder(

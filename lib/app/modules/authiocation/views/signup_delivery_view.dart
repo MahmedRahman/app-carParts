@@ -14,6 +14,13 @@ import 'package:get/get.dart';
 class SignupDeliveryView extends GetView<AuthiocationController> {
   @override
   Widget build(BuildContext context) {
+    controller.nationalNumber.text = '';
+    controller.nationalIdBytes = '';
+    controller.carPaperBytes = '';
+    controller.drivingLicenseBytes = '';
+    controller.carFrontBytes = '';
+    controller.carPaperBytes = '';
+
     return Scaffold(
       body: Center(
         child: SafeArea(
@@ -23,45 +30,44 @@ class SignupDeliveryView extends GetView<AuthiocationController> {
                 title: 'حياك معنا',
               ),
               CustemTextForm(
-                textHint: 'رقم الهوية',
-                inputcontroller: controller.nationalNumber,
-              ),
-              CustemImagePicker(
+                  textHint: 'رقم الهوية',
+                  inputcontroller: controller.nationalNumber,
+                  textInputType: TextInputType.number),
+              new CustemImagePicker(
                 title: 'صورة من الهوية',
                 onclick: (value) {
                   controller.nationalIdBytes = value;
                 },
               ),
-              CustemImagePicker(
+              SizedBox(height: 10,),
+              new CustemImagePicker(
                 title: 'استمارة السيارة',
                 onclick: (value) {
                   controller.carPaperBytes = value;
                 },
-              ),
-              CustemImagePicker(
+              ),    SizedBox(height: 10,),
+              new CustemImagePicker(
                 title: 'رخصة القيادة',
                 onclick: (value) {
                   controller.drivingLicenseBytes = value;
                 },
-              ),
-              CustemImagePicker(
+              ),    SizedBox(height: 10,),
+              new CustemImagePicker(
                 title: 'صورة السيارة من الامام',
                 onclick: (value) {
                   controller.carFrontBytes = value;
                 },
-              ),
-              CustemImagePicker(
+              ),    SizedBox(height: 10,),
+              new CustemImagePicker(
                 title: 'صورة السيارة من الخلف',
                 onclick: (value) {
-                  controller.carPaperBytes = value;
+                  controller.carBackBytes = value;
                 },
-              ),
+              ),    SizedBox(height: 10,),
               CustemButton(
                 title: 'تسجيل',
-            
                 onPressed: () {
                   controller.upgrateDelivery();
-   
                 },
               )
             ],

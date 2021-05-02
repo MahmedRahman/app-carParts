@@ -1,6 +1,7 @@
 import 'package:carpart/app/data/component/CustomIndicator.dart';
 import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/model/notifaction_model.dart';
+import 'package:carpart/app/modules/home/views/home_view.dart';
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,17 @@ class NotifactionView extends GetView<NotifactionController> {
   Widget build(BuildContext context) {
     NotifactionController controller = Get.put(NotifactionController());
     controller.getNotifaction();
-    return Scaffold(body: GetX<NotifactionController>(builder: (builder) {
+
+
+
+    return Scaffold(
+      
+      appBar: AppBar(
+        title: Text('التنبيهات'),
+        centerTitle: true,
+      ),
+      drawer: CustomDrawer(),
+      body: GetX<NotifactionController>(builder: (builder) {
       return FutureBuilder(
         future: controller.notifactionList.value,
         builder: (context, snapshot) {

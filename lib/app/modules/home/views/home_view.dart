@@ -35,245 +35,9 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     return Scaffold(
-      appBar: AppBar(
-        title: SizedBox(
-          width: Get.width * .2,
-          child: Image.asset(
-            'images/logodark.png',
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0.0,
-        backgroundColor: KPrimaryColor,
-      ),
-      drawer: Drawer(
-          elevation: 0.0,
-          child: Container(
-            color: KScandaryColor,
-            child: ListView(
-              children: [
-                KRole != userRole.anonymous
-                    ? Container(
-                        height: Get.height * .3,
-                        decoration: BoxDecoration(
-                          color: KScandaryColor,
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'images/drwar/wallpaper.png',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: Obx(
-                         () {
-                            return Center(
-                                child: KRole != userRole.anonymous
-                                    ? ListTile(
-                                        leading: Container(
-                                          child:
-                                              SizedBox(
-                                                width: 75,
-                                                child: CustomImageCached(
-                                                  imageUrl: KUserImage.value,
-                                                ),
-                                              ),
-                                        ),
-                                        title: Text(
-                                          KName.value,
-                                          style: headline3.copyWith(
-                                              color: Colors.white),
-                                        ),
-                                        subtitle: Text(
-                                          KEmail.value,
-                                          style: headline3.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      )
-                                    : SizedBox.shrink());
-                          }
-                        ),
-                      )
-                    : Container(
-                        height: Get.height * .3,
-                        decoration: BoxDecoration(
-                          color: KScandaryColor,
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'images/drwar/wallpaper.png',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            'images/logolight.png',
-                            width: 128,
-                          ),
-                        ),
-                      ),
-                Container(
-                  height: Get.height * .6,
-                  color: Color(0XFF445969),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          'الرئيسية',
-                          style: headline4.copyWith(color: Colors.white),
-                        ),
-                        leading: SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: Image.asset('images/drwar/home.png'),
-                        ),
-                        onTap: () {
-                          Get.find<HomeController>().selectindex.value = 0;
-                          Get.back();
-                        },
-                      ),
-                      ListTile(
-                        title: Text(
-                          'عن التطبيق',
-                          style: headline4.copyWith(color: Colors.white),
-                        ),
-                        leading: Image.asset('images/drwar/about.png'),
-                        onTap: () {
-                          Get.back();
-                          Get.toNamed(
-                            Routes.AboutView,
-                          );
-                          // Update the state of the app.
-                          // ...
-                        },
-                      ),
-                      SizedBox(
-                          child: KRole == userRole.Client
-                              ? ListTile(
-                                  title: Text(
-                                    'طلب انضمام كمندوب',
-                                    style:
-                                        headline4.copyWith(color: Colors.white),
-                                  ),
-                                  leading: Image.asset('images/drwar/sign.png'),
-                                  onTap: () {
-                                    Get.back();
-                                    Get.toNamed(Routes.SignupDeliveryView);
-                                    // Update the state of the app.
-                                    // ...
-                                  },
-                                )
-                              : SizedBox.shrink()),
-                      SizedBox(
-                          child: KRole == userRole.Client
-                              ? ListTile(
-                                  title: Text(
-                                    'طلب انضمام كتاجر',
-                                    style:
-                                        headline4.copyWith(color: Colors.white),
-                                  ),
-                                  leading: Image.asset('images/drwar/sign.png'),
-                                  onTap: () {
-                                    Get.back();
-                                    Get.toNamed(Routes.SignupDealerView);
-                                  },
-                                )
-                              : SizedBox.shrink()),
-                      SizedBox(
-                          child: KRole == userRole.anonymous
-                              ? ListTile(
-                                  title: Text(
-                                    'تسجيل جديد',
-                                    style: headline4.copyWith(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  leading: Image.asset('images/drwar/sign.png'),
-                                  onTap: () {
-                                    Get.back();
-                                    Get.toNamed(Routes.AUTHIOCATION_SIGNUP);
-                                  },
-                                )
-                              : SizedBox.shrink()),
-                      SizedBox(
-                          child: KRole == userRole.anonymous
-                              ? ListTile(
-                                  title: Text(
-                                    'تسجيل الدخول',
-                                    style:
-                                        headline4.copyWith(color: Colors.white),
-                                  ),
-                                  leading: SvgPicture.asset(
-                                      'images/drwar/login.svg'),
-                                  onTap: () {
-                                    Get.back();
-                                    // Get.to()
-                                    Get.offNamed(Routes.SigninView);
-                                    // Update the state of the app.
-                                    // ...
-                                  },
-                                )
-                              : SizedBox.shrink()),
-                      ListTile(
-                        title: Text(
-                          'مشاركة التطبيق',
-                          style: headline4.copyWith(color: Colors.white),
-                        ),
-                        leading: Image.asset('images/drwar/shareappmenu.png'),
-                        onTap: () {
-                          Share.share('check out my website https://tsp.sa');
-                          // Update the state of the app.
-                          // ...
-                        },
-                      ),
-                      ListTile(
-                        title: Text(
-                          'اتصل بنا',
-                          style: headline4.copyWith(color: Colors.white),
-                        ),
-                        leading: SvgPicture.asset('images/drwar/callus.svg'),
-                        onTap: () {
-                          Get.back();
-                          Get.toNamed(Routes.ContactusView);
-                        },
-                      ),
-                      Container(
-                        color: Color(0XFF445969),
-                        child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: KRole != userRole.anonymous
-                                ? ListTile(
-                                    title: Text(
-                                      'تسجيل خروج',
-                                      style: headline4.copyWith(
-                                          color: Colors.white),
-                                    ),
-                                    leading:
-                                        Image.asset('images/drwar/exit.png'),
-                                    onTap: () {
-                                      Get.back();
-                                      KRole = userRole.anonymous;
-                                      Get.find<UserAuth>().setUserToken(null);
-                                      controller.selectindex.value = 0;
-                                      Get.offAndToNamed(Routes.HOME);
-                                    },
-                                  )
-                                : SizedBox.shrink()),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: SizedBox.shrink(),
-                )
-              ],
-            ),
-          ) // Populate the Drawer in the next step.
-          ),
       bottomNavigationBar: Obx(() {
         return BottomNavigationBar(
-          currentIndex: controller.selectindex.value,
+          currentIndex: Kselectindex.value,
           backgroundColor: Colors.white70,
           selectedItemColor: KAccentColor,
           unselectedItemColor: KScandaryColor,
@@ -282,14 +46,14 @@ class HomeView extends GetView<HomeController> {
           elevation: 2,
           onTap: (value) {
             if (KRole == userRole.anonymous) {
-              controller.selectindex.value = 0;
+              Kselectindex.value = 0;
               AppUtils().showDialog(
                   AppName, 'برجاء تسجيل دخول حتى تتمكن من استخدام التطبيق', () {
                 Get.back();
                 Get.toNamed(Routes.SigninView);
               });
             } else {
-              controller.selectindex.value = value;
+              Kselectindex.value = value;
               // _stack[value];
             }
           },
@@ -301,9 +65,8 @@ class HomeView extends GetView<HomeController> {
                 ),
                 child: SvgPicture.asset(
                   'images/menu/Home.svg',
-                  color: controller.selectindex.value == 0
-                      ? KAccentColor
-                      : KScandaryColor,
+                  color:
+                      Kselectindex.value == 0 ? KAccentColor : KScandaryColor,
                 ),
               ),
               label: 'الرئيسية',
@@ -315,9 +78,8 @@ class HomeView extends GetView<HomeController> {
                   ),
                   child: SvgPicture.asset(
                     'images/menu/Cart.svg',
-                    color: controller.selectindex.value == 1
-                        ? KAccentColor
-                        : KScandaryColor,
+                    color:
+                        Kselectindex.value == 1 ? KAccentColor : KScandaryColor,
                   ),
                 ),
                 label: 'الطلبات'),
@@ -339,7 +101,7 @@ class HomeView extends GetView<HomeController> {
                       badgeColor: KPrimaryColor,
                       child: SvgPicture.asset(
                         'images/menu/notifications.svg',
-                        color: controller.selectindex.value == 2
+                        color: Kselectindex.value == 2
                             ? KAccentColor
                             : KScandaryColor,
                       ),
@@ -356,19 +118,267 @@ class HomeView extends GetView<HomeController> {
                 ),
                 child: SvgPicture.asset(
                   'images/menu/Profile.svg',
-                  color: controller.selectindex.value == 3
-                      ? KAccentColor
-                      : KScandaryColor,
+                  color:
+                      Kselectindex.value == 3 ? KAccentColor : KScandaryColor,
                 ),
               ),
-              label: 'صفحتي',
+              label: 'حسابى',
             )
           ],
         );
       }),
       body: Obx(() {
-        return _stack[controller.selectindex.value];
+        return _stack[Kselectindex.value];
       }),
     );
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        elevation: 0.0,
+        child: Container(
+          color: KScandaryColor,
+          child: ListView(
+            children: [
+              KRole != userRole.anonymous
+                  ? Container(
+                      height: Get.height * .3,
+                      decoration: BoxDecoration(
+                        color: KScandaryColor,
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'images/drwar/wallpaper.png',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Obx(
+                        () {
+                          return Center(
+                            child: KRole != userRole.anonymous
+                                ? Row(
+                                    children: [
+                                         SizedBox(
+                                        width: 5,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage:
+                                            NetworkImage(KUserImage.value),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            KName.value,
+                                            style: headline3.copyWith(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Text(
+                                            KEmail.value,
+                                            style: headline3.copyWith(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                : SizedBox.shrink(),
+                          );
+                        },
+                      ),
+                    )
+                  : Container(
+                      height: Get.height * .3,
+                      decoration: BoxDecoration(
+                        color: KScandaryColor,
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'images/drwar/wallpaper.png',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          'images/logolight.png',
+                          width: 128,
+                        ),
+                      ),
+                    ),
+              Container(
+                height: Get.height * .6,
+                color: Color(0XFF445969),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        'الرئيسية',
+                        style: headline4.copyWith(color: Colors.white),
+                      ),
+                      leading: SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: Image.asset('images/drwar/home.png'),
+                      ),
+                      onTap: () {
+                        Kselectindex.value = 0;
+                        Get.back();
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        'عن التطبيق',
+                        style: headline4.copyWith(color: Colors.white),
+                      ),
+                      leading: Image.asset('images/drwar/about.png'),
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(
+                          Routes.AboutView,
+                        );
+                        // Update the state of the app.
+                        // ...
+                      },
+                    ),
+                    SizedBox(
+                        child: KRole == userRole.Client
+                            ? ListTile(
+                                title: Text(
+                                  'طلب انضمام كمندوب',
+                                  style:
+                                      headline4.copyWith(color: Colors.white),
+                                ),
+                                leading: Image.asset('images/drwar/sign.png'),
+                                onTap: () {
+                                  Get.back();
+                                  Get.toNamed(Routes.SignupDeliveryView);
+                                  // Update the state of the app.
+                                  // ...
+                                },
+                              )
+                            : SizedBox.shrink()),
+                    SizedBox(
+                        child: KRole == userRole.Client
+                            ? ListTile(
+                                title: Text(
+                                  'طلب انضمام كتاجر',
+                                  style:
+                                      headline4.copyWith(color: Colors.white),
+                                ),
+                                leading: Image.asset('images/drwar/sign.png'),
+                                onTap: () {
+                                  Get.back();
+                                  Get.toNamed(Routes.SignupDealerView);
+                                },
+                              )
+                            : SizedBox.shrink()),
+                    SizedBox(
+                        child: KRole == userRole.anonymous
+                            ? ListTile(
+                                title: Text(
+                                  'تسجيل جديد',
+                                  style: headline4.copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                leading: Image.asset('images/drwar/sign.png'),
+                                onTap: () {
+                                  Get.back();
+                                  Get.toNamed(Routes.AUTHIOCATION_SIGNUP);
+                                },
+                              )
+                            : SizedBox.shrink()),
+                    SizedBox(
+                        child: KRole == userRole.anonymous
+                            ? ListTile(
+                                title: Text(
+                                  'تسجيل الدخول',
+                                  style:
+                                      headline4.copyWith(color: Colors.white),
+                                ),
+                                leading:
+                                    SvgPicture.asset('images/drwar/login.svg'),
+                                onTap: () {
+                                  Get.back();
+                                  // Get.to()
+                                  Get.offNamed(Routes.SigninView);
+                                  // Update the state of the app.
+                                  // ...
+                                },
+                              )
+                            : SizedBox.shrink()),
+                    ListTile(
+                      title: Text(
+                        'مشاركة التطبيق',
+                        style: headline4.copyWith(color: Colors.white),
+                      ),
+                      leading: Image.asset('images/drwar/shareappmenu.png'),
+                      onTap: () {
+                        Share.share('check out my website https://tsp.sa');
+                        // Update the state of the app.
+                        // ...
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        'اتصل بنا',
+                        style: headline4.copyWith(color: Colors.white),
+                      ),
+                      leading: SvgPicture.asset('images/drwar/callus.svg'),
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(Routes.ContactusView);
+                      },
+                    ),
+                    Container(
+                      color: Color(0XFF445969),
+                      child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: KRole != userRole.anonymous
+                              ? ListTile(
+                                  title: Text(
+                                    'تسجيل خروج',
+                                    style:
+                                        headline4.copyWith(color: Colors.white),
+                                  ),
+                                  leading: Image.asset('images/drwar/exit.png'),
+                                  onTap: () {
+                                    Get.back();
+                                    KRole = userRole.anonymous;
+                                    Get.find<UserAuth>().setUserToken(null);
+                                    Kselectindex.value = 0;
+                                    NotifactionCount.value = 0;
+                                    Get.offAndToNamed(Routes.HOME);
+                                  },
+                                )
+                              : SizedBox.shrink()),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                child: SizedBox.shrink(),
+              )
+            ],
+          ),
+        ) // Populate the Drawer in the next step.
+        );
   }
 }

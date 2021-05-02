@@ -6,6 +6,7 @@ import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/model/offer_model.dart';
 import 'package:carpart/app/modules/profile/model/profile_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class WebServices extends ApiManger {
@@ -13,6 +14,9 @@ class WebServices extends ApiManger {
     @required String phone,
     @required String password,
   }) async {
+
+ EasyLoading.show(status: 'جارى التحميل');
+
     var data = {
       "username": phone,
       "password": password,
@@ -30,10 +34,16 @@ class WebServices extends ApiManger {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         });
     if (response.status.hasError) {
+      EasyLoading.showError(response.body['error_description']);
       return Future.error(response.body['error_description']);
     } else {
+       EasyLoading.showSuccess('تم التحميل');
       return response.bodyString.toString();
     }
+
+
+
+
   }
 
   Future<ResponsModel> createUser({
@@ -266,7 +276,7 @@ class WebServices extends ApiManger {
       "CarFrontBytes": carFrontBytes,
       "CarBackBytes": carBackBytes,
       "CarPaperBytes": carPaperBytes
-    });
+    } , showLoading: true);
     return response;
   }
 

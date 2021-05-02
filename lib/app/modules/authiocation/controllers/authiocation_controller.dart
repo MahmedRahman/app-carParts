@@ -95,7 +95,7 @@ class AuthiocationController extends GetxController {
   }
 
   void siginWithPhoneNumber() async {
-    // String deviceId = await _getId();
+  
     await WebServices()
         .siginWithPhoneNumber(
       phone: phoneNumber.text,
@@ -110,8 +110,7 @@ class AuthiocationController extends GetxController {
       Get.offNamed(Routes.HOME);
     }, onError: (err) {
       //print(err);
-      showSnackBar(
-          title: AppName, message: err.toString(), snackbarStatus: () {});
+ 
     });
   }
 

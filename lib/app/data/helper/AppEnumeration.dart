@@ -38,6 +38,7 @@ enum userRole { Client, Merchant, DeliveryAgent, anonymous }
 var KName = ''.obs;
 var KEmail = ''.obs;
 var KUserImage = ''.obs;
+var Kselectindex = 0.obs;
 String KCity = '';
 
 String KFirebaseMessagingToken = '';

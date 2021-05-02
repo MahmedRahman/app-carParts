@@ -56,6 +56,7 @@ void main() async {
 
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: true,
       title: AppName,
       theme: themeData,
       initialRoute: AppPages.INITIAL,

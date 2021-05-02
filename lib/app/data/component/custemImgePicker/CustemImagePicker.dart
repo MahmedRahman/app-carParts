@@ -1,22 +1,24 @@
 import 'dart:io';
 
+import 'package:carpart/app/data/component/CustomImageCached.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:get/get.dart';
 import 'ImagePicker.dart';
 
-class CustemImagePicker extends StatefulWidget {
-  CustemImagePicker({this.onclick, this.title});
+class CustemImagePicker extends StatelessWidget {
+  CustemImagePicker({
+    this.onclick,
+    this.title,
+    this.showimagepath,
+  });
 
   Function onclick;
   String title;
+  String showimagepath;
 
-  @override
-  _custemImagePicker createState() => _custemImagePicker();
-}
+  var imagepath = ''.obs;
 
-class _custemImagePicker extends State<CustemImagePicker> {
-  PickYouImage pickYouImage = new PickYouImage();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,28 +26,33 @@ class _custemImagePicker extends State<CustemImagePicker> {
       child: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
-        ),
+            color: Colors.white,
+            border: Border.all(color: Colors.black.withOpacity(.3))),
         child: Column(
           children: [
-            pickYouImage.selectImagePath != null
-                ? Image.file(File(pickYouImage.selectImagePath))
-                : SizedBox.shrink(),
+            Obx(() {
+              return GetUtils.isNullOrBlank(imagepath.value)
+                  ?  GetUtils.isNullOrBlank(showimagepath) ? Container() : CustomImageCached(
+                    imageUrl: showimagepath,
+                  )
+                  : Image.file(
+                      File(imagepath.value),
+                    );
+            }),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  child: widget.title == null
-                      ? Text('ارفق صورة')
-                      : Text(widget.title),
+                  child: title == null ? Text('ارفق صورة') : Text(title),
                 ),
                 IconButton(
                   icon: Icon(Icons.file_upload),
                   onPressed: () {
+                    PickYouImage pickYouImage = new PickYouImage();
                     pickYouImage.getImage(source: ImageSource.gallery).then(
                       (value) {
-                        setState(() {});
-                        widget.onclick(value);
+                        imagepath.value = pickYouImage.selectImagePath;
+                        onclick(value);
                       },
                     );
                   },
@@ -53,10 +60,11 @@ class _custemImagePicker extends State<CustemImagePicker> {
                 IconButton(
                   icon: Icon(Icons.camera_alt_sharp),
                   onPressed: () {
+                    PickYouImage pickYouImage = new PickYouImage();
                     pickYouImage.getImage(source: ImageSource.camera).then(
                       (value) {
-                        setState(() {});
-                        widget.onclick(value);
+                        imagepath.value = pickYouImage.selectImagePath;
+                        onclick(value);
                       },
                     );
                   },

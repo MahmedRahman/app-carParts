@@ -13,13 +13,18 @@ class PickYouImage {
   String imageBytes;
 
   Future getImage({@required ImageSource source}) async {
+
     final pickedFile = await ImagePicker().getImage(source: source);
 
     if (pickedFile != null) {
+
       selectImagePath = '';
       selectImageSize = '';
 
       selectImagePath = pickedFile.path.toString();
+     
+     
+     
       selectImageSize = ((File(pickedFile.path).lengthSync() / 1024 / 1024)
               .toStringAsFixed(2)) +
           ' MB';
@@ -46,14 +51,9 @@ class PickYouImage {
         return Future.error('error');
       });
     } else {
-
       print('لم يتم اختيار صورة');
-      /*
-      showSnackBar(
-        title: AppName,
-        message: 'لم يتم اختيار صورة',
-        snackbarStatus: () {},
-      );*/
     }
   }
+
+
 }

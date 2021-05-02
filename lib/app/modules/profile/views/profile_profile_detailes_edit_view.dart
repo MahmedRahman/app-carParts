@@ -33,10 +33,9 @@ class ProfileDetailesEditView extends GetView {
               ),
             ),
           ),
-          CustomImageCached(
-            imageUrl: KUserImage.value,
-          ),
+       
           CustemImagePicker(
+            showimagepath:KUserImage.value,
             onclick: (value) {
               profileController.imagelogo = value;
             },

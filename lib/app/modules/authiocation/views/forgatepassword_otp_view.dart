@@ -35,8 +35,25 @@ Get.to(FrogatepasswordRestView());
             SizedBox(
               height: 10,
             ),
-           
-            
+            SizedBox(
+              width: Get.width,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xff445969), // background
+                  ),
+                  onPressed: () {
+                    controller.setForgotPassword();
+                    //  Get.to(ComplateView());
+                  },
+                  child: Text('ارسل الكود مرة اخرى'),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
           ],
         ),
       ),
