@@ -55,6 +55,7 @@ enum OrderStatus {
   Paid,
   MerchantGivePart,
   DeliveryGetPart,
+  DeliveryGivePart,
   Complete,
 }
 

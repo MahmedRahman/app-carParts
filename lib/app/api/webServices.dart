@@ -134,6 +134,19 @@ class WebServices extends ApiManger {
     return response;
   }
 
+  Future<ResponsModel> setStatus({
+    @required int orderId,
+    @required int statusId,
+  }) async {
+    ResponsModel response = await repPost(
+        'Order/SetStatus/' +
+            orderId.toString() +
+            '?status=' +
+            statusId.toString(),
+        {});
+    return response;
+  }
+
   Future<ResponsModel> addDeliveryOffer({
     @required int orderId,
     @required double price,

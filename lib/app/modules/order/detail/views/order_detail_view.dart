@@ -84,7 +84,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
                   orderAdress(orderDetaileModel),
                   deliveryView(orderDetaileModel),
                   orderPayment(orderDetaileModel),
-                  orderPayment(orderDetaileModel),
+                  
                   orderComplete(orderDetaileModel),
                 ],
               )
@@ -805,56 +805,95 @@ class OrderDetailView extends GetView<OrderDetailController> {
   }
 
   Widget ordertoDelivery(OderDetaileModel orderDetaileModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Container(
-        color: Colors.red,
-        width: Get.width * .8,
-        height: 60,
-        child: SizedBox(
-          width: Get.width * .9,
-          child: ElevatedButton(
-            onPressed: () {},
-            child: Text('تم التسليم الى المندوب'),
-          ),
-        ),
-      ),
-    );
+    return OrderStatus.values[orderDetaileModel.status] ==
+            OrderStatus.Paid
+        ? Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+              // color: Colors.red,
+              width: Get.width * .8,
+              height: 60,
+              child: SizedBox(
+                width: Get.width * .9,
+                child: ElevatedButton(
+                  onPressed: () {
+                    controller.setOrderStatus(OrderStatus.MerchantGivePart);
+                  },
+                  child: Text('تم التسليم الى المندوب'),
+                ),
+              ),
+            ),
+          )
+        : Container();
   }
 
   Widget ordertoClient(OderDetaileModel orderDetaileModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Container(
-        color: Colors.black,
-        width: Get.width * .8,
-        height: 60,
-        child: SizedBox(
-          width: Get.width * .9,
-          child: ElevatedButton(
-            onPressed: () {},
-            child: Text('تم التسليم الى العميل'),
-          ),
-        ),
-      ),
+    return Column(
+      children: [
+        OrderStatus.values[orderDetaileModel.status] ==
+                OrderStatus.MerchantGivePart
+            ? Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  //color: Colors.black,
+                  width: Get.width * .8,
+                  height: 60,
+                  child: SizedBox(
+                    width: Get.width * .9,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        controller.setOrderStatus(OrderStatus.DeliveryGetPart);
+                      },
+                      child: Text('تم الاستلام من التاجر'),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
+        OrderStatus.values[orderDetaileModel.status] ==
+                OrderStatus.DeliveryGetPart
+            ? Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  //color: Colors.black,
+                  width: Get.width * .8,
+                  height: 60,
+                  child: SizedBox(
+                    width: Get.width * .9,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        controller.setOrderStatus(OrderStatus.DeliveryGivePart);
+                      },
+                      child: Text('تم التسليم الى العميل'),
+                    ),
+                  ),
+                ),
+              )
+            : Container()
+      ],
     );
   }
 
   Widget orderComplete(OderDetaileModel orderDetaileModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Container(
-        color: Colors.yellow,
-        width: Get.width * .8,
-        height: 60,
-        child: SizedBox(
-          width: Get.width * .9,
-          child: ElevatedButton(
-            onPressed: () {},
-            child: Text('تم الاستلام من المندوب'),
-          ),
-        ),
-      ),
-    );
+    return OrderStatus.values[orderDetaileModel.status] ==
+            OrderStatus.DeliveryGivePart
+        ? Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+              // color: Colors.yellow,
+              width: Get.width * .8,
+              height: 60,
+              child: SizedBox(
+                width: Get.width * .9,
+                child: ElevatedButton(
+                  onPressed: () {
+                    controller.setOrderStatus(OrderStatus.Complete);
+                  },
+                  child: Text('تم الاستلام من المندوب'),
+                ),
+              ),
+            ),
+          )
+        : Container();
   }
 }

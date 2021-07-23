@@ -58,7 +58,7 @@ class OrderDetailController extends GetxController {
         showSnackBar(
           message: 'تم الدفع بنجاح',
           snackbarStatus: () {
-             Get.offAllNamed(Routes.HOME);
+            Get.offAllNamed(Routes.HOME);
             //setPaid();
           },
         );
@@ -66,6 +66,28 @@ class OrderDetailController extends GetxController {
         print(response.body['Message']);
         showSnackBar(
           message: 'خطاء فى  البيانات',
+          snackbarStatus: () {},
+        );
+      }
+    }
+  }
+
+  setOrderStatus(OrderStatus orderStatus) async {
+    ResponsModel responsModel =
+        await WebServices().setStatus(orderId: OrderId, statusId: orderStatus.index);
+
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.body['IsSuccess']) {
+        showSnackBar(
+          message: 'تم',
+          snackbarStatus: () {
+            getOrderDetailes();
+          },
+        );
+      } else {
+        showSnackBar(
+          message: 'خطاء',
           snackbarStatus: () {},
         );
       }
