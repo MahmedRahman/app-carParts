@@ -14,8 +14,7 @@ class WebServices extends ApiManger {
     @required String phone,
     @required String password,
   }) async {
-
- EasyLoading.show(status: 'جارى التحميل');
+    EasyLoading.show(status: 'جارى التحميل');
 
     var data = {
       "username": phone,
@@ -37,13 +36,9 @@ class WebServices extends ApiManger {
       EasyLoading.showError(response.body['error_description']);
       return Future.error(response.body['error_description']);
     } else {
-       EasyLoading.showSuccess('تم التحميل');
+      EasyLoading.showSuccess('تم تسجيل الدخول');
       return response.bodyString.toString();
     }
-
-
-
-
   }
 
   Future<ResponsModel> createUser({
@@ -246,6 +241,26 @@ class WebServices extends ApiManger {
     return response;
   }
 
+  Future<ResponsModel> addPaymentCard(
+      String Brand,
+      String CardNumber,
+      String CardHolder,
+      String ExpiryMonth,
+      String ExpiryYear,
+      String CVV,
+      int OrderId) async {
+    ResponsModel response = await repPost('Payment/Add', {
+      "Brand": Brand,
+      "CardNumber": CardNumber,
+      "CardHolder": CardHolder,
+      "ExpiryMonth": ExpiryMonth,
+      "ExpiryYear": ExpiryYear,
+      "CVV": CVV,
+      "OrderId": OrderId,
+    });
+    return response;
+  }
+
   Future<ResponsModel> getPaymentRequest() async {
     ResponsModel response = await repGet('PaymentRequest/Get');
     return response;
@@ -269,14 +284,17 @@ class WebServices extends ApiManger {
     @required String carBackBytes,
     @required String carPaperBytes,
   }) async {
-    ResponsModel response = await repPost('Account/Upgrade?role=2', {
-      "NationalNumber": nationalNumber,
-      "NationalIdBytes": nationalIdBytes,
-      "DrivingLicenseBytes": drivingLicenseBytes,
-      "CarFrontBytes": carFrontBytes,
-      "CarBackBytes": carBackBytes,
-      "CarPaperBytes": carPaperBytes
-    } , showLoading: true);
+    ResponsModel response = await repPost(
+        'Account/Upgrade?role=2',
+        {
+          "NationalNumber": nationalNumber,
+          "NationalIdBytes": nationalIdBytes,
+          "DrivingLicenseBytes": drivingLicenseBytes,
+          "CarFrontBytes": carFrontBytes,
+          "CarBackBytes": carBackBytes,
+          "CarPaperBytes": carPaperBytes
+        },
+        showLoading: true);
     return response;
   }
 

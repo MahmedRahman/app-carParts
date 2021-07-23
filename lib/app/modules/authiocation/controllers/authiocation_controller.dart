@@ -33,8 +33,8 @@ class AuthiocationController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    phoneNumber.text = "";
-    password.text = "";
+    phoneNumber.text = "01090468201";
+    password.text = "29302101301234";
   }
 
   void setForgotPassword() async {

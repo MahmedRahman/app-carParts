@@ -15,6 +15,10 @@ class NotifactionController extends GetxController {
       Response response = responsModel.data;
       final notifactionModel = notifactionModelFromJson(response.bodyString);
       notifactionList.value = Future.value(notifactionModel);
+
+      NotifactionCount.value =
+          notifactionModel.where((element) => element.isRead == false).length;
+
       return notifactionModel;
     }
   }
@@ -24,7 +28,13 @@ class NotifactionController extends GetxController {
         await WebServices().setNotifactionRead(notifactionId);
     if (responsModel.success) {
       Response response = responsModel.data;
-      NotifactionCount.value = NotifactionCount.value - 1;
+
+      /*
+      if (NotifactionCount.value - 1 > 0) {
+        NotifactionCount.value = NotifactionCount.value - 1;
+        
+      }*/
+
       getNotifaction();
     }
   }

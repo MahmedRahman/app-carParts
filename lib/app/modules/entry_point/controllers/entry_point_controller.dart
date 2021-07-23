@@ -134,7 +134,7 @@ class EntryPointController extends GetxController {
 
       KName.value = response.body['Name'];
       KEmail.value = response.body['Email'];
-      KCity = response.body['CityName'];
+      KCity.value = response.body['CityName'];
 
       Klatitude = response.body['Lat'];
       Klongitude = response.body['Lng'];

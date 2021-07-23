@@ -5,6 +5,8 @@ import 'package:carpart/app/data/model/googel_distance_model.dart';
 import 'package:carpart/app/data/model/oder_detaile_model.dart';
 import 'package:carpart/app/data/model/offer_model.dart';
 import 'package:carpart/app/api/webServices.dart';
+import 'package:carpart/app/modules/order/detail/views/pay_view.dart';
+import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,6 +30,45 @@ class OrderDetailController extends GetxController {
       final oderDetaileModel = oderDetaileModelFromJson(response.bodyString);
       oderModel.value = Future.value(oderDetaileModel);
       return oderDetaileModel;
+    }
+  }
+
+  Future addPaymentCard({
+    @required String Brand,
+    @required String CardNumber,
+    @required String CardHolder,
+    @required String ExpiryMonth,
+    @required String ExpiryYear,
+    @required String CVV,
+  }) async {
+    ResponsModel responsModel = await WebServices().addPaymentCard(
+      Brand,
+      CardNumber,
+      CardHolder,
+      ExpiryMonth,
+      ExpiryYear,
+      CVV,
+      OrderId,
+    );
+
+    if (responsModel.success) {
+      Response response = responsModel.data;
+
+      if (response.body['IsSuccess']) {
+        showSnackBar(
+          message: 'تم الدفع بنجاح',
+          snackbarStatus: () {
+             Get.offAllNamed(Routes.HOME);
+            //setPaid();
+          },
+        );
+      } else {
+        print(response.body['Message']);
+        showSnackBar(
+          message: 'خطاء فى  البيانات',
+          snackbarStatus: () {},
+        );
+      }
     }
   }
 
@@ -83,30 +124,26 @@ class OrderDetailController extends GetxController {
   }
 
   addMultiMerchantOffer() async {
-    ResponsModel responsModel = await WebServices().addMultiOffer(
-   offerMultiList
-    );
-  if (responsModel.success) {
-        Response response = responsModel.data;
+    ResponsModel responsModel =
+        await WebServices().addMultiOffer(offerMultiList);
+    if (responsModel.success) {
+      Response response = responsModel.data;
 
-        if (response.body['IsSuccess']) {
-          showSnackBar(
-            message: 'تم الاضافة بنجاح',
-            snackbarStatus: () {
-              getOrderDetailes();
-              getMerchantOffers();
-            },
-          );
-        } else {
-          showSnackBar(
-            message: 'خطاء فى اضافة البيانات',
-            snackbarStatus: () {},
-          );
-        }
-  }
-
-
-
+      if (response.body['IsSuccess']) {
+        showSnackBar(
+          message: 'تم الاضافة بنجاح',
+          snackbarStatus: () {
+            getOrderDetailes();
+            getMerchantOffers();
+          },
+        );
+      } else {
+        showSnackBar(
+          message: 'خطاء فى اضافة البيانات',
+          snackbarStatus: () {},
+        );
+      }
+    }
   }
 
   Future getMerchantOffers() async {
@@ -159,7 +196,7 @@ class OrderDetailController extends GetxController {
     }
   }
 
-  setPaid() async {
+  Future setPaid() async {
     ResponsModel responsModel = await WebServices().setPaid(orderId: OrderId);
 
     if (responsModel.success) {
@@ -168,7 +205,9 @@ class OrderDetailController extends GetxController {
         showSnackBar(
             message: 'تم الدفع',
             snackbarStatus: () {
-              getOrderDetailes();
+              // getOrderDetailes();
+
+              Get.offAllNamed(Routes.HOME);
             });
       }
     }

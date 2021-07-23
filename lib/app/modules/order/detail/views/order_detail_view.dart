@@ -7,12 +7,14 @@ import 'package:carpart/app/data/helper/AppTheme.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/oder_detaile_model.dart';
 import 'package:carpart/app/data/model/offer_model.dart';
+import 'package:carpart/app/modules/order/detail/views/pay_view.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/order_detail_controller.dart';
 
@@ -81,18 +83,26 @@ class OrderDetailView extends GetView<OrderDetailController> {
                   clientOfferMerchanView(orderDetaileModel),
                   orderAdress(orderDetaileModel),
                   deliveryView(orderDetaileModel),
-                  orderPayment(orderDetaileModel)
+                  orderPayment(orderDetaileModel),
+                  orderPayment(orderDetaileModel),
+                  orderComplete(orderDetaileModel),
                 ],
               )
             : SizedBox.shrink(),
         KRole == userRole.Merchant
-            ? offerMerchant(orderDetaileModel)
+            ? Column(
+                children: [
+                  offerMerchant(orderDetaileModel),
+                  ordertoDelivery(orderDetaileModel),
+                ],
+              )
             : SizedBox.shrink(),
         KRole == userRole.DeliveryAgent
             ? Column(
                 children: [
                   clientOfferMerchanView(orderDetaileModel),
                   offerDeliveryAgent(orderDetaileModel),
+                  ordertoClient(orderDetaileModel),
                 ],
               )
             : SizedBox.shrink(),
@@ -644,15 +654,50 @@ class OrderDetailView extends GetView<OrderDetailController> {
               'وصف الطلب',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            Text(orderDetaileModel.description),
             SizedBox(
               height: 10,
             ),
-            Text(orderDetaileModel.description),
+
+            Divider(),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              width: Get.width * .9,
+              child: ElevatedButton(
+                onPressed: () {
+                  _launchURL(
+                      'https://www.google.com/maps/search/?api=1&query=${orderDetaileModel.lat.toString()},${orderDetaileModel.lng.toString()}');
+                },
+                child: Text('عنوان الطلب'),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            orderDetaileModel.merchantOffers.length == 0
+                ? Container()
+                : SizedBox(
+                    width: Get.width * .9,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _launchURL(
+                            'https://www.google.com/maps/search/?api=1&query=${orderDetaileModel.merchantOffers.first.lat.toString()},${orderDetaileModel.merchantOffers.first.lng.toString()}');
+                      },
+                      child: Text('عنوان التاجر'),
+                    ),
+                  ),
+            // Text('https://www.google.com/maps/search/?api=1&query=${orderDetaileModel.lat.toString()},${orderDetaileModel.lng.toString()}'),
           ],
         ),
       ),
     );
   }
+
+  void _launchURL(String _url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   Widget orderPayment(OderDetaileModel orderDetaileModel) {
     /*
@@ -692,9 +737,9 @@ class OrderDetailView extends GetView<OrderDetailController> {
                 ListTile(
                   title: Text('الإجمالي'),
                   trailing: Text((orderDetaileModel
-                              .merchantOffers.first.details.first.price 
-                           + orderDetaileModel.deliveryOffers.first.price 
-                           + KAdministrativeFees)
+                              .merchantOffers.first.details.first.price +
+                          orderDetaileModel.deliveryOffers.first.price +
+                          KAdministrativeFees)
                       .toString()),
                 ),
                 OrderStatus.values[orderDetaileModel.status] ==
@@ -702,7 +747,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
                     ? CustemButton(
                         title: 'دفع',
                         onPressed: () {
-                          controller.setPaid();
+                          Get.to(PayView(), fullscreenDialog: true);
                         },
                       )
                     : Container()
@@ -757,5 +802,59 @@ class OrderDetailView extends GetView<OrderDetailController> {
             ],
           )
         : SizedBox.shrink();
+  }
+
+  Widget ordertoDelivery(OderDetaileModel orderDetaileModel) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        color: Colors.red,
+        width: Get.width * .8,
+        height: 60,
+        child: SizedBox(
+          width: Get.width * .9,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text('تم التسليم الى المندوب'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget ordertoClient(OderDetaileModel orderDetaileModel) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        color: Colors.black,
+        width: Get.width * .8,
+        height: 60,
+        child: SizedBox(
+          width: Get.width * .9,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text('تم التسليم الى العميل'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget orderComplete(OderDetaileModel orderDetaileModel) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        color: Colors.yellow,
+        width: Get.width * .8,
+        height: 60,
+        child: SizedBox(
+          width: Get.width * .9,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text('تم الاستلام من المندوب'),
+          ),
+        ),
+      ),
+    );
   }
 }

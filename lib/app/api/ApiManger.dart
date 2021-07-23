@@ -8,7 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
 
-String baes_url = 'https://carpart.atpnet.net/api/';
+const baes_url = 'https://carpart.atpnet.net/api/';
 
 class ApiManger extends GetConnect {
   final header = {
@@ -29,6 +29,7 @@ class ApiManger extends GetConnect {
   }
 
   Future<ResponsModel> repPost(url, body, {bool showLoading = false}) async {
+   
     if (showLoading) {
       EasyLoading.show(status: 'جارى التحميل');
     }
@@ -88,6 +89,7 @@ class ApiManger extends GetConnect {
   }
 
   Future<ResponsModel> repGet(url, {bool showLoading = false}) async {
+   
     if (showLoading) {
       EasyLoading.show(status: 'جارى التحميل');
     }
@@ -153,7 +155,12 @@ class ApiManger extends GetConnect {
       );
     }
   }
+
+
 }
+
+
+
 
 class ErrorView extends GetView {
   ErrorView({

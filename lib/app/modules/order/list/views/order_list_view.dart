@@ -89,10 +89,7 @@ class OrderListView extends GetView<OrderListController> {
                           ? Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Placeholder(
-                                fallbackHeight: 150,
-                              ))
+                                  borderRadius: BorderRadius.circular(20),),)
                           : Expanded(
                               child: Container(
                                 decoration: BoxDecoration(

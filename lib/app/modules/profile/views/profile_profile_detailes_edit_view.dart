@@ -55,6 +55,14 @@ class ProfileDetailesEditView extends GetView {
               controller: profileController.emailText,
             ),
           ),
+
+              ListTile(
+            dense: true,
+            title: Text('ألمدينة'),
+            subtitle: TextFormField(
+              controller: profileController.cityText,
+            ),
+          ),
           SizedBox(
             height: 120,
           )

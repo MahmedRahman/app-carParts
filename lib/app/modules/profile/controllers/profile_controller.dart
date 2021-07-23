@@ -9,11 +9,15 @@ import 'package:get/get.dart';
 class ProfileController extends GetxController {
   TextEditingController nameText = new TextEditingController();
   TextEditingController emailText = new TextEditingController();
+
+  TextEditingController cityText = new TextEditingController();
+
   var imagelogo;
   @override
   void onInit() {
     nameText.text = KName.value;
     emailText.text = KEmail.value;
+     cityText.text = KCity.value;
     super.onInit();
   }
 

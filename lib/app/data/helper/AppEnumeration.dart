@@ -39,7 +39,7 @@ var KName = ''.obs;
 var KEmail = ''.obs;
 var KUserImage = ''.obs;
 var Kselectindex = 0.obs;
-String KCity = '';
+var KCity = ''.obs;
 
 String KFirebaseMessagingToken = '';
 

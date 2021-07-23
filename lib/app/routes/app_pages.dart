@@ -30,6 +30,7 @@ import 'package:carpart/app/modules/page/views/about_view.dart';
 import 'package:carpart/app/modules/page/views/contactus_view.dart';
 import 'package:carpart/app/modules/page/views/page_view.dart';
 import 'package:carpart/app/modules/page/views/trems_view.dart';
+import 'package:carpart/app/modules/order/detail/views/pay_view.dart';
 import 'package:carpart/app/modules/payment/add/bindings/payment_add_binding.dart';
 import 'package:carpart/app/modules/payment/add/views/payment_add_view.dart';
 import 'package:carpart/app/modules/payment/list/bindings/payment_list_binding.dart';
@@ -75,13 +76,11 @@ class AppPages {
       page: () => SignupDealerView(),
       binding: AuthiocationBinding(),
     ),
-
     GetPage(
       name: Routes.FrogatepasswordView,
       page: () => FrogatepasswordView(),
       binding: AuthiocationBinding(),
     ),
-
     GetPage(
       name: Routes.PAGE,
       page: () => PageView(),
@@ -162,5 +161,6 @@ class AppPages {
       page: () => AuthiocationSignupView(),
       binding: AuthiocationSignupBinding(),
     ),
+
   ];
 }
