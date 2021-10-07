@@ -35,4 +35,7 @@ abstract class Routes {
   static const ORDER_DETAIL = '/order/detail';
   static const AUTHIOCATION_SIGNUP = '/authiocation/signup';
   static const PAY = '/pay';
+  static const MAP = '/map';
+  static const TREMS = '/trems';
+  static const TREMSNEW = '/tremsnew';
 }

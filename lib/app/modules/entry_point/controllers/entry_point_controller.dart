@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:carpart/app/api/response_model.dart';
 import 'package:carpart/app/data/auth.dart';
+import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/model/PrepareListModel.dart';
 import 'package:carpart/app/data/model/setting_model.dart';
@@ -24,12 +25,24 @@ class EntryPointController extends GetxController {
         InitializationSettings(android: initialzationSettingsAndroid);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('hiiiiiiiiii');
+
+      print(message.data);
+
+      Get.toNamed(Routes.ORDER_DETAIL,
+          arguments: [int.parse(message.data['orderId'])]);
+    });
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
-
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
-        Get.snackbar(notification.title, notification.body);
+        Get.snackbar(notification.title, notification.body, onTap: (val) {
+          Get.toNamed(Routes.ORDER_DETAIL,
+              arguments: [int.parse(message.data['orderId'])]);
+        });
 
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
@@ -39,103 +52,116 @@ class EntryPointController extends GetxController {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                channel.description,
+               
                 icon: android?.smallIcon,
               ),
             ));
       }
     });
-    getToken();
-  }
 
-  getToken() async {
     String token = await FirebaseMessaging.instance.getToken();
     KFirebaseMessagingToken = token;
   }
 
-  void Start() async {
+  @override
+  void onReady() {
+    // TODO: implement onReady
+
+    super.onReady();
+  }
+
+  void start() async {
     await fillLookUpTable().then((value) {
       Get.offNamed(Routes.HOME);
     });
-
-    super.onInit();
   }
 
   Future fillLookUpTable() async {
-    await getprepareList();
-
     if (GetUtils.isNullOrBlank(Get.find<UserAuth>().getUserToken())) {
       KRole = userRole.anonymous;
     } else {
       await getProfile();
     }
 
-    //if (KRole != userRole.anonymous) {
-
-    // }
+    await getprepareList().then((value) {});
   }
 
+  ResponsModel responsprepareModel;
   Future getprepareList() async {
-    ResponsModel responsModel = await WebServices().getprepareList();
-    if (responsModel.success) {
-      Response response = responsModel.data;
+    if (responsprepareModel == null) {
+      responsprepareModel = await WebServices().getprepareList();
 
-      final prepareListModel = prepareListModelFromJson(response.bodyString);
+      if (responsprepareModel.success) {
+        Response response = responsprepareModel.data;
 
-      prepareListModel.cities.forEach((element) {
-        cityName.add({
-          "id": "" + element.id.toString() + "",
-          "title": "" + element.name + "",
+        final prepareListModel = prepareListModelFromJson(response.bodyString);
+
+        KTerms.value = prepareListModel.setting.terms.toString();
+
+        prepareListModel.cities.forEach((element) {
+          cityName.add({
+            "id": "" + element.id.toString() + "",
+            "title": "" + element.name + "",
+          });
         });
-      });
 
-      prepareListModel.bank.forEach((element) {
-        bankName.add({
-          "id": "" + element.id.toString() + "",
-          "title": "" + element.name.toString() + "",
+        prepareListModel.bank.forEach((element) {
+          bankName.add({
+            "id": "" + element.id.toString() + "",
+            "title": "" + element.name.toString() + "",
+          });
         });
-      });
 
-      pageAbout = Future.value(prepareListModel.setting.about);
-      pageCallus = Future.value(prepareListModel.setting.callUs);
-      pageTream = Future.value(prepareListModel.setting.terms);
+        pageAbout = Future.value(prepareListModel.setting.about);
+        pageCallus = Future.value(prepareListModel.setting.callUs);
+        pageTream = Future.value(prepareListModel.setting.terms);
 
-      KMPriceMin = prepareListModel.setting.kmPriceMin;
-      KMPriceMax = prepareListModel.setting.kmPriceMax;
-      helpPhoneNumber = prepareListModel.setting.helpPhoneNumber;
-      BaseDeliveryPrice = prepareListModel.setting.BaseDeliveryPrice;
+        KSlider = response.body['Setting']['Images'];
 
-      KAdministrativeFees = prepareListModel.setting.AdministrativeFees;
+        KMPriceMin = prepareListModel.setting.kmPriceMin;
+        KMPriceMax = prepareListModel.setting.kmPriceMax;
+        helpPhoneNumber = prepareListModel.setting.helpPhoneNumber;
+        BaseDeliveryPrice = prepareListModel.setting.BaseDeliveryPrice;
+        Ktax = (prepareListModel.setting.tax) / 100;
+        KAdministrativeFees = prepareListModel.setting.AdministrativeFees;
 
-      Kwhatapp = GetUtils.isNullOrBlank(prepareListModel.setting.whatsUpNumber)
-          ? 'https://tsp.sa'
-          : 'https://wa.me/'+prepareListModel.setting.whatsUpNumber;
+        Kwhatapp =
+            GetUtils.isNullOrBlank(prepareListModel.setting.whatsUpNumber)
+                ? 'https://tsp.sa'
+                : 'https://wa.me/' + prepareListModel.setting.whatsUpNumber;
 
-      KTwitter = GetUtils.isNullOrBlank(prepareListModel.setting.twitter)
-          ? 'https://tsp.sa'
-          : prepareListModel.setting.twitter;
+        KTwitter = GetUtils.isNullOrBlank(prepareListModel.setting.twitter)
+            ? 'https://tsp.sa'
+            : prepareListModel.setting.twitter;
 
-      KInstegram = GetUtils.isNullOrBlank(prepareListModel.setting.instagram)
-          ? 'https://tsp.sa'
-          : prepareListModel.setting.instagram;
+        KInstegram = GetUtils.isNullOrBlank(prepareListModel.setting.instagram)
+            ? 'https://tsp.sa'
+            : prepareListModel.setting.instagram;
 
-      KSnapChat = GetUtils.isNullOrBlank(prepareListModel.setting.snapchat)
-          ? 'https://tsp.sa'
-          : prepareListModel.setting.snapchat;
+        KSnapChat = GetUtils.isNullOrBlank(prepareListModel.setting.snapchat)
+            ? 'https://tsp.sa'
+            : prepareListModel.setting.snapchat;
 
-      Cars.addAll(prepareListModel.mark);
+        Cars.addAll(prepareListModel.mark);
+      }
     }
+    return true;
   }
 
-  Future getProfile() async {
-    ResponsModel responsModel = await WebServices().getProfile();
-    if (responsModel.success) {
-      Response response = responsModel.data;
+  ResponsModel responsProfileModel;
+
+  getProfile() async {
+    responsProfileModel = await WebServices().getProfile();
+
+    if (responsProfileModel.success) {
+      Response response = responsProfileModel.data;
 
       KName.value = response.body['Name'];
       KEmail.value = response.body['Email'];
+      KOrderCount.value = response.body['OrderCount'].toString();
       KCity.value = response.body['CityName'];
-
+      KAdress.value = response.body['Address'];
+      KRate.value = response.body['Rate'];
       Klatitude = response.body['Lat'];
       Klongitude = response.body['Lng'];
       KBalance = response.body['Balance'];
@@ -152,6 +178,8 @@ class EntryPointController extends GetxController {
               response.body['Logo'].toString();
 
       NotifactionCount.value = response.body['UnreadNotificationCount'];
+    } else {
+      KRole = userRole.anonymous;
     }
   }
 }

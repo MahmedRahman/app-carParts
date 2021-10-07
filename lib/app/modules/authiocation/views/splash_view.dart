@@ -8,14 +8,17 @@ import 'package:loading_indicator/loading_indicator.dart';
 class SplashView extends GetView {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    
+    Scaffold(
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/background.png'),
-              fit: BoxFit.cover,
-            ),
-            color: KScandaryColor),
+          image: DecorationImage(
+            image: AssetImage('images/background.png'),
+            fit: BoxFit.cover,
+          ),
+          color: KScandaryColor,
+        ),
         child: Stack(
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           //crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +44,7 @@ class SplashView extends GetView {
                       width: Get.width * .3,
                       child: LoadingIndicator(
                         indicatorType: Indicator.ballPulse,
-                        color: Colors.white,
+                 
                       ),
                     )
                   ],
@@ -82,5 +85,8 @@ class SplashView extends GetView {
         ),
       ),
     );
+  
+  
+  
   }
 }

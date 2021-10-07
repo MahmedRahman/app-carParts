@@ -30,8 +30,8 @@ class SignupDealerView extends GetView<AuthiocationController> {
               CustemTextForm(
                 textHint: 'اسم النشاط التجاري',
                 inputcontroller: controller.businessName,
-                onValidator: (value){
-                 return AppValidation.checkEmpty(value);
+                onValidator: (value) {
+                  return AppValidation.checkEmpty(value);
                 },
               ),
               CustemImagePicker(
@@ -42,14 +42,18 @@ class SignupDealerView extends GetView<AuthiocationController> {
               SizedBox(
                 height: 15,
               ),
-              SizedBox(
-                width: Get.width,
-                height: 350,
-                child: MapSample(),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.MAP);
+                },
+                child: SizedBox(
+                  width: Get.width,
+                  height: 350,
+                  child: MapSample(),
+                ),
               ),
               CustemButton(
                 title: 'تسجيل',
-
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     controller.upgrateMerchant();

@@ -95,10 +95,14 @@ class HomeView extends GetView<HomeController> {
                         NotifactionCount.value.toString(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          
                         ),
                       ),
+                      
                       showBadge: NotifactionCount.value == 0 ? false : true,
-                      badgeColor: KPrimaryColor,
+                      
+                      badgeColor: Colors.red,
                       child: SvgPicture.asset(
                         'images/menu/notifications.svg',
                         color: Kselectindex.value == 2
@@ -122,7 +126,7 @@ class HomeView extends GetView<HomeController> {
                       Kselectindex.value == 3 ? KAccentColor : KScandaryColor,
                 ),
               ),
-              label: 'حسابى',
+              label: 'صفحتى',
             )
           ],
         );
@@ -165,13 +169,16 @@ class CustomDrawer extends StatelessWidget {
                             child: KRole != userRole.anonymous
                                 ? Row(
                                     children: [
-                                         SizedBox(
+                                      SizedBox(
                                         width: 5,
                                       ),
-                                      CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage:
-                                            NetworkImage(KUserImage.value),
+                                      SizedBox(
+                                        width: 64,
+                                        child: CircleAvatar(
+                                          radius: 40,
+                                          backgroundImage:
+                                              NetworkImage(KUserImage.value),
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 5,
@@ -252,6 +259,21 @@ class CustomDrawer extends StatelessWidget {
                         Get.back();
                         Get.toNamed(
                           Routes.AboutView,
+                        );
+                        // Update the state of the app.
+                        // ...
+                      },
+                    ),
+                        ListTile(
+                      title: Text(
+                        'الشروط واالحكام',
+                        style: headline4.copyWith(color: Colors.white),
+                      ),
+                      leading: Image.asset('images/drwar/about.png'),
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(
+                          Routes.TREMSNEW,
                         );
                         // Update the state of the app.
                         // ...

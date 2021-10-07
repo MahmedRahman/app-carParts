@@ -19,6 +19,7 @@ class OfferModel {
         this.userId,
         this.userName,
         this.name,
+        this.image,
         this.price,
     });
 
@@ -29,6 +30,7 @@ class OfferModel {
     String userId;
     String userName;
     String name;
+       String image;
     double price;
 
     factory OfferModel.fromJson(Map<String, dynamic> json) => OfferModel(
@@ -39,6 +41,7 @@ class OfferModel {
         userId: json["UserId"],
         userName: json["UserName"],
         name: json["Name"],
+        image: json["image"],
         price: json["Price"],
     );
 
@@ -50,6 +53,7 @@ class OfferModel {
         "UserId": userId,
         "UserName": userName,
         "Name": name,
+        "ImageBytes": image,
         "Price": price,
     };
 }

@@ -12,12 +12,14 @@ class ProfileController extends GetxController {
 
   TextEditingController cityText = new TextEditingController();
 
+  TextEditingController adressText = new TextEditingController();
   var imagelogo;
   @override
   void onInit() {
     nameText.text = KName.value;
     emailText.text = KEmail.value;
-     cityText.text = KCity.value;
+    cityText.text = KCity.value;
+    adressText.text = KAdress.value;
     super.onInit();
   }
 
@@ -31,7 +33,13 @@ class ProfileController extends GetxController {
           snackbarStatus: () {});
     } else {
       ProfileModel profileModel = new ProfileModel(
-          name: nameText.text, email: emailText.text, logoBytes: imagelogo);
+        name: nameText.text,
+        email: emailText.text,
+        logoBytes: imagelogo,
+        address: adressText.text,
+        lat: Klatitude,
+        lng: Klongitude
+      );
 
       ResponsModel responsModel = await WebServices().setProfile(profileModel);
 

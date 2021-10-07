@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 
  const String AppName ='قطعة';
  const String AppLogo ='images/logo.svg';
  const String baseUrl ='';
+var KTerms =''.obs;
 
+var KSlider = [];
 
 List<String> monty = ['01','02','03','04','05','06','07','08','09','11','12',];
 

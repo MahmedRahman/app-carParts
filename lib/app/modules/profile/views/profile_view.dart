@@ -8,6 +8,7 @@ import 'package:carpart/app/modules/profile/views/profile_profile_detailes_edit_
 import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:carpart/app/modules/profile/controllers/profile_controller.dart';
 import 'package:share/share.dart';
@@ -29,10 +30,6 @@ class ProfileView extends GetView<ProfileController> {
                 fullscreenDialog: true,
               );
             },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {},
           ),
           IconButton(
             icon: Icon(Icons.logout),
@@ -67,26 +64,28 @@ class ProfileView extends GetView<ProfileController> {
                             backgroundColor: Colors.grey,
                             backgroundImage: NetworkImage(KUserImage.value),
                           ),
-                          Positioned(
-                            bottom: 1,
-                            left: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xff445969),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 3,
-                                  horizontal: 15,
-                                ),
-                                child: Text(
-                                  KRole.toString().tr,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          )
+                          KRole == userRole.Client
+                              ? Container()
+                              : Positioned(
+                                  bottom: 1,
+                                  left: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff445969),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 3,
+                                        horizontal: 15,
+                                      ),
+                                      child: Text(
+                                        KRole.toString().tr,
+                                        style: TextStyle(color:  KRole == userRole.DeliveryAgent ?  Color(0xFFFFCC30) :  Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                )
                         ],
                       ),
                       SizedBox(
@@ -99,17 +98,34 @@ class ProfileView extends GetView<ProfileController> {
                           children: [
                             Text(
                               KName.value,
+                              maxLines: 1,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                
+                              ),
                             ),
                             SizedBox(
                               height: 2,
                             ),
                             Text(
                               KEmail.value,
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 10),
                             ),
-                            //Text(KCity),
+                            RatingBar.builder(
+                              initialRating: double.parse(KRate.value.toString()) ,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                            itemSize:15 ,
+                              itemBuilder: (context, _) => 
+                              Icon(
+                                Icons.star,
+                                size: 10,
+                                color: Colors.amber,
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -138,7 +154,9 @@ class ProfileView extends GetView<ProfileController> {
                         },
                         leading: Image.asset('images/cart-car.png'),
                         title: Text('الطلبات'),
+                        trailing: Text(KOrderCount.value.toString()),
                       ),
+                      Divider(),
                       (KRole != userRole.Client)
                           ? ListTile(
                               onTap: () {},
@@ -176,14 +194,16 @@ class ProfileView extends GetView<ProfileController> {
                           : SizedBox.fromSize(),
                       ListTile(
                         onTap: () async {
-                          await canLaunch('tel:+$helpPhoneNumber')
-                              ? await launch('tel:+$helpPhoneNumber')
-                              : throw 'Could not launch tel:+$helpPhoneNumber';
+                          await canLaunch('tel:+$helpPhoneNumber??' '')
+                              ? await launch('tel:+$helpPhoneNumber??' '')
+                              : throw 'Could not launch tel:+$helpPhoneNumber??'
+                                  '';
                         },
                         leading: Image.asset('images/support.png'),
                         title: Text('مركز المساعدة'),
-                        trailing: Text(helpPhoneNumber),
+                        trailing: Text(helpPhoneNumber ?? ''),
                       ),
+                      Divider(),
                       ListTile(
                         onTap: () {
                           Get.toNamed(Routes.ContactusView);
@@ -191,6 +211,7 @@ class ProfileView extends GetView<ProfileController> {
                         leading: Icon(Icons.call),
                         title: Text('اتصل بنا'),
                       ),
+                      Divider(),
                       ListTile(
                         onTap: () {
                           Share.share('check out my website https://tsp.sa');
@@ -198,6 +219,7 @@ class ProfileView extends GetView<ProfileController> {
                         leading: Icon(Icons.share),
                         title: Text('شارك التطبيق'),
                       ),
+                      Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -209,11 +231,11 @@ class ProfileView extends GetView<ProfileController> {
                                   : throw 'Could not launch $Kwhatapp';
                             },
                             child: Container(
-                              width: 50,
-                              height: 50,
+                              width: 40,
+                              height: 40,
                               decoration: BoxDecoration(
                                   color: Color(0xff445969),
-                                  borderRadius: BorderRadius.circular(50)),
+                                  borderRadius: BorderRadius.circular(40)),
                               child: Image.asset('images/whatsapp.png'),
                             ),
                           ),
@@ -227,11 +249,11 @@ class ProfileView extends GetView<ProfileController> {
                                   : throw 'Could not launch $KInstegram';
                             },
                             child: Container(
-                              width: 50,
-                              height: 50,
+                              width: 40,
+                              height: 40,
                               decoration: BoxDecoration(
                                 color: Color(0xff445969),
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(40),
                               ),
                               child: Image.asset('images/instagram.png'),
                             ),
@@ -246,11 +268,11 @@ class ProfileView extends GetView<ProfileController> {
                                   : throw 'Could not launch $KTwitter';
                             },
                             child: Container(
-                              width: 50,
-                              height: 50,
+                              width: 40,
+                              height: 40,
                               decoration: BoxDecoration(
                                   color: Color(0xff445969),
-                                  borderRadius: BorderRadius.circular(50)),
+                                  borderRadius: BorderRadius.circular(40)),
                               child: Image.asset('images/twitter.png'),
                             ),
                           ),
@@ -264,11 +286,11 @@ class ProfileView extends GetView<ProfileController> {
                                   : throw 'Could not launch $KSnapChat';
                             },
                             child: Container(
-                              width: 50,
-                              height: 50,
+                              width: 40,
+                              height: 40,
                               decoration: BoxDecoration(
                                   color: Color(0xff445969),
-                                  borderRadius: BorderRadius.circular(50)),
+                                  borderRadius: BorderRadius.circular(40)),
                               child: Image.asset('images/snapchat.png'),
                             ),
                           ),
@@ -278,7 +300,7 @@ class ProfileView extends GetView<ProfileController> {
                         ],
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 100,
                       )
                     ],
                   ),

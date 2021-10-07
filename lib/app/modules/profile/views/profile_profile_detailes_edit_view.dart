@@ -1,4 +1,5 @@
 import 'package:carpart/app/data/component/CustomImageCached.dart';
+import 'package:carpart/app/data/component/MapSample.dart';
 import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/modules/profile/controllers/profile_controller.dart';
@@ -33,41 +34,58 @@ class ProfileDetailesEditView extends GetView {
               ),
             ),
           ),
-       
           CustemImagePicker(
-            showimagepath:KUserImage.value,
+            showimagepath: KUserImage.value,
             onclick: (value) {
               profileController.imagelogo = value;
             },
           ),
-          ListTile(
-            dense: true,
-            title: Text('الاسم الشخصى'),
-            subtitle: TextFormField(
-              controller: profileController.nameText,
-              //  initialValue: 'KName',
-            ),
+          defaulttext(
+            title: 'الاسم الشخصى',
+            controller: profileController.nameText,
           ),
-          ListTile(
-            dense: true,
-            title: Text('البريد الالكترونى'),
-            subtitle: TextFormField(
-              controller: profileController.emailText,
-            ),
+          defaulttext(
+            title: 'البريد الالكترونى',
+            controller: profileController.emailText,
           ),
-
-              ListTile(
-            dense: true,
-            title: Text('ألمدينة'),
-            subtitle: TextFormField(
-              controller: profileController.cityText,
-            ),
+          defaulttext(
+            title: 'المدينة',
+            controller: profileController.cityText,
+          ),
+          defaulttext(
+            title: 'العنوان',
+            controller: profileController.adressText,
           ),
           SizedBox(
-            height: 120,
+            width: Get.width,
+            height: 350,
+            child: MapSample(),
+          ),
+          SizedBox(
+            height: 20,
           )
         ],
       ),
     );
   }
+
+  defaulttext({@required title, @required controller}) => ListTile(
+        dense: true,
+        title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: TextFormField(
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(),
+            ),
+            controller: controller,
+          ),
+        ),
+      );
 }

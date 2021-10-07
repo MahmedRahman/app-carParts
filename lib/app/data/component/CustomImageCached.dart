@@ -14,6 +14,7 @@ class CustomImageCached extends StatelessWidget {
       ),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
+        fit: BoxFit.cover,
         placeholder: (context, url) => Center(
           child: CustomIndicator(
             indicatorStatus: IndicatorStatus.imageplaceholder,

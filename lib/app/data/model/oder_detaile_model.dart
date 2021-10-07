@@ -30,6 +30,10 @@ class OderDetaileModel {
         this.lat,
         this.lng,
         this.distance,
+        this.deliveryRate,
+        this.merchantRate,
+        this.merchantPhone,
+        this.deliveryPhone,
     });
 
     int id;
@@ -52,6 +56,10 @@ class OderDetaileModel {
     double lat;
     double lng;
     double distance;
+var merchantRate;
+var deliveryRate;
+var merchantPhone;
+var deliveryPhone;
 
     factory OderDetaileModel.fromJson(Map<String, dynamic> json) => OderDetaileModel(
         id: json["Id"],
@@ -62,6 +70,8 @@ class OderDetaileModel {
         modelId: json["ModelId"],
         modelName: json["ModelName"],
         versionId: json["VersionId"],
+         merchantRate: json["MerchantRate"],
+        deliveryRate: json["DeliveryRate"],
         date: DateTime.parse(json["Date"]),
         status: json["Status"],
         price: json["Price"].toDouble(),
@@ -71,6 +81,8 @@ class OderDetaileModel {
         description: json["Description"],
         image: json["Image"],
         statusName: json["StatusName"],
+          merchantPhone: json["MerchantPhone"],
+            deliveryPhone: json["DeliveryPhone"],
         lat: json["Lat"],
         lng: json["Lng"],
         distance: json["Distance"].toDouble(),

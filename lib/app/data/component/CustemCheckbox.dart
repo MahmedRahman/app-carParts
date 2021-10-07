@@ -1,4 +1,5 @@
 import 'package:carpart/app/data/helper/AppTheme.dart';
+import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,8 +20,13 @@ class CustemCheckbox extends StatelessWidget {
             },
             activeColor: KAccentColor,
           ),
-          Text(
-            'اوافق على شروط الاستخدام و سياسة الخصوصية',
+          InkWell(
+            onTap: (){
+              Get.toNamed(Routes.TREMSNEW);
+            },
+            child: Text(
+              'اوافق على شروط الاستخدام و سياسة الخصوصية',
+            ),
           ),
         ],
         mainAxisAlignment: MainAxisAlignment.start,

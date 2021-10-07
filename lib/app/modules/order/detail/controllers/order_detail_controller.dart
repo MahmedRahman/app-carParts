@@ -1,4 +1,5 @@
 import 'package:carpart/app/api/response_model.dart';
+import 'package:carpart/app/data/helper/AppConstant.dart';
 import 'package:carpart/app/data/helper/AppEnumeration.dart';
 import 'package:carpart/app/data/helper/showSnackBar.dart';
 import 'package:carpart/app/data/model/googel_distance_model.dart';
@@ -18,8 +19,9 @@ class OrderDetailController extends GetxController {
 
   final MerchantOffersList = Future.value().obs;
   final oderModel = Future.value().obs;
-  var distance = ''.obs;
+  var distance = '0'.obs;
   var destinationAddresses = ''.obs;
+  var imagelogo;
 
   Future getOrderDetailes() async {
     ResponsModel responsModel = await WebServices().getOrderDetailes(OrderId);
@@ -30,6 +32,37 @@ class OrderDetailController extends GetxController {
       final oderDetaileModel = oderDetaileModelFromJson(response.bodyString);
       oderModel.value = Future.value(oderDetaileModel);
       return oderDetaileModel;
+    }
+  }
+
+  Future setRate({
+    String merchantRate,
+    String deliveryRate,
+  }) async {
+    ResponsModel responsModel = await WebServices().setRate(
+      orderId: OrderId.toString(),
+      deliveryRate: deliveryRate,
+      merchantRate: merchantRate,
+    );
+
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      print(response.bodyString);
+      if (response.body['IsSuccess']) {
+        showSnackBar(
+          message: 'تم التقيم بنجاح',
+          snackbarStatus: () {
+            Get.back();
+            getOrderDetailes();
+          },
+        );
+      } else {
+        print(response.body['Message']);
+        showSnackBar(
+          message: 'خطاء فى  البيانات',
+          snackbarStatus: () {},
+        );
+      }
     }
   }
 
@@ -73,8 +106,8 @@ class OrderDetailController extends GetxController {
   }
 
   setOrderStatus(OrderStatus orderStatus) async {
-    ResponsModel responsModel =
-        await WebServices().setStatus(orderId: OrderId, statusId: orderStatus.index);
+    ResponsModel responsModel = await WebServices()
+        .setStatus(orderId: OrderId, statusId: orderStatus.index);
 
     if (responsModel.success) {
       Response response = responsModel.data;
@@ -100,13 +133,24 @@ class OrderDetailController extends GetxController {
         GetUtils.isNullOrBlank(offerName.text)) {
       showSnackBar(message: 'برجاء تحديد سعر للقطعة', snackbarStatus: () {});
     } else {
-      offerMultiList.add(
-        OfferModel(
-          orderId: OrderId,
-          name: offerName.text,
-          price: double.parse(offerPrice.text.toString()),
-        ),
-      );
+      if (offerMultiList.length == 0) {
+        offerMultiList.add(
+          OfferModel(
+            orderId: OrderId,
+            name: offerName.text,
+            image: imagelogo.toString(),
+            price: double.parse(offerPrice.text.toString()),
+          ),
+        );
+      } else {
+        offerMultiList.add(
+          OfferModel(
+            orderId: OrderId,
+            name: offerName.text,
+            price: double.parse(offerPrice.text.toString()),
+          ),
+        );
+      }
     }
     offerName.clear();
     offerPrice.clear();
@@ -121,6 +165,7 @@ class OrderDetailController extends GetxController {
       ResponsModel responsModel = await WebServices().addOffer(
         orderId: OrderId,
         name: offerName.text,
+        image: imagelogo,
         price: double.parse(offerPrice.text.toString()),
       );
 
@@ -218,6 +263,19 @@ class OrderDetailController extends GetxController {
     }
   }
 
+  Future deleteOrder(String Orderid) async {
+    ResponsModel responsModel = await WebServices().deleteOrder(Orderid);
+
+    if (responsModel.success) {
+      Response response = responsModel.data;
+      if (response.body['IsSuccess']) {
+        Get.snackbar(AppName, 'تم الحذف');
+      } else {
+        Get.snackbar(AppName, 'خطاء');
+      }
+    }
+  }
+
   Future setPaid() async {
     ResponsModel responsModel = await WebServices().setPaid(orderId: OrderId);
 
@@ -263,12 +321,12 @@ class OrderDetailController extends GetxController {
     }
   }
 
-  getdistance(double lat, double lang) async {
+  Future getdistance(double lat, double lang) async {
     ResponsModel responsModel = await WebServices().getdistance(
       originslat: Klatitude,
       originslang: Klongitude,
-      destinationslat: 30.3827948,
-      destinationslang: 31.0007844,
+      destinationslat: lat,
+      destinationslang: lang,
     );
 
     if (responsModel.success) {
@@ -276,11 +334,16 @@ class OrderDetailController extends GetxController {
       final googelDistanceModel =
           googelDistanceModelFromJson(response.bodyString);
 
+      print(response.bodyString);
+
       destinationAddresses.value =
           googelDistanceModel.destinationAddresses.toString();
 
-      distance.value =
-          googelDistanceModel.rows.first.elements.first.distance.text;
+      distance.value = googelDistanceModel
+          .rows.first.elements.first.distance.value
+          .toString();
+
+      return googelDistanceModel.rows.first.elements.first.distance.value;
     }
   }
 }

@@ -29,7 +29,6 @@ class ApiManger extends GetConnect {
   }
 
   Future<ResponsModel> repPost(url, body, {bool showLoading = false}) async {
-   
     if (showLoading) {
       EasyLoading.show(status: 'جارى التحميل');
     }
@@ -40,6 +39,11 @@ class ApiManger extends GetConnect {
 
     Response response = await post(baes_url + url, body, headers: header);
 
+    print("Api Request " +
+        baes_url +
+        url +
+        response.statusCode.toString() +
+        body.toString());
     try {
       switch (response.statusCode) {
         case 200:
@@ -53,18 +57,28 @@ class ApiManger extends GetConnect {
             data: response,
           );
           break;
-
+        case 401:
+          if (showLoading) {
+            EasyLoading.showError('خطاء');
+          }
+          Get.toNamed(Routes.SignupView);
+          return ResponsModel(
+            code: response.statusCode,
+            success: false,
+          );
         default:
           if (showLoading) {
             EasyLoading.showError('خطاء');
           }
-
+          Get.toNamed(Routes.SigninView);
+/*
           Get.to(ErrorView(
             api_url: url.toString(),
             api_body: body.toString(),
             api_header: header.toString(),
             api_status_code: response.statusCode.toString(),
           ));
+          */
           return ResponsModel(
             code: response.statusCode,
             success: false,
@@ -74,13 +88,15 @@ class ApiManger extends GetConnect {
       if (showLoading) {
         EasyLoading.showError('خطاء');
       }
-
+      Get.toNamed(Routes.SigninView);
+/*
       Get.to(ErrorView(
         api_url: response.headers.toString(),
         api_body: e.toString(),
         api_header: '',
         api_status_code: e.hashCode.toString(),
       ));
+      */
       return ResponsModel(
         code: e.hashCode,
         success: false,
@@ -88,8 +104,8 @@ class ApiManger extends GetConnect {
     }
   }
 
-  Future<ResponsModel> repGet(url, {bool showLoading = false}) async {
-   
+  Future<ResponsModel> repGet(url,
+      {bool showLoading = false, bool showErro = true}) async {
     if (showLoading) {
       EasyLoading.show(status: 'جارى التحميل');
     }
@@ -122,10 +138,23 @@ class ApiManger extends GetConnect {
           );
           break;
 
+        case 401:
+          if (showLoading) {
+            EasyLoading.showError('خطاء');
+          }
+          Get.toNamed(Routes.SignupView);
+          return ResponsModel(
+            code: response.statusCode,
+            success: false,
+          );
+
         default:
           if (showLoading) {
             EasyLoading.showError('خطاء');
           }
+          Get.toNamed(Routes.SigninView);
+
+          /*
           Get.to(
             ErrorView(
               api_url: url.toString(),
@@ -134,6 +163,8 @@ class ApiManger extends GetConnect {
               api_status_code: response.statusCode.toString(),
             ),
           );
+          */
+
           return ResponsModel(
             code: response.statusCode,
             success: false,
@@ -143,24 +174,21 @@ class ApiManger extends GetConnect {
       if (showLoading) {
         EasyLoading.showError('خطاء');
       }
+      Get.toNamed(Routes.SigninView);
+/*
       Get.to(ErrorView(
         api_url: response.headers.toString(),
         api_body: e.toString(),
         api_header: '',
         api_status_code: e.hashCode.toString(),
-      ));
+      ));*/
       return ResponsModel(
         code: e.hashCode,
         success: false,
       );
     }
   }
-
-
 }
-
-
-
 
 class ErrorView extends GetView {
   ErrorView({

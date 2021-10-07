@@ -204,12 +204,15 @@ class WebServices extends ApiManger {
     @required int orderId,
     @required String name,
     @required double price,
+       @required String image,
+    
   }) async {
     ResponsModel response = await repPost('MerchantOffer/Add', {
       "OrderId": orderId,
       "Name": name,
       "Price": price,
-    });
+      "ImageBytes" : image.toString()
+    },showLoading: true);
 
     return response;
   }
@@ -249,8 +252,26 @@ class WebServices extends ApiManger {
   }
 
   Future<ResponsModel> addPaymentRequest(int price) async {
-    ResponsModel response =
-        await repPost('PaymentRequest/Add', {"Price": price});
+    ResponsModel response = await repPost(
+      'PaymentRequest/Add',
+      {"Price": price},
+      showLoading: true,
+    );
+    return response;
+  }
+
+  Future<ResponsModel> deleteOrder(String Orderid) async {
+    ResponsModel response = await repPost('Order/Delete/$Orderid', {});
+    return response;
+  }
+
+  Future<ResponsModel> addReview() async {
+    ResponsModel response = await repPost('Review/Add/', {
+      "MerchantId": "sample string 3",
+      "DeliveryAgentId": "sample string 5",
+      "MerchantRate": 7,
+      "DeliveryAgentRate": 8,
+    });
     return response;
   }
 
@@ -270,7 +291,7 @@ class WebServices extends ApiManger {
       "ExpiryYear": ExpiryYear,
       "CVV": CVV,
       "OrderId": OrderId,
-    });
+    } ,showLoading: true);
     return response;
   }
 
@@ -318,7 +339,7 @@ class WebServices extends ApiManger {
     @required double destinationslang,
   }) async {
     ResponsModel response = await repGet(
-        'https://maps.googleapis.com/maps/api/distancematrix/json?origins=$originslat,$originslang&destinations=$destinationslat,$destinationslang&key=AIzaSyC8ph0Arqdy0u0I5kEqV44sXFPUSM7iOb0');
+        'https://maps.googleapis.com/maps/api/distancematrix/json?origins=$originslat,$originslang&destinations=$destinationslat,$destinationslang&key=AIzaSyC8ph0Arqdy0u0I5kEqV44sXFPUSM7iOb0&language=ar');
     return response;
   }
 
@@ -345,8 +366,29 @@ class WebServices extends ApiManger {
   }
 
   Future<ResponsModel> setProfile(ProfileModel profileModel) async {
+
     ResponsModel response = await repPost(
         'Account/Profile', profileModel.toJson(),
+        showLoading: true);
+
+    return response;
+
+
+  }
+
+  Future<ResponsModel> setRate({
+    String orderId,
+    String merchantRate,
+    String deliveryRate,
+  }) async {
+
+    ResponsModel response = await repPost(
+        'Order/SetRate',
+        {
+          "Id": orderId,
+          "MerchantRate": merchantRate,
+          "DeliveryRate": deliveryRate,
+        },
         showLoading: true);
     return response;
   }
@@ -364,7 +406,7 @@ class WebServices extends ApiManger {
   }
 
   Future<ResponsModel> setResetPassword(String phonenumber) async {
-    ResponsModel response = await repPost(' api/Account/ResetPassword', {
+    ResponsModel response = await repPost('api/Account/ResetPassword', {
       "UserName": "sample string 1",
       "Password": "sample string 2",
       "ConfirmPassword": "sample string 3",
@@ -372,4 +414,8 @@ class WebServices extends ApiManger {
     });
     return response;
   }
+
+
+
+
 }

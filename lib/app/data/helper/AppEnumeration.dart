@@ -7,7 +7,7 @@ var bankName = [];
 var Cars = [];
 
 var verisionYears = [
-  '2021','2020','2019','2018' 
+  '2021', '2020', '2019', '2018'
   //, '2017' , '2016' , '2015' ,'2014' ,'2013' ,'2012'
 ];
 
@@ -26,7 +26,7 @@ double Klongitude = 46.675297;
 double BaseDeliveryPrice;
 double KAdministrativeFees;
 
-var NotifactionCount= 0.obs;
+var NotifactionCount = 0.obs;
 
 String Kwhatapp = '';
 String KTwitter = '';
@@ -36,10 +36,17 @@ String KSnapChat = '';
 enum userRole { Client, Merchant, DeliveryAgent, anonymous }
 
 var KName = ''.obs;
+var KRate = 0.obs;
 var KEmail = ''.obs;
+var KOrderCount = ''.obs;
 var KUserImage = ''.obs;
+var KMerchantOfferImage = ''.obs;
+
 var Kselectindex = 0.obs;
 var KCity = ''.obs;
+var Ktax;
+
+var KAdress = ''.obs;
 
 String KFirebaseMessagingToken = '';
 
@@ -57,6 +64,7 @@ enum OrderStatus {
   DeliveryGetPart,
   DeliveryGivePart,
   Complete,
+  Delete,
 }
 
 enum RequestStatus { Request, Accept, Refuse }

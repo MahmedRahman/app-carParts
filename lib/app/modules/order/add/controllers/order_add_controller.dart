@@ -9,7 +9,6 @@ import 'package:carpart/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class OrderAddController extends GetxController {
   var carMarkid = 0;
   var carModelId = 0;
@@ -19,8 +18,6 @@ class OrderAddController extends GetxController {
   TextEditingController description = new TextEditingController();
   String carImageBytes;
 
-
-
   createorder() async {
     if (KRole == userRole.anonymous) {
       clearFormData();
@@ -28,12 +25,10 @@ class OrderAddController extends GetxController {
     }
 
     if (KRole == userRole.Client) {
-      if (carMarkid == 0 || carModelId == 0 ) {
+      if (carMarkid == 0 || carModelId == 0) {
         showSnackBar(
           message: 'برجاء تحديد ماركة و نوع المركبة',
-          snackbarStatus: () {
-         
-          },
+          snackbarStatus: () {},
         );
       } else {
         ResponsModel responsModel = await WebServices().createorder(
@@ -51,17 +46,14 @@ class OrderAddController extends GetxController {
             showSnackBar(
               message: 'تم ارسال الطلب بنجاح',
               snackbarStatus: () {
-             
                 clearFormData();
-                Get.find<HomeController>().selectindex.value = 1;
+                Kselectindex.value = 1;
               },
             );
           } else {
             showSnackBar(
               message: 'خطاء فى البيانات المرسالة',
-              snackbarStatus: () {
-              
-              },
+              snackbarStatus: () {},
             );
           }
         }
@@ -69,10 +61,8 @@ class OrderAddController extends GetxController {
     }
   }
 
-
-
   clearFormData() {
-    versionYear.value='';
+    versionYear.value = '';
     vanNumber.clear();
     description.clear();
     carMarkid = 0;

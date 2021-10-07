@@ -1,5 +1,7 @@
+import 'package:carpart/app/data/auth.dart';
 import 'package:carpart/app/data/component/CustemButton.dart';
 import 'package:carpart/app/data/component/CustemTextForm.dart';
+import 'package:carpart/app/data/component/CustomImageCached.dart';
 
 import 'package:carpart/app/data/component/MapSample.dart';
 import 'package:carpart/app/data/component/custemImgePicker/CustemImagePicker.dart';
@@ -24,6 +26,18 @@ class OrderAddView extends GetView<OrderAddController> {
 
   @override
   Widget build(BuildContext context) {
+
+/*
+  if (GetUtils.isNullOrBlank(Get.find<UserAuth>().getUserToken())) {
+        KRole = userRole.anonymous;
+      } else {
+        //getProfile();
+         //KRole = userRole.;
+
+          KRole = userRole.DeliveryAgent;
+      }
+*/
+
     Get.lazyPut<OrderAddController>(
       () => OrderAddController(),
     );
@@ -59,17 +73,13 @@ class OrderAddView extends GetView<OrderAddController> {
                 height: Get.height * .3,
                 child: PageView(
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    Center(
-                      child: Image.asset('images/Banner1.jpg'),
-                    ),
-                    Center(
-                      child: Image.asset('images/Banner1.jpg'),
-                    ),
-                    Center(
-                      child: Image.asset('images/Banner1.jpg'),
-                    )
-                  ],
+                  children:List.generate(KSlider.length, (index) => Center(
+                      child: CustomImageCached(imageUrl: "https://carpart.atpnet.net/Files/Setting/${KSlider.elementAt(index)['Image']}",),
+                    )) 
+                  
+                  
+                  
+                  ,
                 ),
               ),
               (KRole == userRole.anonymous || KRole == userRole.Client)

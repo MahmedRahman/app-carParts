@@ -16,26 +16,39 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
-  print(message.data);
-  flutterLocalNotificationsPlugin.show(
-    message.data.hashCode,
-    message.data['title'],
-    message.data['body'],
-    NotificationDetails(
-      android: AndroidNotificationDetails(
-        channel.id,
-        channel.name,
-        channel.description,
+
+  print(message.data['orderId']);
+/*
+  Get.snackbar(AppName, message.data['body'], onTap: (val) {
+    Get.toNamed(Routes.ORDER_DETAIL, arguments: [message.data['orderId']]);
+  });
+*/
+/*
+  if (GetUtils.isNullOrBlank(message.data['body'])) {
+  } else {
+    print('Handling a background message ${message.messageId}');
+    print(message.data['name']);
+    flutterLocalNotificationsPlugin.show(
+      message.data.hashCode,
+      message.data['title'],
+      message.data['body'],
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channel.description,
+        ),
       ),
-    ),
-  );
+    );
+    Get.snackbar(AppName, message.data['body']);
+  }
+*/
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
-  'This channel is used for important notifications.', // description
+ // description
   importance: Importance.high,
 );
 
@@ -49,7 +62,7 @@ void main() async {
   await initServices();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  
+
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -75,5 +88,3 @@ void initServices() async {
   await Get.putAsync<UserAuth>(() async => await UserAuth());
   await Get.putAsync<connectivity>(() async => await connectivity());
 }
-
-
